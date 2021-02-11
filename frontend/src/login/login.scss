@@ -1,0 +1,96 @@
+@import '../index.scss';
+
+.login-container {
+    .bg-login {
+        position: relative;
+        display: block;
+        height: 375px;
+        width: 100vw;
+        &::after {
+            position: absolute;
+            background-image: url("../img/main-veg.jpg");
+            background-attachment: fixed;
+            background-position: center center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.8;
+            z-index: -1;
+            content: "";
+        }
+    }
+    .space-white {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        background-color: white;
+        height: 100vh;
+        // width: 50vw;
+        width: 100vw;
+        // margin: 0 10px;
+    }
+    .ant-btn {
+        width: 280px;
+        background-color: $green;
+        color: white;
+        border-radius: 10px;
+        height: 45px;
+        border: none;
+    }
+    .ant-form-item {
+        width: 280px;
+        color: $drak-green;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+    a {
+        color: $green;
+    }
+    .ant-form {
+        color: $drak-green;
+    }
+    .ant-form-item-label > label {
+        color: $drak-green;
+    }
+    .space-none {
+        height: 375px;
+    }
+
+    @media screen and(min-width: 1025px) {
+        .bg-login {
+            height: 100vh;
+        }
+        .space-white {
+            width: 50vw;
+        }
+        .space-none {
+            height: 0;
+        }
+        .input,
+        .ant-form-item,
+        .ant-btn {
+            width: 320px;
+        }
+    };
+    // @media screen and(min-width: 1025px) {
+    //     .bg-login {
+    //         height: 100vh;
+    //     }
+    //     .space-white {
+    //         width: 50vw;
+    //     }
+    //     .space-none {
+    //         height: 0;
+    //     }
+    //     .input,
+    //     .ant-form-item,
+    //     .ant-btn {
+    //         width: 320px;
+    //     }
+    // }
+
+}
