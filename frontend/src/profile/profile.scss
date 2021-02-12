@@ -1,0 +1,119 @@
+@import '../index.scss';
+
+.profile-page-container {
+    .profile-container {
+        position:relative;
+        margin-top: -100px;
+    
+        display: flex;
+        flex-flow: row wrap;
+        column-gap: 3%;
+    
+        height: 100%;
+        align-items: start;
+        font-family: Poppins;
+        font-style: normal;
+        justify-content: center;
+    
+    }
+    
+    .full-name {
+        font-weight: bold;
+        font-size: 45px;
+        color: $green;
+        padding-top: 100px;
+    }
+    
+    .role {
+        font-weight: 500;
+        font-size: 23px;
+        color: $green;
+    }
+    
+    .cover-img {
+        object-fit:fill;
+        width: 100%;
+        height: 220px;
+    }
+    
+    .profile-img {
+        max-width: 300px;
+        max-height: 300px;
+        width: auto;
+        height: auto;
+        border-radius: 50%;
+    }
+    
+    .data-flex {
+        display: flex;
+        flex-direction: column;
+    
+    }
+    
+    .info-container {
+        display: flex;
+        flex-direction: row;
+        column-gap: 15%;
+        margin-top: 50px;
+        padding-bottom: 10px;
+    
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 23px;
+    
+        color: $gray;
+
+        min-width: 40%;
+    }
+
+    .ant-btn {
+        background-color: $green;
+        border-radius: 10px;
+        height: 80px;
+        border: none;
+
+        font-weight: 600;
+        font-size: 25px;
+        color: white;
+    }
+
+    .button-container  {
+        display: flex;
+        flex-direction: row;
+
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #AAAAAA;
+    }
+    .button-content {
+        margin-left: 10px;
+        display: flex;
+        flex-direction: row;
+        column-gap: 10px;
+        align-items: center;
+    }
+
+    .address .title{
+        font-weight: bold;
+        font-size: 30px;
+        color: $green
+    }
+
+    .address .content{
+        font-weight: 500;
+        font-size: 23px;
+        color: $gray
+    }
+
+    .score-text {
+        font-weight: 600;
+        font-size: 25px;
+        color: $gray;
+    }
+
+    .vote-count-text {
+        font-size: 25px;
+        color: $gray;
+    }
+}
