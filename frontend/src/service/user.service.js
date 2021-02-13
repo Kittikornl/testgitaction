@@ -1,6 +1,7 @@
 import axios from 'axios'
+import authHeader from './auth-header'
 
-export const register = async (values) => {
+export const postRegister = async (values) => {
     try {
         return await axios.post('/users', values)
     } catch (error) {
@@ -9,27 +10,22 @@ export const register = async (values) => {
     }
 }
 
-export const login = async (values) => {
+export const postChangePassword = async (userId, values) => {
     try {
-        return await axios.post('/users/login', values)
-    } catch (error) {
-        console.log('error login')
-        throw error
-    }
-}
-
-export const changePassword = async (userId, values) => {
-    try {
-        return await axios.post(`/users/${userId}`, values)
+        return await axios.post(`/users/${userId}`, values, {
+            headers: authHeader() 
+        })
     } catch (error) {
         console.log('error change password')
         throw error
     }
 }
 
-export const editProfile = async (userId, values) => {
+export const patchEditProfile = async (userId, values) => {
     try {
-        return await axios.patch(`/users/${userId}`, values)
+        return await axios.patch(`/users/${userId}`, values, {
+            headers: authHeader() 
+        })
     } catch (error) {
         console.log('error edit profile')
         throw error
@@ -38,16 +34,20 @@ export const editProfile = async (userId, values) => {
 
 export const deleteProfile = async (userId) => {
     try {
-        return await axios.delete(`/users/${userId}`)
+        return await axios.delete(`/users/${userId}`, {
+            headers: authHeader() 
+        })
     } catch (error) {
         console.log('error delete profile')
         throw error
     }
 }
  
-export const resetPassword = async (values) => {
+export const postResetPassword = async (values) => {
     try {
-        return await axios.post('/users/reset-pwd', values)
+        return await axios.post('/users/reset-pwd', values, {
+            headers: authHeader() 
+        })
     } catch (error) {
         console.log('error reset password')
         throw error
