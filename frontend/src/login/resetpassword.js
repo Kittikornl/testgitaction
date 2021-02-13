@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Input, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import "./resetpassword.scss"
-// import resetPassword from '../service/user.service'
+import resetPassword from '../service/user.service'
 
 const ResetPassword = () => {
     const history = useHistory()

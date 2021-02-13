@@ -1,13 +1,20 @@
 import React from 'react'
 import { Button, Input, Form } from 'antd'
 import { Link } from 'react-router-dom'
-import "./login.scss"
+import './login.scss'
+// import AuthService from '../service/auth.service'
 
 const Login = () => {
     // const history = useHistory()
 
-    const handleLogin = (e) => {
-        // history.push("/order")
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        try {
+            // await  AuthService.login(e.email, e.password)
+        } catch (error) {
+            console.log(error)
+        }
+        // history.push("/profile") for next sprint change it to history.push('/home')
         console.log(e)
     }
 
