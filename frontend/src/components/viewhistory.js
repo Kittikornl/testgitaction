@@ -8,8 +8,8 @@ const viewhistory = (props) => {
         <div className="view-shop-btn">
             {console.log(props.test)}
             <Button className="button" style={{marginTop:"10px", width:"auto"}}>     
-                <FontAwesomeIcon icon={faHistory} style={{marginRight:"10px", fontSize:"35px"}} />
-                {"Shopping history >"}
+                <FontAwesomeIcon icon={faHistory} />
+                &nbsp;{"Shopping history >"}
             </Button>
         </div>
         

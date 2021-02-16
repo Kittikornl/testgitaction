@@ -7,15 +7,15 @@ const viewshopbutton = (props) => {
     return (
         <div className="view-shop-btn">
             {(props.enable) && 
-                <Button className="button" style={{width:"auto"}}>     
-                    <FontAwesomeIcon icon={faShoppingCart} style={{marginRight:"10px", fontSize:"35px"}} />
-                    {"View shop >"}
+                <Button style={{width:"auto"}}>     
+                    <FontAwesomeIcon icon={faShoppingCart} />
+                    &nbsp;{"View shop >"}
                 </Button>
             }
             {(!props.enable) && 
-                <Button className="button" style={{width: "auto", backgroundColor: "#979797" }} disabled>
-                    <FontAwesomeIcon icon={faShoppingCart} style={{marginRight:"10px", fontSize:"35px"}} />
-                    {"View shop >"}
+                <Button style={{width: "auto", backgroundColor: "#979797" }} disabled>
+                    <FontAwesomeIcon icon={faShoppingCart} />
+                    &nbsp;{"View shop >"}
                 </Button>
             }
         </div>
