@@ -1,119 +1,53 @@
 @import '../index.scss';
 
 .profile-page-container {
-    .profile-container {
-        position:relative;
-        margin-top: -100px;
-    
-        display: flex;
-        flex-flow: row wrap;
-        column-gap: 3%;
-    
-        height: 100%;
-        align-items: start;
-        font-family: Poppins;
-        font-style: normal;
-        justify-content: center;
-    
-    }
-    
-    .full-name {
-        font-weight: bold;
-        font-size: 45px;
-        color: $green;
-        padding-top: 100px;
-    }
-    
-    .role {
-        font-weight: 500;
-        font-size: 23px;
-        color: $green;
-    }
-    
-    .cover-img {
-        object-fit:fill;
-        width: 100%;
-        height: 220px;
-    }
-    
-    .profile-img {
-        max-width: 300px;
-        max-height: 300px;
-        width: auto;
-        height: auto;
-        border-radius: 50%;
-    }
-    
-    .data-flex {
-        display: flex;
-        flex-direction: column;
-    
-    }
-    
-    .info-container {
-        display: flex;
-        flex-direction: row;
-        column-gap: 15%;
-        margin-top: 50px;
-        padding-bottom: 10px;
-    
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 23px;
-    
-        color: $gray;
+    background-image: url("../img/main-veg.jpg");
+}
 
-        min-width: 40%;
-    }
+.profile-container {
+    margin-top: 220px ;
+    justify-content: center;
+    column-gap: 50px;
 
-    .ant-btn {
-        background-color: $green;
-        border-radius: 10px;
-        height: 80px;
-        border: none;
+    background-color: white;
+}
 
-        font-weight: 600;
-        font-size: 25px;
-        color: white;
-    }
+.profile-container img {
+    margin-top: -80px;
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+}
 
-    .button-container  {
-        display: flex;
-        flex-direction: row;
+.profile-title .full-name {
+    font-weight: bold;
+    font-size: 45px;
+    color: $green;
+}
 
-        padding-top: 20px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #AAAAAA;
-    }
-    .button-content {
-        margin-left: 10px;
-        display: flex;
-        flex-direction: row;
-        column-gap: 10px;
-        align-items: center;
-    }
+.profile-title .role {
+    font-weight: 500;
+    font-size: 23px;
+    color: $green;
+}
 
-    .address .title{
-        font-weight: bold;
-        font-size: 30px;
-        color: $green
-    }
+.info-container {
+    margin-top: 10px;
+    column-gap: 10%;
 
-    .address .content{
-        font-weight: 500;
-        font-size: 23px;
-        color: $gray
-    }
+    font-weight: 500;
+    font-size: 23px;
+}
 
-    .score-text {
-        font-weight: 600;
-        font-size: 25px;
-        color: $gray;
-    }
+.ant-btn {
+    background-color: $green;
+    border-radius: 10px;
+    height: 80px;
+    border: none;
 
-    .vote-count-text {
-        font-size: 25px;
-        color: $gray;
-    }
+    font-weight: 600;
+    font-size: 25px;
+    color: white;
 }

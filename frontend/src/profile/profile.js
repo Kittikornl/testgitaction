@@ -62,49 +62,32 @@ const Profile = () => {
 
     return (
         <div className="profile-page-container">
-            {/* <navbar /> */}
-            <div className="navbar"></div>
-            <div className="profile-cover-container">
-                <div className="cover-img-container">
-                    <img className="cover-img"
-                        src="https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2017/08/facebook-cover.jpg"
-                        alt="profile-img"
-                    />
-                </div>
-                <div className="profile-container">
-                    <img className="profile-img"
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                        alt="profile-img"
-                    />
-                    <div className="data-flex">
-                        <div className="profile-title">
-                            <div className="full-name">{`${data.firstname} ${data.lastname}`}</div>
-                            <div className="role">{ data.role}</div>
+            <div>sss</div>
+            <div className="profile-container flex-row">
+                <img className="profile-img"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="profile-img"
+                />
+                <div className="profile-title">
+                    <div className="full-name">{`${data.firstname} ${data.lastname}`}</div>
+                    <div className="role">{data.role}</div>
+                    <div className="info-container flex-row">
+                        <div className="info-title">
+                            <div className="birth">Birth Date :</div>
+                            <div className="age">Age :</div>
+                            <div className="email">Email :</div>
+                            <div className="phone">Phone :</div>
                         </div>
-                        <div className="info-container">
-                            <div className="info-title">
-                                <div className="birth">Birth Date :</div>
-                                <div className="age">Age :</div>
-                                <div className="email">Email :</div>
-                                <div className="phone">Phone :</div>
-                            </div>
-                            <div className="info-data">
-                                <div className="birth">{data.birthdate}</div>
-                                <div className="age">{data.age}</div>
-                                <div className="email">{data.email}</div>
-                                <div className="phone">{data.phoneNo}</div>
-                            </div>
+                        <div className="info-data">
+                            <div className="birth">{data.birthdate}</div>
+                            <div className="age">{data.age}</div>
+                            <div className="email">{data.email}</div>
+                            <div className="phone">{data.phoneNo}</div>
                         </div>
                         {renderButtonContent(data.role, data.shop)}
-                        <div className="address">
-                            <div className="title">Address</div>
-                            <div className="content">
-                                <div>{data.address}</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </div>
+            </div>        
         </div>
     )
 }
