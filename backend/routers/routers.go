@@ -9,6 +9,8 @@ import (
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
+
+	//test api
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
@@ -17,7 +19,7 @@ func InitRouter() *gin.Engine {
 
 	r1 := r.Group("/user")
 	{
-		r1.GET("all", user.GetAllUser)
+		r1.GET("all", user.GetAllUser) //example api
 	}
 
 	return r
