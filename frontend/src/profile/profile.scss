@@ -36,6 +36,7 @@
 .info-container {
     margin-top: 10px;
     column-gap: 10%;
+    max-width: 550px;
 
     font-weight: 500;
     font-size: 23px;
@@ -50,4 +51,18 @@
     font-weight: 600;
     font-size: 25px;
     color: white;
+}
+
+.button-container {
+    margin-top: 10px;
+    column-gap: 10px;
+}
+
+.button-content {
+    align-content: center;
+    column-gap: 10px;
+}
+
+.button-content .score-text, .button-content .vote-count-text {
+    align-self: center;
 }

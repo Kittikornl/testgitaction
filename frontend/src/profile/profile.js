@@ -9,7 +9,7 @@ import {faUserFriends} from '@fortawesome/free-solid-svg-icons'
 
 const renderButtonContentText = (shop) => {
     return (
-        <div className="button-content">
+        <div className="button-content flex-row">
             <div className="score-text">{shop.score.toFixed(1)}</div>
             <Scores score={shop.score}/>
             <div className="vote-count-text">
@@ -21,17 +21,20 @@ const renderButtonContentText = (shop) => {
 }
 
 const renderButtonContent = (role, shop) => {
-    console.log(typeof(shop))
     if(role==="Product Seller" && Object.keys(shop).length !== 0) {
         return (
-            <div className="button-container">
+            <div className="button-container flex-row">
                 <Viewshopbutton enable={true}/>
                 {renderButtonContentText(shop)}
             </div>      
         )
     } 
     else if (role==="Product Seller") {
-        return <Viewshopbutton enable={false}/>
+        return (
+            <div className="button-container flex-row">
+                <Viewshopbutton enable={false}/>
+            </div>      
+        )
     }
     else 
         return <Viewhistory/>
@@ -42,7 +45,7 @@ const Profile = () => {
     const initData = {
         "firstname": "Tinnapop",
         "lastname" : "Pratheep",
-        "role": "Product Seller",
+        "role": "Customer",
         "birthdate": "22/02/2000",
         "age": "20",
         "email": "guutar@pugsod.com",
