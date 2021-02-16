@@ -2,7 +2,6 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from 'antd'
 import React from 'react'
-import icon from '../img/cart.png'
 
 const viewshopbutton = (props) => {
     return (
