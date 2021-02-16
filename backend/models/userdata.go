@@ -6,15 +6,15 @@ import (
 
 type Userdata struct {
 	gorm.Model
-	userID        int `gorm:"primaryKey"`
-	firstName     string
-	lastname      string
-	isActive      int
-	profilePicURL string
-	role          int
-	phoneOn       string
-	birthdate     string
-	adress        string
-	zipcode       string
-	city          string
+	UserID        int `gorm:"primaryKey"`
+	FirstName     string
+	Lastname      string
+	IsActive      int
+	ProfilePicURL string
+	Role          int
+	PhoneOn       string
+	Birthdate     string
+	Adress        string
+	Zipcode       string
+	City          string
 }
