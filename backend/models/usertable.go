@@ -1,4 +1,4 @@
-package Usertable
+package models
 
 import (
 	"gorm.io/gorm"

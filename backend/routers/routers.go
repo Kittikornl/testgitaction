@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	user "github.com/sec33_Emparty/backend/handle"
+	"github.com/sec33_Emparty/backend/handle/user"
 )
 
 func InitRouter() *gin.Engine {
