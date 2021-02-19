@@ -5,13 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sec33_Emparty/backend/database"
-	Userdata "github.com/sec33_Emparty/backend/models"
-	Usertable "github.com/sec33_Emparty/backend/models"
+	"github.com/sec33_Emparty/backend/models"
 )
-
 //example handle function for api
 func GetAllUser(c *gin.Context) {
-	user := []Userdata.Userdata{}
+	user := []models.Userdata{}
 
 	database.DB.Find(&user)
 
@@ -19,29 +17,29 @@ func GetAllUser(c *gin.Context) {
 }
 
 func SaveUser(c *gin.Context) {
-	userdata := Userdata.Userdata{}
-	usertable := Usertable.Usertable{} 
+	user_data := models.Userdata{}
+	user_table := models.Usertable{}
 
-	if err := c.ShouldBindJSON(&userdata); err != nil {
+	if err := c.ShouldBindJSON(&user_data); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	if err := database.DB.Save(&userdata).Error; err != nil {
+	if err := database.DB.Save(&user_data).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
 		return
 	}
 
-	if err := c.ShouldBindJSON(&usertable); err != nil {
+	if err := c.ShouldBindJSON(&user_table); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	if err := database.DB.Save(&usertable).Error; err != nil {
+	if err := database.DB.Save(&user_table).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, userdata)
+	c.JSON(http.StatusOK, user_data)
 
 }
