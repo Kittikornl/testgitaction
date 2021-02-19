@@ -1,4 +1,4 @@
-package userdata
+package Userdata
 
 import (
 	"gorm.io/gorm"
@@ -8,7 +8,7 @@ type Userdata struct {
 	gorm.Model
 	UserID        int `gorm:"primaryKey"`
 	FirstName     string
-	Lastname      string
+	LastName      string
 	IsActive      int
 	ProfilePicURL string
 	Role          int

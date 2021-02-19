@@ -17,9 +17,10 @@ func InitRouter() *gin.Engine {
 		})
 	})
 
-	r1 := r.Group("/user")
+	r1 := r.Group("/users")
 	{
 		r1.GET("all", user.GetAllUser) //example api
+		r1.POST("", user.SaveUser)
 	}
 
 	return r
