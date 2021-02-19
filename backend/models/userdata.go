@@ -6,10 +6,9 @@ import (
 
 type Userdata struct {
 	gorm.Model
-	UserID        int `gorm:"primaryKey"`
 	FirstName     string
 	LastName      string
-	IsActive      int
+	IsActive      int `gorm:"default:1"`
 	ProfilePicURL string
 	Role          int
 	PhoneOn       string
