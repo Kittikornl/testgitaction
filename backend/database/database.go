@@ -1,8 +1,7 @@
 package database
 
 import (
-	userdata "github.com/sec33_Emparty/backend/models"
-	usertable "github.com/sec33_Emparty/backend/models"
+	"github.com/sec33_Emparty/backend/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -16,7 +15,7 @@ func Initdatabase() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	DB.AutoMigrate(&userdata.Userdata{})
-	DB.AutoMigrate(&usertable.Usertable{})
+	DB.AutoMigrate(&models.Userdata{})
+	DB.AutoMigrate(&models.Usertable{})
 
 }
