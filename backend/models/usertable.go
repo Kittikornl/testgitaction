@@ -6,7 +6,6 @@ import (
 
 type Usertable struct {
 	gorm.Model
-	UserID   int `gorm:"primaryKey"`
-	Email    string
-	Password string
+	Email    string `gorm:"NOT NULL"`
+	Password string `gorm:"NOT NULL"`
 }
