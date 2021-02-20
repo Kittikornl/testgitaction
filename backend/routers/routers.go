@@ -7,14 +7,11 @@ import (
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
-
-	r1 := r.Group("/api/users")
-	{
-		r1.GET("all", user.GetAllUser) //example api
-		r1.POST("", user.SaveUser)
-		r1.DELETE("/:id", user.DeleteUser)
-		r1.POST("reset-pwd", user.ResetPassword)
-	}
+	r.GET("/api/users", user.GetAllUser)
+	r.GET("/api/accounts", user.GetAllAccount)
+	r.POST("/api/users", user.SaveUser)
+	r.DELETE("/api/users/:id", user.DeleteUser)
+	r.POST("/api/users/reset-pwd", user.ResetPassword)
 
 	return r
 }
