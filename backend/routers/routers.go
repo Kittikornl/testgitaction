@@ -21,6 +21,7 @@ func InitRouter() *gin.Engine {
 	{
 		r1.GET("all", user.GetAllUser) //example api
 		r1.POST("", user.SaveUser)
+		r1.DELETE("/:id", user.DeleteUser)
 	}
 
 	return r
