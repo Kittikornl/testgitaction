@@ -27,6 +27,14 @@ func GetAllUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+func GetAllAccount(c *gin.Context) {
+	user := []models.Usertable{}
+
+	database.DB.Find(&user)
+
+	c.JSON(http.StatusOK, user)
+}
+
 func SaveUser(c *gin.Context) {
 
 	var userData models.Userdata
