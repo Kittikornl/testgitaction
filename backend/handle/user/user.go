@@ -12,8 +12,11 @@ import (
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 	"github.com/sendgrid/sendgrid-go"
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 )
