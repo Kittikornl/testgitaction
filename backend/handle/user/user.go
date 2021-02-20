@@ -1,9 +1,9 @@
 package user
 
 import (
+	"crypto/tls"
 	"math/rand"
 	"net/http"
-	"net/smtp"
 	"strings"
 	"time"
 
@@ -11,24 +11,13 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-	"github.com/sendgrid/sendgrid-go"
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-)
-
-=======
 	"golang.org/x/crypto/bcrypt"
+	gomail "gopkg.in/mail.v2"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
->>>>>>> 0f0e56806dec286bb2e98486eff54dce834d8138
 //example handle function for api
 func GetAllUser(c *gin.Context) {
 	user := []models.Userdata{}
@@ -133,42 +122,60 @@ func GeneratePassword() string {
 	return string(inRune)
 }
 
-// send email
 func SendEmail(userEmail, subject, text string) string {
-	// Sender data.
-	from := "noreply.pugsod@gmail.com"
-	password := "emparty@2021"
 
-	// Receiver email address.
-	to := []string{
-		userEmail,
-	}
+	// 	// Sender data.
+	// 	from := "noreply.pugsod@gmail.com"
+	// 	password := "emparty@2021"
 
-	// smtp server configuration.
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
+	// 	// Receiver email address.
+	// 	to := []string{
+	// 		userEmail,
+	// 	}
 
-	// Message.
-	message := []byte(userEmail)
+	// 	// smtp server configuration.
+	// 	smtpHost := "smtp.gmail.com"
+	// 	smtpPort := "587"
 
-	// Authentication.
-	auth := smtp.PlainAuth("", from, password, smtpHost)
+	// 	// Message.
+	// 	message := []byte(text)
 
-	// Sending email.
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	if err != nil {
+	// 	// Authentication.
+	// 	auth := smtp.PlainAuth("", from, password, smtpHost)
+
+	// 	// Sending email.
+	// 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
+	// 	if err != nil {
+	// 		return err.Error()
+	// 	}
+	// 	return "Email Sent Successfully!"
+	// }
+
+	m := gomail.NewMessage()
+	sender := "noreply.pugsod@gmail.com"
+	// Set E-Mail sender
+	m.SetHeader("From", sender)
+
+	// Set E-Mail receivers
+	m.SetHeader("To", userEmail)
+
+	// Set E-Mail subject
+	m.SetHeader("Subject", subject)
+
+	// Set E-Mail body. You can set plain text or html with text/html
+	m.SetBody("text/plain", text)
+
+	// Settings for SMTP server
+	d := gomail.NewDialer("smtp.gmail.com", 587, sender, "emparty@2021")
+
+	// This is only needed when SSL/TLS certificate is not valid on server.
+	// In production this should be set to false.
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	// Now send E-Mail
+	if err := d.DialAndSend(m); err != nil {
 		return err.Error()
 	}
-	return "Email Sent Successfully!"
-}
 
-// reset password by email
-func ResetPassword(c *gin.Context) {
-	// user_data := models.Userdata{}
-	// user_table := models.Usertable{}
-	println("I'm working")
-	new_password := GeneratePassword()
-	text := "we change your password to \n " + new_password + "\n pls change your password in profile page \n Best Regress \n Pugsod"
-	message := SendEmail("pkorn03@gmail.com", "Reset Password", text)
-	c.JSON(http.StatusOK, message)
+	return "Email Sent Successfully!"
 }
