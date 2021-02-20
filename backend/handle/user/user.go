@@ -123,34 +123,6 @@ func GeneratePassword() string {
 }
 
 func SendEmail(userEmail, subject, text string) string {
-
-	// 	// Sender data.
-	// 	from := "noreply.pugsod@gmail.com"
-	// 	password := "emparty@2021"
-
-	// 	// Receiver email address.
-	// 	to := []string{
-	// 		userEmail,
-	// 	}
-
-	// 	// smtp server configuration.
-	// 	smtpHost := "smtp.gmail.com"
-	// 	smtpPort := "587"
-
-	// 	// Message.
-	// 	message := []byte(text)
-
-	// 	// Authentication.
-	// 	auth := smtp.PlainAuth("", from, password, smtpHost)
-
-	// 	// Sending email.
-	// 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	// 	if err != nil {
-	// 		return err.Error()
-	// 	}
-	// 	return "Email Sent Successfully!"
-	// }
-
 	m := gomail.NewMessage()
 	sender := "noreply.pugsod@gmail.com"
 	// Set E-Mail sender
@@ -176,6 +148,30 @@ func SendEmail(userEmail, subject, text string) string {
 	if err := d.DialAndSend(m); err != nil {
 		return err.Error()
 	}
-
 	return "Email Sent Successfully!"
+}
+
+func ResetPassword(c *gin.Context) {
+	var userTable models.Usertable
+
+	email := c.PostForm("email")
+	new_password := GeneratePassword()
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	if err := database.DB.Where("email = ?", email).First(&userTable).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"massage": "Email is not exist",
+		})
+		return
+	}
+	database.DB.Model(&userTable).Where("email = ?", email).Update("password", passwordHash)
+	text := "This is your new password\n\n" + new_password + "\n\n you can change your password in profile page\n\n  Best regres\n Pugsod team"
+	SendEmail(userTable.Email, "Reset Password", text)
+	c.JSON(http.StatusOK, gin.H{
+		"massage": "Your new password was sent to your Email",
+	})
 }
