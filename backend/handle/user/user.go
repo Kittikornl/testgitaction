@@ -3,14 +3,19 @@ package user
 import (
 	"math/rand"
 	"net/http"
+	"net/smtp"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 	"github.com/sendgrid/sendgrid-go"
+=======
+>>>>>>> Stashed changes
 )
 
 =======
@@ -123,4 +128,44 @@ func GeneratePassword() string {
 		inRune[i], inRune[j] = inRune[j], inRune[i]
 	})
 	return string(inRune)
+}
+
+// send email
+func SendEmail(userEmail, subject, text string) string {
+	// Sender data.
+	from := "noreply.pugsod@gmail.com"
+	password := "emparty@2021"
+
+	// Receiver email address.
+	to := []string{
+		userEmail,
+	}
+
+	// smtp server configuration.
+	smtpHost := "smtp.gmail.com"
+	smtpPort := "587"
+
+	// Message.
+	message := []byte(userEmail)
+
+	// Authentication.
+	auth := smtp.PlainAuth("", from, password, smtpHost)
+
+	// Sending email.
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
+	if err != nil {
+		return err.Error()
+	}
+	return "Email Sent Successfully!"
+}
+
+// reset password by email
+func ResetPassword(c *gin.Context) {
+	// user_data := models.Userdata{}
+	// user_table := models.Usertable{}
+	println("I'm working")
+	new_password := GeneratePassword()
+	text := "we change your password to \n " + new_password + "\n pls change your password in profile page \n Best Regress \n Pugsod"
+	message := SendEmail("pkorn03@gmail.com", "Reset Password", text)
+	c.JSON(http.StatusOK, message)
 }
