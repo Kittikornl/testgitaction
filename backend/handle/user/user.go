@@ -23,7 +23,7 @@ func GetAllUser(c *gin.Context) {
 }
 
 func SaveUser(c *gin.Context) {
-	
+
 	var userData models.Userdata
 	var userTable models.Usertable
 
@@ -46,10 +46,10 @@ func SaveUser(c *gin.Context) {
 	}
 
 	if err := database.DB.Save(&userTable).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			println("4")
-			return
-		}
+		c.Status(http.StatusInternalServerError)
+		println("4")
+		return
+	}
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -65,4 +65,18 @@ func SaveUser(c *gin.Context) {
 	database.DB.Model(&userTable).Updates(models.Usertable{Email: userTable.Email, Password: string(passwordHash), Userdata: userData})
 	c.JSON(http.StatusOK, newUser)
 
+}
+
+func DeleteUser(c *gin.Context) {
+
+	id := c.Param("id")
+	userData := models.Userdata{}
+
+	if err := database.DB.Find(&userData, id).Error; err != nil {
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	database.DB.Model(models.Userdata{}).Where("id", id).Updates(map[string]interface{}{"is_active": 0})
+	c.Status(http.StatusNoContent)
 }
