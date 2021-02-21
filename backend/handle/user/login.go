@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/dto"
 	"github.com/sec33_Emparty/backend/models"
 	"github.com/sec33_Emparty/backend/service"
@@ -42,8 +43,23 @@ func (user *loginController) Login(c *gin.Context) string {
 }
 
 func LoginToTheFuckingUser(c *gin.Context) {
-	var userTable models.Usertable
-	var loginService service.LoginService = service.NewLoginService(userTable.Email, userTable.Password)
+
+	body := c.Request.Body
+
+	userTable := models.Usertable{}
+
+	// Check if tne email exists in DB
+	if err := database.DB.Find(&userTable).Error; err != nil {
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	if password != database.DB.Select("Password").Where("Email", email).Find(&userTable).Name() {
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	var loginService service.LoginService = service.NewLoginService(email, password)
 	var jwtService service.JWTService = service.JWTAuthService()
 	var loginController LoginController = LoginHandler(loginService, jwtService)
 
