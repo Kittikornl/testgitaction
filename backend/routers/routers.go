@@ -13,5 +13,6 @@ func InitRouter() *gin.Engine {
 	r.DELETE("/api/users/:id", user.DeleteUser)
 	r.POST("/api/users/reset-pwd", user.ResetPassword)
 	r.POST("/api/users/login", user.LoginToUser)
+	r.POST("/api/users/logout", user.LogoutFromUser)
 	return r
 }
