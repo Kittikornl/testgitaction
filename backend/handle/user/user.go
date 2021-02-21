@@ -2,6 +2,7 @@ package user
 
 import (
 	"crypto/tls"
+	//"go/printer"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -45,39 +46,49 @@ func SaveUser(c *gin.Context) {
 		println("1")
 		return
 	}
-
-	if err := database.DB.Save(&userData).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println("2")
-		return
-	}
-
+	
 	if err := c.ShouldBindBodyWith(&userTable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println("3")
 		return
 	}
+	
+	//check valid email
+	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
+		print("Not found")
+		
+		
+		if err := database.DB.Save(&userData).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println("2")
+			return
+		}
 
-	if err := database.DB.Save(&userTable).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println("4")
+		if err := database.DB.Save(&userTable).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println("4")
+			return
+		}
+
+		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+
+		// newUser := &models.Usertable{
+		// 	Email:    userTable.Email,
+		// 	Password: string(passwordHash),
+		// 	Userdata: userData,
+		// }
+
+		database.DB.Model(&userTable).Updates(models.Usertable{Email: userTable.Email, Password: string(passwordHash), Userdata: userData})
+		c.JSON(http.StatusOK, "OK")
+
+	}else{	
+		println("found")
+		c.JSON(http.StatusFound,"enter valid email")
 		return
 	}
-
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return
-	}
-
-	newUser := &models.Usertable{
-		Email:    userTable.Email,
-		Password: string(passwordHash),
-		Userdata: userData,
-	}
-
-	database.DB.Model(&userTable).Updates(models.Usertable{Email: userTable.Email, Password: string(passwordHash), Userdata: userData})
-	c.JSON(http.StatusOK, newUser)
-
 }
 
 func DeleteUser(c *gin.Context) {
@@ -172,7 +183,7 @@ func ResetPassword(c *gin.Context) {
 
 	if err := database.DB.Where("email = ?", email).First(&userTable).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"massage": "Email is not exist",
+			"message": "Email is not exist",
 		})
 		return
 	}
@@ -180,6 +191,6 @@ func ResetPassword(c *gin.Context) {
 	text := "This is your new password\n\n" + new_password + "\n\n you can change your password in profile page\n\n  Best regres\n Pugsod team"
 	SendEmail(userTable.Email, "Reset Password", text)
 	c.JSON(http.StatusOK, gin.H{
-		"massage": "Your new password was sent to your Email",
+		"message": "Your new password was sent to your Email",
 	})
 }
