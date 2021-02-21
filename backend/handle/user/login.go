@@ -56,7 +56,7 @@ func LoginToUser(c *gin.Context) {
 	password := loginInformation.Password
 
 	// Check if the email exists in DB
-	if err := database.DB.Where("Email = ?", loginInformation.Email).First(&userTable).Error; err != nil {
+	if err := database.DB.Joins("Userdata").Where("Email = ?", loginInformation.Email).First(&userTable).Error; err != nil {
 		println("This email doesn't exist in the system")
 		c.Status(http.StatusNotFound)
 		return
@@ -90,11 +90,12 @@ func LoginToUser(c *gin.Context) {
 	newToken := &models.Token{
 		Token: token,
 	}
-	database.DB.Model(models.Token{}).Updates(models.Token{Token: token})
+	database.DB.Model(models.Token{}).Save(models.Token{Token: token})
 	c.JSON(http.StatusOK, newToken)
 }
 
 func LogoutFromUser(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	database.DB.Model(models.Token{}).Delete(models.Token{Token: token})
+	c.JSON(205, "")
 }
