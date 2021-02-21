@@ -1,30 +1,17 @@
 package routers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sec33_Emparty/backend/handle/user"
 )
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
-
-	//test api
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-
-	r1 := r.Group("/users")
-	{
-		r1.GET("all", user.GetAllUser) //example api
-		r1.POST("", user.SaveUser)
-		r1.DELETE("/:id", user.DeleteUser)
-		// login
-		r1.POST("/login", user.LoginToTheFuckingUser)
-	}
-
+	r.GET("/api/users", user.GetAllUser)
+	r.GET("/api/accounts", user.GetAllAccount)
+	r.POST("/api/users", user.SaveUser)
+	r.DELETE("/api/users/:id", user.DeleteUser)
+	r.POST("/api/users/reset-pwd", user.ResetPassword)
+	r.POST("/api/users/login", user.LoginToTheFuckingUser)
 	return r
 }
