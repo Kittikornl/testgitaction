@@ -82,7 +82,7 @@ func DeleteUser(c *gin.Context) {
 	userData := models.Userdata{}
 
 	if err := database.DB.Find(&userData, id).Error; err != nil {
-		c.Status(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
 
@@ -97,7 +97,7 @@ func ResetPassword(c *gin.Context) {
 	new_password := services.GeneratePassword()
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
 	if err != nil {
-		c.Status(http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
 	}
 
@@ -120,7 +120,7 @@ func ChangePassword(c *gin.Context) {
 
 	new_password_hash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
 	if err != nil {
-		c.Status(http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
 	}
 
@@ -135,5 +135,25 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 	database.DB.Model(&userTable).Where("id", id).Update("password", new_password_hash)
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, services.ReturnMessage("Your password have been changed"))
+}
+
+func UpdateUser(c *gin.Context) {
+	id := c.Param("id")
+	var userDataIN models.Userdata
+	var userData models.Userdata
+
+	if err := c.ShouldBindBodyWith(&userDataIN, binding.JSON); err != nil {
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+		return
+	}
+	if err := database.DB.First(&userData, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+"is not exist"))
+		return
+	}
+	if err := database.DB.Model(&userData).Updates(userDataIN).Error; err != nil {
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, services.ReturnMessage(""))
 }
