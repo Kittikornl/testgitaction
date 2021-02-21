@@ -15,8 +15,6 @@ func Initdatabase() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	DB.Exec("DROP TABLE usertables")
-	DB.Exec("DROP TABLE userdata")
 	DB.AutoMigrate(&models.Userdata{})
 	DB.AutoMigrate(&models.Usertable{})
 
