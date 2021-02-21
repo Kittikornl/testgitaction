@@ -94,7 +94,7 @@ func LoginToUser(c *gin.Context) {
 	c.JSON(http.StatusOK, newToken)
 }
 
-func logoutFromUser(c *gin.Context) {
+func LogoutFromUser(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	database.DB.Model(models.Token{}).Delete(models.Token{Token: token})
 }
