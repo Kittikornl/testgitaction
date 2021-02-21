@@ -55,14 +55,20 @@ func SaveUser(c *gin.Context) {
 	
 	//check valid email
 	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
-		print("Not found")
-		
 		
 		if err := database.DB.Save(&userData).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			println("2")
 			return
 		}
+		
+		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+		
+		userTable.Userdata = userData
+		userTable.Password = string(passwordHash)
 
 		if err := database.DB.Save(&userTable).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
@@ -70,18 +76,6 @@ func SaveUser(c *gin.Context) {
 			return
 		}
 
-		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return
-		}
-
-		// newUser := &models.Usertable{
-		// 	Email:    userTable.Email,
-		// 	Password: string(passwordHash),
-		// 	Userdata: userData,
-		// }
-
-		database.DB.Model(&userTable).Updates(models.Usertable{Email: userTable.Email, Password: string(passwordHash), Userdata: userData})
 		c.JSON(http.StatusOK, "OK")
 
 	}else{	
