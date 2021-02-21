@@ -42,38 +42,42 @@ func SaveUser(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Save(&userData).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println("2")
-		return
-	}
-
 	if err := c.ShouldBindBodyWith(&userTable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println("3")
 		return
 	}
 
-	if err := database.DB.Save(&userTable).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println("4")
+	//check valid email
+	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
+
+		if err := database.DB.Save(&userData).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println("2")
+			return
+		}
+
+		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+
+		userTable.Userdata = userData
+		userTable.Password = string(passwordHash)
+
+		if err := database.DB.Save(&userTable).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println("4")
+			return
+		}
+
+		c.JSON(http.StatusOK, "OK")
+
+	} else {
+		println("found")
+		c.JSON(http.StatusFound, "enter valid email")
 		return
 	}
-
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return
-	}
-
-	newUser := &models.Usertable{
-		Email:    userTable.Email,
-		Password: string(passwordHash),
-		Userdata: userData,
-	}
-
-	database.DB.Model(&userTable).Updates(models.Usertable{Email: userTable.Email, Password: string(passwordHash), Userdata: userData})
-	c.JSON(http.StatusOK, newUser)
-
 }
 
 func DeleteUser(c *gin.Context) {
