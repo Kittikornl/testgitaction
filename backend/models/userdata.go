@@ -6,7 +6,6 @@ import (
 
 type Userdata struct {
 	gorm.Model
-	ID   			uint   `gorm:"primary_key" json:"id"`
 	FirstName     string
 	LastName      string
 	IsActive      int `gorm:"default:1"`
