@@ -10,14 +10,14 @@ import (
 
 //jwt service
 type JWTService interface {
-	GenerateToken(email string, isUser bool) string
+	GenerateToken(userID int, role int) string
 	ValidateToken(token string) (*jwt.Token, error)
 }
 
 // jwtCustomClaims are custom claims extending default ones.
 type authCustomClaims struct {
-	Email string `json:"email"`
-	User  bool   `json:"user"`
+	UserID int `json:"userID"`
+	Role   int `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -42,12 +42,12 @@ func getSecretKey() string {
 	return secret
 }
 
-func (service *jwtService) GenerateToken(email string, isUser bool) string {
+func (service *jwtService) GenerateToken(userID int, role int) string {
 
 	// Set custom and standard claims
 	claims := &authCustomClaims{
-		email,
-		isUser,
+		userID,
+		role,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 48).Unix(),
 			Issuer:    service.issuer,
