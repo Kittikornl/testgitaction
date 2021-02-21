@@ -4,15 +4,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/dto"
 	"github.com/sec33_Emparty/backend/models"
 	"github.com/sec33_Emparty/backend/service"
+	"golang.org/x/crypto/bcrypt"
 )
 
 //login controller interface
 type LoginController interface {
-	Login(ctx *gin.Context) string
+	Login(isAuth bool, userData models.Userdata) string
 }
 
 type loginController struct {
@@ -28,13 +30,11 @@ func LoginHandler(loginService service.LoginService,
 	}
 }
 
-func (user *loginController) Login(c *gin.Context) string {
+func (user *loginController) Login(isAuthenticated bool, userData models.Userdata) string {
 	var credential dto.LoginCredentials
-	err := c.ShouldBind(&credential)
-	if err != nil {
-		return "No data found"
-	}
-	isAuthenticated := user.loginService.LoginUser(credential.Email, credential.Password)
+	credential.UserID = int(userData.ID)
+	credential.Role = userData.Role
+
 	if isAuthenticated {
 		// return the token
 		return user.jWtService.GenerateToken(credential.UserID, credential.Role)
@@ -42,28 +42,42 @@ func (user *loginController) Login(c *gin.Context) string {
 	return ""
 }
 
-func LoginToTheFuckingUser(c *gin.Context) {
+func LoginToUser(c *gin.Context) {
 
-	body := c.Request.Body
+	var userTable = models.Usertable{}
+	var loginInformation = service.LoginInformation{}
 
-	userTable := models.Usertable{}
+	if err := c.ShouldBindBodyWith(&loginInformation, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println("Error: Missing data")
+		return
+	}
+	// Store input password
+	password := loginInformation.Password
 
-	// Check if tne email exists in DB
-	if err := database.DB.Find(&userTable).Error; err != nil {
+	// Check if the email exists in DB
+	if err := database.DB.Where("Email = ?", loginInformation.Email).First(&userTable).Error; err != nil {
+		println("This email doesn't exist in the system")
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	if password != database.DB.Select("Password").Where("Email", email).Find(&userTable).Name() {
+	// Check if input password matched with input in the DB
+	if err := bcrypt.CompareHashAndPassword([]byte(userTable.Password), []byte(password)); err != nil {
+		// Error message
+		println("The password doesn't correct")
 		c.Status(http.StatusNotFound)
 		return
 	}
 
-	var loginService service.LoginService = service.NewLoginService(email, password)
+	userData := userTable.Userdata
+	isAuth := true
+
+	var loginService service.LoginService = service.NewLoginService(userTable.Email, password)
 	var jwtService service.JWTService = service.JWTAuthService()
 	var loginController LoginController = LoginHandler(loginService, jwtService)
 
-	token := loginController.Login(c)
+	token := loginController.Login(isAuth, userData)
 	if token != "" {
 		c.JSON(http.StatusOK, gin.H{
 			"token": token,
@@ -72,4 +86,15 @@ func LoginToTheFuckingUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, nil)
 	}
 
+	// Insert token into Token table to store the working token.
+	newToken := &models.Token{
+		Token: token,
+	}
+	database.DB.Model(models.Token{}).Updates(models.Token{Token: token})
+	c.JSON(http.StatusOK, newToken)
+}
+
+func logoutFromUser(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	database.DB.Model(models.Token{}).Delete(models.Token{Token: token})
 }
