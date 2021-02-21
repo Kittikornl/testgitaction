@@ -35,7 +35,8 @@ func (user *loginController) Login(c *gin.Context) string {
 	}
 	isAuthenticated := user.loginService.LoginUser(credential.Email, credential.Password)
 	if isAuthenticated {
-		return user.jWtService.GenerateToken(credential.Email, true)
+		// return the token
+		return user.jWtService.GenerateToken(credential.UserID, credential.Role)
 	}
 	return ""
 }
@@ -54,4 +55,5 @@ func LoginToTheFuckingUser(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusUnauthorized, nil)
 	}
+
 }
