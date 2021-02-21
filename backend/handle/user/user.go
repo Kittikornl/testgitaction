@@ -16,19 +16,19 @@ var DB *gorm.DB
 
 //example handle function for api
 func GetAllUser(c *gin.Context) {
-	user := []models.Userdata{}
+	users := []models.Userdata{}
 
-	database.DB.Find(&user)
+	database.DB.Find(&users)
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, users)
 }
 
 func GetAllAccount(c *gin.Context) {
-	user := []models.Usertable{}
+	users := []models.Usertable{}
 
-	database.DB.Find(&user)
+	database.DB.Joins("Userdata").Find(&users)
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, users)
 }
 
 func SaveUser(c *gin.Context) {
@@ -38,46 +38,38 @@ func SaveUser(c *gin.Context) {
 
 	if err := c.ShouldBindBodyWith(&userData, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
-		println("1")
 		return
 	}
 
 	if err := c.ShouldBindBodyWith(&userTable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
-		println("3")
 		return
 	}
 
-	//check valid email
-	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
-
-		if err := database.DB.Save(&userData).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			println("2")
-			return
-		}
-
-		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return
-		}
-
-		userTable.Userdata = userData
-		userTable.Password = string(passwordHash)
-
-		if err := database.DB.Save(&userTable).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			println("4")
-			return
-		}
-
-		c.JSON(http.StatusOK, "OK")
-
-	} else {
-		println("found")
-		c.JSON(http.StatusFound, "enter valid email")
+	if err := database.DB.Save(&userData).Error; err != nil {
+		c.Status(http.StatusInternalServerError)
 		return
 	}
+
+	if err := database.DB.Save(&userData).Error; err != nil {
+		c.Status(http.StatusInternalServerError)
+		println("2")
+		return
+	}
+
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	userTable.Password = string(passwordHash)
+	userTable.Userdata = userData
+	if err := database.DB.Save(&userTable).Error; err != nil {
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+	c.JSON(http.StatusOK, userTable)
 }
 
 func DeleteUser(c *gin.Context) {
