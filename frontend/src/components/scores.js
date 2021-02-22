@@ -8,21 +8,21 @@ const renderStar = (score) => {
     const listStar = []
     for (let i = 0; i < intScore; i++) {
         listStar.push(
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFC107", fontSize: "30px" }} />
+            <FontAwesomeIcon className="star-icon" icon={faStar} />
         )
     }
     if (score - intScore === 0.5)
         listStar.push(
-            <FontAwesomeIcon icon={faStarHalfAlt} style={{ color: "#FFC107", fontSize: "30px" }} />
+            <FontAwesomeIcon className="star-icon" icon={faStarHalfAlt}  />
         )
     for (let i = 0; i < zeroStar; i++) {
         listStar.push(
-            <FontAwesomeIcon icon={faStarZero} style={{ color: "#FFC107", fontSize: "30px" }} />
+            <FontAwesomeIcon className="star-icon" icon={faStarZero} />
         )
     }
     if (score === 0)
         listStar.push(
-            <FontAwesomeIcon icon={faStarZero} style={{ color: "#FFC107", fontSize: "30px" }} />
+            <FontAwesomeIcon className="star-icon" icon={faStarZero} />
         )
     return listStar
 }
