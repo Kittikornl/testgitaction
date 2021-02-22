@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import bg from "../img/vegetables.jpg";
-import { Form, Input, Button, DatePicker, Modal, Popconfirm } from "antd";
+import { Form, Input, Button, DatePicker, Modal, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import "./Editprofile.scss";
 import visa from "../img/visa.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,6 +47,7 @@ const CardInfo = (props) => {
 
 const Editprofile = (props) => {
   const [data, setData] = useState(initData);
+  const [image, setImage] = useState();
   const [refresh, setRefresh] = useState(true);
   const dateFormat = "DD/MM/YYYY";
 
@@ -76,6 +78,19 @@ const Editprofile = (props) => {
       "date-picker": fieldsValue["date-picker"].format("YYYY-MM-DD"),
     };
     console.log("Received values of form: ", values);
+  };
+
+  const propsUpload = {
+    maxCount: 1,
+    onChange: (info) => {
+      const type = info.file.name.split(".")[1];
+      if (type === "png" || type === "jpg") {
+        setImage(info.file);
+        console.log(info.file);
+      } else {
+        console.error("Type error!");
+      }
+    },
   };
 
   const renderCreditCard = (card, index) => {
@@ -133,7 +148,15 @@ const Editprofile = (props) => {
         <img className="bg" preview={false} src={bg} />
         <div className="profile flex-row">
           <div className="img-col">
-            <img src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+            <Upload {...propsUpload}>
+              <Button icon={<UploadOutlined />}>Upload png only</Button>
+            </Upload>
+            <img
+              src={
+                image ||
+                "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              }
+            />
           </div>
           <div className="info-container">
             <Form

@@ -22,28 +22,25 @@ function App() {
   // };
   return (
     <Router history={history}>
-      <div className="flex">
-        {/* {checkPath(location.pathname) ? } */}
-        <Switch>
-          <Route
-            exact
-            key="editprofile"
-            path="/profile/edit"
-            component={Editprofile}
-          />
-          <Route exact key="login" path="/login" component={Login} />
-          <Route exact key="login" path="/" component={Login} />
-          <Route exact key="register" path="/register" component={Register} />
-          <Route
-            exact
-            key="reset password"
-            path="/password/reset"
-            component={ResetPassword}
-          />
-          <Route exact key="profile" path="/profile" component={Profile} />
-          {/* <Route exact key="edit profile" path="profile/edit" component={editProfile} /> */}
-        </Switch>
-      </div>
+      <Switch>
+        <Route
+          exact
+          key="editprofile"
+          path="/profile/edit"
+          component={Editprofile}
+        />
+        <Route exact key="login" path="/login" component={Login} />
+        <Route exact key="login" path="/" component={Login} />
+        <Route exact key="register" path="/register" component={Register} />
+        <Route
+          exact
+          key="reset password"
+          path="/password/reset"
+          component={ResetPassword}
+        />
+        <Route exact key="profile" path="/profile" component={Profile} />
+        {/* <Route exact key="edit profile" path="profile/edit" component={editProfile} /> */}
+      </Switch>
     </Router>
   );
 }
