@@ -5,7 +5,7 @@ import "./profile.scss"
 import Scores from '../components/scores';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faUserFriends} from '@fortawesome/free-solid-svg-icons'
+import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
 
 const renderButtonContentText = (shop) => {
     return (
@@ -41,11 +41,11 @@ const renderButtonContent = (role, shop) => {
 }
 
 const Profile = () => {
-
+    
     const initData = {
         "firstname": "Tinnapop",
         "lastname" : "Pratheep",
-        "role": "Customer",
+        "role": "Product Seller",
         "birthdate": "22/02/2000",
         "age": "20",
         "email": "guutar@pugsod.com",
@@ -71,23 +71,32 @@ const Profile = () => {
                     src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                     alt="profile-img"
                 />
-                <div className="profile-title">
-                    <div className="full-name">{`${data.firstname} ${data.lastname}`}</div>
+                <div className="profile-title flex-col">
+                    <div className="full-name">
+                        <div className="name">{`${data.firstname} ${data.lastname}`}</div>
+                        <a className="edit-info"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
+                    </div>
                     <div className="role">{data.role}</div>
-                    <div className="info-container flex-row">
-                        <div className="info-title">
-                            <div className="birth">Birth Date :</div>
-                            <div className="age">Age :</div>
-                            <div className="email">Email :</div>
-                            <div className="phone">Phone :</div>
-                        </div>
-                        <div className="info-data">
-                            <div className="birth">{data.birthdate}</div>
-                            <div className="age">{data.age}</div>
-                            <div className="email">{data.email}</div>
-                            <div className="phone">{data.phoneNo}</div>
+                    <div className="info-container flex-col">
+                        <div className="info-data flex-row">
+                            <div className="info-title">
+                                <div className="birth">Birth Date :</div>
+                                <div className="age">Age :</div>
+                                <div className="email">Email :</div>
+                                <div className="phone">Phone :</div>
+                            </div>
+                            <div className="info-data">
+                                <div className="birth">{data.birthdate}</div>
+                                <div className="age">{data.age}</div>
+                                <div className="email">{data.email}</div>
+                                <div className="phone">{data.phoneNo}</div>
+                            </div>
                         </div>
                         {renderButtonContent(data.role, data.shop)}
+                    </div>
+                    <div className="info-address flex-col">
+                        <div className="address-title">Address</div>
+                        <div className="address-data">{data.address}</div>
                     </div>
                 </div>
             </div>        
