@@ -4,7 +4,7 @@ import { faStar as faStarZero } from '@fortawesome/free-regular-svg-icons'
 
 const renderStar = (score) => {
     const intScore = parseInt(score)
-    const zeroStar = 4 - intScore
+    const zeroStar = 5 - Math.round(score)
     const listStar = []
     for (let i = 0; i < intScore; i++) {
         listStar.push(
@@ -15,15 +15,15 @@ const renderStar = (score) => {
         listStar.push(
             <FontAwesomeIcon className="star-icon" icon={faStarHalfAlt}  />
         )
+    else if (Math.round(score) > score)
+        listStar.push(
+            <FontAwesomeIcon className="star-icon" icon={faStarHalfAlt}  />
+        )
     for (let i = 0; i < zeroStar; i++) {
         listStar.push(
             <FontAwesomeIcon className="star-icon" icon={faStarZero} />
         )
     }
-    if (score === 0)
-        listStar.push(
-            <FontAwesomeIcon className="star-icon" icon={faStarZero} />
-        )
     return listStar
 }
 
