@@ -74,7 +74,7 @@ const Profile = () => {
                 <div className="profile-title flex-col">
                     <div className="full-name">
                         <div className="name">{`${data.firstname} ${data.lastname}`}</div>
-                        <a className="edit-info"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
+                        <a className="edit-info" href="/editprofile"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
                     </div>
                     <div className="role">{data.role}</div>
                     <div className="info-container flex-col">
