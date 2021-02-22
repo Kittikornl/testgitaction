@@ -47,7 +47,7 @@ const CardInfo = (props) => {
 const Editprofile = (props) => {
   const [data, setData] = useState(initData);
   const [refresh, setRefresh] = useState(true);
-  const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+  const dateFormat = "DD/MM/YYYY";
 
   useEffect(() => {
     setData(initData);
@@ -82,9 +82,9 @@ const Editprofile = (props) => {
     return <CardInfo card={card} pageRefresh={pageRefresh} />;
   };
 
-  const [visibleCredit, setVisibleCredit] = React.useState(false);
-  const [visibleDelete, setVisibleDelete] = React.useState(false);
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [visibleCredit, setVisibleCredit] = useState(false);
+  const [visibleDelete, setVisibleDelete] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModalCredit = () => {
     setVisibleCredit(true);
@@ -127,15 +127,6 @@ const Editprofile = (props) => {
     setVisibleDelete(false);
   };
 
-  // const handleClear = () => {
-  //   document.getElementById("firstname").value = " ";
-  //   document.getElementById("lastname").value = "";
-  //   document.getElementById("email").value = "";
-  //   document.getElementById("phone").value = "";
-  //   document.getElementById("address").value = "";
-  //   document.getElementById("birthdate").value = "";
-  // };
-
   return (
     <div className="editprofile-container">
       <div className="edit-info">
@@ -147,8 +138,15 @@ const Editprofile = (props) => {
           <div className="info-container">
             <Form
               name="basic"
-              // initialValues={{ remember: true }}
               onFinish={onFinishInfo}
+              initialValues={{
+                firstname: `${data.name}`,
+                lastname: `${data.surname}`,
+                email: `${data.mail}`,
+                phone: `${data.Tel}`,
+                address: `${data.Addr}`,
+                birthdate: moment(data.Birthdate, dateFormat),
+              }}
             >
               <div className="info-header">Edit Information</div>
               <Form.Item
@@ -161,12 +159,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input
-                  className="input"
-                  defaultValue={data.name}
-                  id="firstname"
-                  allowClear
-                />
+                <Input className="input" id="firstname" allowClear />
               </Form.Item>
               <Form.Item
                 label="Last name"
@@ -178,12 +171,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input
-                  className="input"
-                  defaultValue={data.surname}
-                  id="lastname"
-                  allowClear
-                />
+                <Input className="input" id="lastname" allowClear />
               </Form.Item>
               <Form.Item
                 label="Email"
@@ -196,12 +184,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input
-                  className="input"
-                  defaultValue={data.mail}
-                  id="email"
-                  allowClear
-                />
+                <Input className="input" id="email" allowClear />
               </Form.Item>
               <Form.Item
                 label="Phone"
@@ -213,13 +196,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input
-                  type="tel"
-                  className="input"
-                  defaultValue={data.Tel}
-                  id="phone"
-                  allowClear
-                />
+                <Input type="tel" className="input" id="phone" allowClear />
               </Form.Item>
               <Form.Item
                 label="Address"
@@ -231,24 +208,14 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input
-                  className="input"
-                  defaultValue={data.Addr}
-                  id="address"
-                  allowClear
-                />
+                <Input className="input" id="address" allowClear />
               </Form.Item>
               <Form.Item
                 label="Birth date"
                 name="birthdate"
                 {...configBirthdate}
               >
-                <DatePicker
-                  defaultValue={moment(`${data.Birthdate}`, dateFormatList[0])}
-                  format={dateFormatList}
-                  id="birthdate"
-                  allowClear
-                />
+                <DatePicker format={dateFormat} id="birthdate" allowClear />
               </Form.Item>
               <Button
                 htmlType="submit"
