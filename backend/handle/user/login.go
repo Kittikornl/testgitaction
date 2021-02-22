@@ -79,6 +79,11 @@ func LoginToUser(c *gin.Context) {
 
 	token := loginController.Login(isAuth, userData)
 	if token != "" {
+		// Insert token into Token table to store the working token.
+		newToken := &models.Token{
+			Token: token,
+		}
+		database.DB.Save(&newToken)
 		c.JSON(http.StatusOK, gin.H{
 			"token": token,
 		})
@@ -86,16 +91,17 @@ func LoginToUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, nil)
 	}
 
-	// Insert token into Token table to store the working token.
-	newToken := &models.Token{
-		Token: token,
-	}
-	database.DB.Model(models.Token{}).Save(models.Token{Token: token})
-	c.JSON(http.StatusOK, newToken)
 }
 
 func LogoutFromUser(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	database.DB.Model(models.Token{}).Delete(models.Token{Token: token})
+	token := &models.Token{
+		Token: c.GetHeader("Authorization"),
+	}
+
+	if err := database.DB.Delete(&token).Error; err != nil {
+		// Error message
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
 	c.JSON(205, "")
 }
