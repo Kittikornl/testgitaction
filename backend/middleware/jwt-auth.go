@@ -7,7 +7,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/sec33_Emparty/backend/service"
+	"github.com/sec33_Emparty/backend/services"
 )
 
 // AuthorizeJWT validates the token from the http request
@@ -16,7 +16,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		const BEARER_SCHEMA = "Bearer"
 		authHeader := c.GetHeader("Authorization")
 		tokenString := authHeader[len(BEARER_SCHEMA):]
-		token, err := service.JWTAuthService().ValidateToken(tokenString)
+		token, err := services.JWTAuthService().ValidateToken(tokenString)
 
 		if token.Valid {
 			claims := token.Claims.(jwt.MapClaims)

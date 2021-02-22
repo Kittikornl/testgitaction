@@ -8,7 +8,7 @@ import (
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/dto"
 	"github.com/sec33_Emparty/backend/models"
-	"github.com/sec33_Emparty/backend/service"
+	"github.com/sec33_Emparty/backend/services"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,12 +18,12 @@ type LoginController interface {
 }
 
 type loginController struct {
-	loginService service.LoginService
-	jWtService   service.JWTService
+	loginService services.LoginService
+	jWtService   services.JWTService
 }
 
-func LoginHandler(loginService service.LoginService,
-	jWtService service.JWTService) LoginController {
+func LoginHandler(loginService services.LoginService,
+	jWtService services.JWTService) LoginController {
 	return &loginController{
 		loginService: loginService,
 		jWtService:   jWtService,
@@ -45,7 +45,7 @@ func (user *loginController) Login(isAuthenticated bool, userData models.Userdat
 func LoginToUser(c *gin.Context) {
 
 	var userTable = models.Usertable{}
-	var loginInformation = service.LoginInformation{}
+	var loginInformation = services.LoginInformation{}
 
 	if err := c.ShouldBindBodyWith(&loginInformation, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
@@ -73,8 +73,8 @@ func LoginToUser(c *gin.Context) {
 	userData := userTable.Userdata
 	isAuth := true
 
-	var loginService service.LoginService = service.NewLoginService(userTable.Email, password)
-	var jwtService service.JWTService = service.JWTAuthService()
+	var loginService services.LoginService = services.NewLoginService(userTable.Email, password)
+	var jwtService services.JWTService = services.JWTAuthService()
 	var loginController LoginController = LoginHandler(loginService, jwtService)
 
 	token := loginController.Login(isAuth, userData)
