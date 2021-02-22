@@ -31,6 +31,14 @@ func GetAllAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+func GetUser(c *gin.Context) {
+	user := models.Userdata{}
+
+	database.DB.Find(&user)
+
+	c.JSON(http.StatusOK, user)
+}
+
 func SaveUser(c *gin.Context) {
 
 	var userData models.Userdata
@@ -38,6 +46,7 @@ func SaveUser(c *gin.Context) {
 
 	if err := c.ShouldBindBodyWith(&userData, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
+		println(err.Error())
 		return
 	}
 
@@ -46,30 +55,38 @@ func SaveUser(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Save(&userData).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
+	//check valid email
+	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
+		if err := database.DB.Save(&userData).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+
+		if err := database.DB.Save(&userData).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println("2")
+			return
+		}
+
+		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			return
+		}
+
+		userTable.Password = string(passwordHash)
+		userTable.Userdata = userData
+		if err := database.DB.Save(&userTable).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+		c.JSON(http.StatusOK, &userTable)
+
+	} else {
+		c.JSON(http.StatusFound, "enter valid email")
 		return
 	}
 
-	if err := database.DB.Save(&userData).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println("2")
-		return
-	}
-
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-		return
-	}
-
-	userTable.Password = string(passwordHash)
-	userTable.Userdata = userData
-	if err := database.DB.Save(&userTable).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		return
-	}
-	c.JSON(http.StatusOK, userTable)
 }
 
 func DeleteUser(c *gin.Context) {
@@ -81,8 +98,7 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
-
-	database.DB.Model(models.Userdata{}).Where("id", id).Updates(map[string]interface{}{"is_active": 0})
+	database.DB.Delete(&userData)
 	c.Status(http.StatusNoContent)
 }
 
@@ -138,13 +154,13 @@ func UpdateUser(c *gin.Context) {
 	id := c.Param("id")
 	var userDataIN models.Userdata
 	var userData models.Userdata
-
 	if err := c.ShouldBindBodyWith(&userDataIN, binding.JSON); err != nil {
+		println(err.Error())
 		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
 	}
 	if err := database.DB.First(&userData, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+"is not exist"))
+		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+" is not exist"))
 		return
 	}
 	if err := database.DB.Model(&userData).Updates(userDataIN).Error; err != nil {
