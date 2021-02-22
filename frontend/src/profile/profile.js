@@ -5,11 +5,11 @@ import "./profile.scss"
 import Scores from '../components/scores';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faUserFriends} from '@fortawesome/free-solid-svg-icons'
+import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
 
 const renderButtonContentText = (shop) => {
     return (
-        <div className="button-content">
+        <div className="button-content flex-row">
             <div className="score-text">{shop.score.toFixed(1)}</div>
             <Scores score={shop.score}/>
             <div className="vote-count-text">
@@ -21,24 +21,27 @@ const renderButtonContentText = (shop) => {
 }
 
 const renderButtonContent = (role, shop) => {
-    console.log(typeof(shop))
     if(role==="Product Seller" && Object.keys(shop).length !== 0) {
         return (
-            <div className="button-container">
+            <div className="button-container flex-row">
                 <Viewshopbutton enable={true}/>
                 {renderButtonContentText(shop)}
             </div>      
         )
     } 
     else if (role==="Product Seller") {
-        return <Viewshopbutton enable={false}/>
+        return (
+            <div className="button-container flex-row">
+                <Viewshopbutton enable={false}/>
+            </div>      
+        )
     }
     else 
         return <Viewhistory/>
 }
 
 const Profile = () => {
-
+    
     const initData = {
         "firstname": "Tinnapop",
         "lastname" : "Pratheep",
@@ -62,26 +65,20 @@ const Profile = () => {
 
     return (
         <div className="profile-page-container">
-            {/* <navbar /> */}
-            <div className="navbar"></div>
-            <div className="profile-cover-container">
-                <div className="cover-img-container">
-                    <img className="cover-img"
-                        src="https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2017/08/facebook-cover.jpg"
-                        alt="profile-img"
-                    />
-                </div>
-                <div className="profile-container">
-                    <img className="profile-img"
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                        alt="profile-img"
-                    />
-                    <div className="data-flex">
-                        <div className="profile-title">
-                            <div className="full-name">{`${data.firstname} ${data.lastname}`}</div>
-                            <div className="role">{ data.role}</div>
-                        </div>
-                        <div className="info-container">
+            <div>sss</div>
+            <div className="profile-container flex-row">
+                <img className="profile-img"
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    alt="profile-img"
+                />
+                <div className="profile-title flex-col">
+                    <div className="full-name">
+                        <div className="name">{`${data.firstname} ${data.lastname}`}</div>
+                        <a className="edit-info" href="/editprofile"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
+                    </div>
+                    <div className="role">{data.role}</div>
+                    <div className="info-container flex-col">
+                        <div className="info-data flex-row">
                             <div className="info-title">
                                 <div className="birth">Birth Date :</div>
                                 <div className="age">Age :</div>
@@ -96,15 +93,13 @@ const Profile = () => {
                             </div>
                         </div>
                         {renderButtonContent(data.role, data.shop)}
-                        <div className="address">
-                            <div className="title">Address</div>
-                            <div className="content">
-                                <div>{data.address}</div>
-                            </div>
-                        </div>
+                    </div>
+                    <div className="info-address flex-col">
+                        <div className="address-title">Address</div>
+                        <div className="address-data">{data.address}</div>
                     </div>
                 </div>
-            </div>
+            </div>        
         </div>
     )
 }
