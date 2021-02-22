@@ -2,67 +2,218 @@
 
 .profile-page-container {
     background-image: url("../img/main-veg.jpg");
+    width: 100vw;
+
+    .profile-container {
+        margin-top: 220px ;
+        justify-content: center;
+        column-gap: 50px;
+    
+        background-color: white;
+    }
+    
+    .profile-container img {
+        margin-top: -80px;
+        max-width: 300px;
+        max-height: 300px;
+        width: auto;
+        height: auto;
+        border-radius: 50%;
+    }
+    
+    .profile-title .full-name {
+        display: inline-flex;
+        flex-direction: row;
+
+        font-weight: bold;
+        font-size: 45px;
+        color: $green;
+
+        align-items: center;
+    }
+
+    .profile-title .full-name .edit-info {
+        display: inline-flex;
+        flex-direction: row;
+
+        margin-left: 10px;
+        font-weight: bold;
+        font-size: 20px;
+        color: $gray;
+
+        align-items: center;
+        width: fit-content;
+    }
+    
+    .profile-title .role {
+        font-weight: 500;
+        font-size: 23px;
+        color: $green;
+    }
+
+    .info-data {
+        column-gap: 30px;
+    }
+    
+    .info-container {
+        margin-top: 10px;
+        column-gap: 1vw;
+        max-width: 550px;
+    
+        font-weight: 500;
+        font-size: 23px;
+
+        padding-bottom: 20px;
+        border-bottom: 1px solid $gray;
+    }
+    
+    .ant-btn {
+        background-color: $green;
+        border-radius: 10px;
+        height: 80px;
+        border: none;
+    
+        font-weight: 600;
+        font-size: 25px;
+        color: white;
+    }
+    
+    .button-container {
+        margin-top: 10px;
+        column-gap: 10px;
+    }
+    
+    .button-content {
+        align-content: center;
+        column-gap: 10px;
+    }
+    
+    .button-content .score-text, .button-content .vote-count-text {
+        align-self: center;
+    }
+    
+    .view-shop-btn .button {
+        margin-right:"10px";
+        font-size:"35px";
+    }
+    
+    .star-icon {
+        color: #FFC107;
+        font-size: 30px;
+    }
+    
+    .line {
+        width: 100%;
+        border-top: 0px;
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom : solid 3px $gray;
+    }
+
+    .address-title {
+        margin-top: 10px;
+        color: $green;
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    .address-data {
+        color: $gray;
+        font-size: 23px;
+    }
+
+    @media screen and (max-width: 925px) {
+        .profile-title .full-name .edit-info div {
+            display: none;
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        .profile-title .full-name,.profile-title .role {
+            align-self: center;
+            text-align: center;
+        }
+        .info-container {
+            align-self: center;
+        }
+        
+        .info-data {
+            justify-content: center
+        }
+    }
+    
+    @media screen and (max-width: 550px) {
+        .info-container {
+            align-items: center;
+        }
+
+        .profile-container {
+            margin-top: 120px ;
+        }
+    
+        .profile-container img {
+            max-width: 150px;
+            max-height: 150px;
+        }
+    
+        .profile-title .full-name {
+            font-size: 20px;
+        }
+    
+        .profile-title .role {
+            font-size: 15px;
+        }
+        
+        .info-container {
+            font-size: 15px;
+        }
+    
+        .view-shop-btn .ant-btn {
+            height: 40px;
+            font-size: 13px;
+        }
+    
+        .star-icon {
+            color: #FFC107;
+            font-size: 13px;
+        }
+        
+        .address-title {
+            font-size: 20px;
+        }
+
+        .address-data {
+            font-size: 15px;
+        }
+    }
+
+    @media screen and (max-width: 280px) {
+        .button-container { 
+            column-gap: 2px;
+        }
+
+        .button-content { 
+            column-gap: 2px;
+        }
+
+        .view-shop-btn .ant-btn {
+            height: 30px;
+            font-size: 8px;
+        }
+
+        .star-icon {
+            color: #FFC107;
+            font-size: 13px;
+        }
+
+        .info-data {
+            column-gap: 0px;
+        }
+
+        .info-address {
+            width: auto;
+        }
+        
+    }
 }
 
-.profile-container {
-    margin-top: 220px ;
-    justify-content: center;
-    column-gap: 50px;
-
-    background-color: white;
-}
-
-.profile-container img {
-    margin-top: -80px;
-    max-width: 300px;
-    max-height: 300px;
-    width: auto;
-    height: auto;
-    border-radius: 50%;
-}
-
-.profile-title .full-name {
-    font-weight: bold;
-    font-size: 45px;
-    color: $green;
-}
-
-.profile-title .role {
-    font-weight: 500;
-    font-size: 23px;
-    color: $green;
-}
-
-.info-container {
-    margin-top: 10px;
-    column-gap: 10%;
-    max-width: 550px;
-
-    font-weight: 500;
-    font-size: 23px;
-}
-
-.ant-btn {
-    background-color: $green;
-    border-radius: 10px;
-    height: 80px;
-    border: none;
-
-    font-weight: 600;
-    font-size: 25px;
-    color: white;
-}
-
-.button-container {
-    margin-top: 10px;
-    column-gap: 10px;
-}
-
-.button-content {
-    align-content: center;
-    column-gap: 10px;
-}
-
-.button-content .score-text, .button-content .vote-count-text {
-    align-self: center;
-}
