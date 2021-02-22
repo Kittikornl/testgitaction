@@ -12,6 +12,7 @@ func InitRouter() *gin.Engine {
 	r.POST("/api/users", user.SaveUser)
 	r.POST("/api/users/reset-pwd", user.ResetPassword)
 	r.DELETE("/api/users/:id", user.DeleteUser)
+	r.GET("/api/users/:id", user.GetUser)
 	r.PUT("/api/users/:id", user.UpdateUser)
 	r.PATCH("/api/users/:id/change-pwd", user.ChangePassword)
 
