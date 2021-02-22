@@ -6,6 +6,7 @@ import ResetPassword from "./login/resetpassword";
 import { useHistory } from "react-router-dom";
 import Profile from "./profile/profile";
 import Editprofile from "./profile/Editprofile";
+import PrivateRoute from './components/privateroute'
 
 function App() {
   const history = useHistory();
@@ -23,7 +24,7 @@ function App() {
   return (
     <Router history={history}>
       <Switch>
-        <Route
+        <PrivateRoute
           exact
           key="editprofile"
           path="/profile/edit"
@@ -38,9 +39,9 @@ function App() {
           path="/password/reset"
           component={ResetPassword}
         />
-        <Route exact key="profile" path="/profile" component={Profile} />
-        {/* <Route exact key="edit profile" path="profile/edit" component={editProfile} /> */}
+        <PrivateRoute exact key="profile" path="/profile" component={Profile} />
       </Switch>
+
     </Router>
   );
 }

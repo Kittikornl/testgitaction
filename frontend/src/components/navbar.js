@@ -27,7 +27,6 @@ const Navbar = () => {
                 </Link>
              </div>
              <div className="desktop height">
-                 
                 <Menu mode="horizontal">
                         <Menu.Item key="1" >
                         <Link to="/home">Home</Link>
