@@ -5,6 +5,7 @@ import Register from './register/register'
 import ResetPassword from './login/resetpassword'
 import { useHistory } from "react-router-dom";
 import Profile from './profile/profile';
+import PrivateRoute from './components/privateroute'
 
 function App() {
   const history = useHistory()
@@ -21,17 +22,14 @@ function App() {
   // };
   return (
     <Router history={history}>
-      <div className="flex">
-        {/* {checkPath(location.pathname) ? } */}
         <Switch>
           <Route exact key="login" path="/login" component={Login} />
           <Route exact key="login" path="/" component={Login} />
           <Route exact key="register" path="/register" component={Register} />
           <Route exact key="reset password" path="/password/reset" component={ResetPassword} />
-          <Route exact key="profile" path="/profile" component={Profile} /> 
-          {/* <Route exact key="edit profile" path="profile/edit" component={editProfile} /> */}
+          <PrivateRoute exact key="profile" path="/profile" component={Profile} /> 
+          {/* <PrivateRoute exact key="edit profile" path="profile/edit" component={editProfile} /> */}
         </Switch>
-      </div>
     </Router>
   );
 }
