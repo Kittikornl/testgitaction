@@ -1,31 +1,30 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import Authentication from "../stores/AuthenticationStore";
-import { observer } from "mobx-react-lite";
+import AuthService from '../service/auth.service'
+import Navbar from './navbar'
 
-export const PrivateRoute = ({ component: Component, ...rest }) => {
-    const auth = useContext(Authentication);
-    const { currentUserValue } = auth;
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    // const { currentUserValue } = AuthService.getCurrentUser;
+
+    const user = true
 
     return (
         <>
+            <Navbar/>
             <Route
                 {...rest}
-                render={(props) => {
-                    if (currentUserValue) {
-                        return <Component {...props} />;
-                    }
-
-                    return (
-                        <Redirect
-                            to={{
-                                pathname: "/login",
-                                state: { from: props.location },
-                            }}
-                        />
-                    );
-                }}
+                render={(props) => (
+                    user ? 
+                    <Component {...props} />
+                    : <Redirect to={{
+                        pathname: "/login",
+                        state: { from: props.location },
+                    }}
+                />
+                )}
             />
         </>
     );
 };
+
+export default PrivateRoute

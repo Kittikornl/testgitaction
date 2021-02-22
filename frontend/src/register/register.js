@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Input, Form , Select} from 'antd'
 import "./register.scss"
+import postRegister from '../service/user.service'
 
 const register = () => {
     const { Option } = Select;

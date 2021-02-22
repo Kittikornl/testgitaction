@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 $green: #5DB075;
-$drak-green: #4E7852;
+$dark-green: #4E7852;
 
 $gray: #979797;
 
@@ -13,7 +13,7 @@ body {
     // sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: $drak-green;
+    color: $dark-green;
     font-family: 'Poppins', sans-serif;
 }
 .input {
