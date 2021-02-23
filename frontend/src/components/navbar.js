@@ -3,13 +3,13 @@ import './navbar.scss'
 import { Menu, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { MenuOutlined, ShoppingCartOutlined } from '@ant-design/icons'
-// import AuthService from '../service/auth.service'
+import { logout } from '../service/auth.service'
 
 const Navbar = () => {
 
-    const logout = () => {
+    const logoutt = () => {
         console.log('logout')
-        // AuthService.logout()
+        logout()
     }
     // const changeMode = value => {
     //     setMode(value ? 'vertical' : 'inline');
@@ -47,7 +47,7 @@ const Navbar = () => {
                         <Link to="/profile">Profile</Link>
                     </Menu.Item>
                     <Menu.Item key="7" >
-                        <Link to="/login" onClick={logout}>Logout</Link>
+                        <Link to="/login" onClick={logoutt}>Logout</Link>
                     </Menu.Item>
                  </Menu>
              </div>
