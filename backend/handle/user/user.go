@@ -32,9 +32,12 @@ func GetAllAccount(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	user := models.Userdata{}
-
-	database.DB.Find(&user)
+	user := models.Usertable{}
+	id := c.Param("id")
+	if err := database.DB.Joins("Userdata").First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
 
 	c.JSON(http.StatusOK, user)
 }
