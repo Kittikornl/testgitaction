@@ -1,7 +1,7 @@
 import { storage } from "../config/firebase"
 
-const uploadUserPic = (image, setUrl) => {
-    const uploadTask = storage.ref(`images/user/${image.name}`).put(image)
+const uploadUserPic = (image, userID, setUrl) => {
+    const uploadTask = storage.ref(`images/user/${userID}`).put(image)
     uploadTask.on(
         "stated_changed",
         snapshot => {},
