@@ -6,6 +6,11 @@ import Scores from '../components/scores';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
+import { getUserData } from '../service/user.service';
+
+const renderRole = (role) => {
+    return role === 1 ? "Customer" : "Product Seller"
+}
 
 const renderButtonContentText = (shop) => {
     return (
@@ -21,7 +26,8 @@ const renderButtonContentText = (shop) => {
 }
 
 const renderButtonContent = (role, shop) => {
-    if(role==="Product Seller" && Object.keys(shop).length !== 0) {
+    console.log(role)
+    if(role===2 && Object.keys(shop).length !== 0) {
         return (
             <div className="button-container flex-row">
                 <Viewshopbutton enable={true}/>
@@ -29,7 +35,7 @@ const renderButtonContent = (role, shop) => {
             </div>      
         )
     } 
-    else if (role==="Product Seller") {
+    else if (role===2) {
         return (
             <div className="button-container flex-row">
                 <Viewshopbutton enable={false}/>
@@ -41,7 +47,6 @@ const renderButtonContent = (role, shop) => {
 }
 
 const Profile = () => {
-    
     const initData = {
         "firstname": "Tinnapop",
         "lastname" : "Pratheep",
@@ -58,14 +63,22 @@ const Profile = () => {
     }
 
     const [data, setData] = useState(initData);
+    const [role, setRole] = useState(2);
 
     useEffect(() => {
-        setData(initData)
+        fetchData(9)
     }, []);
+
+    const fetchData = async (user_id) => {
+        const result = await getUserData(user_id)
+        const userdata = result.data.Userdata 
+        console.log(userdata)
+        setData(userdata)
+    }
 
     return (
         <div className="profile-page-container">
-            <div>sss</div>
+            <div>.</div>
             <div className="profile-container flex-row">
                 <img className="profile-img"
                     src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -76,7 +89,7 @@ const Profile = () => {
                         <div className="name">{`${data.firstname} ${data.lastname}`}</div>
                         <a className="edit-info" href="/editprofile"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
                     </div>
-                    <div className="role">{data.role}</div>
+                    <div className="role">{renderRole(data.role)}</div>
                     <div className="info-container flex-col">
                         <div className="info-data flex-row">
                             <div className="info-title">
@@ -86,17 +99,20 @@ const Profile = () => {
                                 <div className="phone">Phone :</div>
                             </div>
                             <div className="info-data">
-                                <div className="birth">{data.birthdate}</div>
-                                <div className="age">{data.age}</div>
-                                <div className="email">{data.email}</div>
-                                <div className="phone">{data.phoneNo}</div>
+                                <div className="birth">{data.birthdate || "XX/XX/XXXX"}</div>
+                                <div className="age">{data.age || "0"}</div>
+                                <div className="email">{data.email || "xxxx@xxx.com"}</div>
+                                <div className="phone">{data.phoneNo || "55"}</div>
                             </div>
                         </div>
-                        {renderButtonContent(data.role, data.shop)}
+                        {renderButtonContent(role, initData.shop)}
                     </div>
                     <div className="info-address flex-col">
                         <div className="address-title">Address</div>
-                        <div className="address-data">{data.address}</div>
+                        <div className="address-data">{
+                            `${data.houseNo} ${data.street} ${data.subDistrict} ${data.district} ${data.zipcode} ${data.city}`.trim() === "" ? "No address data" : ""
+                            }
+                        </div>
                     </div>
                 </div>
             </div>        
