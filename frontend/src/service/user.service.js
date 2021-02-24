@@ -28,7 +28,7 @@ export const postResetPassword = async (values) => {
       console.log("error reset password");
       throw error;
     }
-  };
+};
 
 export const postChangePassword = async (userId, values) => {
   try {

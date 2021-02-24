@@ -1,0 +1,19 @@
+@import '../index.scss';
+
+.logout-modal {
+    color: $dark-green;
+    .submit-btn {
+        color: #FFFFFF;
+        background-color: $green;
+        border-radius: 8px
+    }
+    .cancel-btn {
+        color: #FFFFFF;
+        background-color: $red;
+        border-radius: 8px;
+    };
+    .ant-modal-body {
+        height: 150px;
+        font-size: 18px;
+    }
+}

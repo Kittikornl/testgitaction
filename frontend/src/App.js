@@ -34,7 +34,6 @@ function App() {
         <Route exact key="login" path="/login" component={Login} />
         <Route exact key="login" path="/" component={Login} />
         <Route exact key="register" path="/register" component={Register} />
-        <Route exact key="test" path="/test" component={Notification} />
         <Route
           exact
           key="reset password"

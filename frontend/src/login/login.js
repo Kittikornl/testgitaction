@@ -3,6 +3,7 @@ import { Button, Input, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import './login.scss'
 import {login} from '../service/auth.service'
+import Notification from '../components/notification'
 
 const Login = () => {
     const history = useHistory()
@@ -10,9 +11,11 @@ const Login = () => {
     const handleLogin = async (e) => {
         try {
             const res = await  login(e.email, e.password)
+            Notification({type: 'success', message: 'Login success', desc: 'enjoy your shopping!'})
             history.push('/profile')
         } catch (error) {
             console.log(error)
+            Notification({type: 'error', message: 'Login fail', desc: 'email or password incorrect'})
         }
         console.log(e)
     }
