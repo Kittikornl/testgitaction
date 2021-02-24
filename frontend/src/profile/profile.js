@@ -18,8 +18,14 @@ const renderRole = (role) => {
 const getAge = (date) => {
     const now = new Date()
     const [day, month, year] = date.split("/")
-    const birth = new Date(`${month}/${day}/${year}`)
-
+    let birth
+    if (day && month && year) {
+        birth = new Date(`${month}/${day}/${year}`)
+    }
+    else {
+        const [day, month, year] = date.split("-")
+        birth = new Date(`${month}/${day}/${year}`)
+    }
     return parseInt((now - birth) / (1000 * 60 * 60 * 24) / 365, 10)
 }
 
