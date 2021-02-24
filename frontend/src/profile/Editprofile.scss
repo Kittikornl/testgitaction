@@ -1,0 +1,288 @@
+@import "../index.scss";
+
+.add-creditcard-modal {
+  .creditcard-header {
+    margin-bottom: 10px;
+    p {
+      font-size: 20px;
+      font-weight: 600;
+      // color: $dark-green;
+    }
+  }
+  img {
+    margin-top: 2px;
+    max-width: 120px;
+    max-height: 25px;
+    width: auto;
+    height: auto;
+    margin-left: 10px;
+  }
+
+  .card-button {
+    justify-content: center;
+    column-gap: 20px;
+
+    .button-green {
+      width: 100px;
+      background-color: #008c5b;
+      color: white;
+      border-radius: 10px;
+      height: 35px;
+      border: none;
+    }
+
+    .button-red {
+      width: 100px;
+      background-color: #d66969;
+      color: white;
+      border-radius: 10px;
+      height: 35px;
+      border: none;
+    }
+  }
+}
+
+.delete-account-modal {
+  .header {
+    margin-bottom: 10px;
+    .alert-icon {
+      color: $yellow;
+      margin-top: 5px;
+    }
+    p {
+      margin-left: 5px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+  .button-group {
+    justify-content: center;
+    column-gap: 10px;
+  }
+
+  .button-yes {
+    width: 80px;
+    background-color: #008c5b;
+    color: white;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+  }
+
+  .button-no {
+    width: 80px;
+    background-color: $button-red;
+    color: white;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+  }
+}
+
+.change-password-modal {
+  .change-password-header {
+    margin-bottom: 10px;
+
+    p {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .button-green {
+    width: 170px;
+    background-color: #008c5b;
+    color: white;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+  }
+}
+
+.credit-card {
+  width: 150px;
+  justify-content: space-between;
+}
+
+.trash-icon {
+  color: $dark-green;
+  margin-left: 10px;
+}
+
+.editprofile-container {
+  .edit-info {
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    background-color: white;
+
+    .bg {
+      object-fit: cover;
+      height: 220px;
+      width: 100vw;
+      opacity: 1;
+    }
+
+    .profile {
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      margin-top: 50px;
+      column-gap: 18vw;
+      // margin-left: -200px;
+
+      .img-col img {
+        max-width: 300px;
+        max-height: 300px;
+        width: auto;
+        height: auto;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      .uploadButton {
+        display: flex;
+        justify-content: center;
+      }
+
+      .info-container {
+        color: $dark-green;
+        font-size: 100px;
+
+        label {
+          color: $dark-green;
+          font-family: "Poppins", sans-serif;
+          font-size: 20px;
+        }
+
+        .info-header {
+          font-size: 50px;
+          font-weight: 500;
+          margin-bottom: 16px;
+          color: $green;
+        }
+
+        .button-align {
+          display: flex;
+          justify-content: center;
+        }
+
+        .button-green {
+          width: 120px;
+          background-color: $green;
+          font-size: 18px;
+          font-weight: 500;
+          color: white;
+          border-radius: 10px;
+          height: 40px;
+          border: none;
+        }
+      }
+    }
+  }
+
+  .payment-management-container {
+    margin-top: 40px;
+    width: 70vw;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-left: 100px;
+
+    .header {
+      font-size: 40px;
+      font-weight: 500;
+      color: $green;
+    }
+
+    .warning {
+      font-size: 15px;
+      font-weight: 500;
+      color: $red;
+      margin-bottom: 20px;
+    }
+
+    .add-card {
+      .button-green {
+        width: 200px;
+        background-color: $green;
+        color: white;
+        border-radius: 10px;
+        height: 40px;
+        border: none;
+        margin-right: 30px;
+      }
+
+      img {
+        max-width: 120px;
+        max-height: 35px;
+        width: auto;
+        height: auto;
+      }
+    }
+  }
+
+  .account-management {
+    margin-top: 40px;
+    width: 70vw;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-left: 100px;
+
+    .header {
+      font-size: 40px;
+      font-weight: 500;
+      color: $green;
+    }
+
+    .warning {
+      font-size: 15px;
+      font-weight: 500;
+      color: $red;
+      margin-bottom: 20px;
+    }
+
+    .button-green {
+      width: 200px;
+      background-color: $green;
+      color: white;
+      border-radius: 10px;
+      height: 40px;
+      border: none;
+      margin-right: 30px;
+      margin-bottom: 40px;
+    }
+
+    .button-red {
+      width: 150px;
+      background-color: $button-red;
+      color: white;
+      border-radius: 10px;
+      height: 40px;
+      border: none;
+    }
+  }
+
+  .ant-form-item {
+    width: 400px;
+    color: $dark-green;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .inputEdit {
+    width: 380px;
+    border: none;
+    border-bottom: solid 1px #aaaaaa;
+  }
+}
+
+.ant-modal-body {
+  padding: 36px;
+}

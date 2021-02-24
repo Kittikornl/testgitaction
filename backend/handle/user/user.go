@@ -14,6 +14,15 @@ import (
 
 var DB *gorm.DB
 
+type ResetPasswordInput struct {
+	Email string `json:"email"`
+}
+
+type ChangePasswordInput struct {
+	OldPassword string `json:"old-pwd"`
+	NewPassword string `json:"new-pwd"`
+}
+
 //example handle function for api
 func GetAllUser(c *gin.Context) {
 	users := []models.Userdata{}
@@ -32,9 +41,12 @@ func GetAllAccount(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	user := models.Userdata{}
-
-	database.DB.Find(&user)
+	user := models.Usertable{}
+	id := c.Param("id")
+	if err := database.DB.Joins("Userdata").First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
 
 	c.JSON(http.StatusOK, user)
 }
@@ -92,20 +104,32 @@ func SaveUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 
 	id := c.Param("id")
+	userTable := models.Usertable{}
 	userData := models.Userdata{}
 
+	if err := database.DB.Find(&userTable, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
 	if err := database.DB.Find(&userData, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
+	database.DB.Delete(&userTable)
 	database.DB.Delete(&userData)
 	c.Status(http.StatusNoContent)
 }
 
 func ResetPassword(c *gin.Context) {
 	var userTable models.Usertable
+	var emailIn ResetPasswordInput
 
-	email := c.PostForm("email")
+	if err := c.ShouldBindBodyWith(&emailIn, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+
 	new_password := services.GeneratePassword()
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
 	if err != nil {
@@ -113,11 +137,11 @@ func ResetPassword(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Where("email = ?", email).First(&userTable).Error; err != nil {
+	if err := database.DB.Where("email = ?", emailIn.Email).First(&userTable).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage("Email is not exist"))
 		return
 	}
-	database.DB.Model(&userTable).Where("email = ?", email).Update("password", passwordHash)
+	database.DB.Model(&userTable).Where("email = ?", emailIn.Email).Update("password", passwordHash)
 
 	text := "This is your new password\n\n" + new_password + "\n\n you can change your password in profile page\n\n Best Regards\n Pugsod team <3"
 	services.SendEmail(userTable.Email, "Reset Password", text)
@@ -127,10 +151,16 @@ func ResetPassword(c *gin.Context) {
 func ChangePassword(c *gin.Context) {
 
 	id := c.Param("id")
-	old_password := c.PostForm("old-pwd")
-	new_password := c.PostForm("new-pwd")
 
-	new_password_hash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
+	var changePassword ChangePasswordInput
+
+	if err := c.ShouldBindBodyWith(&changePassword, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+
+	new_password_hash, err := bcrypt.GenerateFromPassword([]byte(changePassword.NewPassword), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
@@ -142,7 +172,7 @@ func ChangePassword(c *gin.Context) {
 		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+"is not exist"))
 		return
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(userTable.Password), []byte(old_password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(userTable.Password), []byte(changePassword.OldPassword)); err != nil {
 		c.JSON(http.StatusBadRequest, services.ReturnMessage("Old password is invalid!!"))
 		return
 	}

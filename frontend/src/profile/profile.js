@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react'
-import Viewshopbutton from '../components/viewshopbutton';
-import Viewhistory from '../components/viewhistory';
-import "./profile.scss"
-import Scores from '../components/scores';
+import React, { useState, useEffect } from "react";
+import Viewshopbutton from "../components/viewshopbutton";
+import Viewhistory from "../components/viewhistory";
+import "./profile.scss";
+import Scores from "../components/scores";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
@@ -22,17 +22,17 @@ const getAge = (date) => {
 }
 
 const renderButtonContentText = (shop) => {
-    return (
-        <div className="button-content flex-row">
-            <div className="score-text">{shop.score.toFixed(1)}</div>
-            <Scores score={shop.score}/>
-            <div className="vote-count-text">
-                <FontAwesomeIcon icon={faUserFriends} />
-            </div>
-            <div className="score-text">{shop.vote.length}</div>
-        </div>
-    )
-}
+  return (
+    <div className="button-content flex-row">
+      <div className="score-text">{shop.score.toFixed(1)}</div>
+      <Scores score={shop.score} />
+      <div className="vote-count-text">
+        <FontAwesomeIcon icon={faUserFriends} />
+      </div>
+      <div className="score-text">{shop.vote.length}</div>
+    </div>
+  );
+};
 
 const renderButtonContent = (role, shop) => {
     console.log(role)
@@ -128,7 +128,9 @@ const Profile = () => {
                 </div>
             </div>        
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default Profile
+export default Profile;

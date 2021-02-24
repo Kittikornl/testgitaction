@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080/",
+  "proxy": "http://localhost:8080/api",
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
