@@ -104,12 +104,18 @@ func SaveUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 
 	id := c.Param("id")
+	userTable := models.Usertable{}
 	userData := models.Userdata{}
 
+	if err := database.DB.Find(&userTable, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
 	if err := database.DB.Find(&userData, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
+	database.DB.Delete(&userTable)
 	database.DB.Delete(&userData)
 	c.Status(http.StatusNoContent)
 }
