@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
 import bg from "../img/main-veg.jpg";
-import { Form, Input, Button, DatePicker, Modal, Upload, message } from "antd";
+import { Form, Input, Button, DatePicker, Modal, Upload, Alert } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import "./Editprofile.scss";
 import visa from "../img/visa.png";
@@ -17,6 +17,7 @@ import {
   getUserData,
   putEditProfile,
   deleteProfile,
+  patchChangePassword,
 } from "../service/user.service";
 import { getUserInfo } from "../service/auth.service";
 
@@ -199,7 +200,20 @@ const Editprofile = (props) => {
     setVisibleChange(false);
   };
 
-  const onFinishChangePassword = (e) => {};
+  const onFinishChangePassword = async (e) => {
+    let payload = {};
+    if (e.newPassword !== e.confirmNewPassword) {
+    } else {
+      try {
+        payload["old-pwd"] = e.currentPassword;
+        payload["new-pwd"] = e.newPassword;
+        const res = await patchChangePassword(userId, payload);
+        setVisibleChange(false);
+      } catch {
+        console.log("sus");
+      }
+    }
+  };
 
   const handleYes = () => {
     setVisibleDelete(false);
@@ -422,13 +436,14 @@ const Editprofile = (props) => {
                 {...modalChangePasswordLayout}
                 name="basic"
                 initialValues={{ remember: true }}
+                onFinish={onFinishChangePassword}
               >
                 <div className="change-password-header flex-row">
                   <p>Change Password</p>
                 </div>
                 <Form.Item
                   label="Current Password"
-                  name="Current Password"
+                  name="currentPassword"
                   rules={[
                     {
                       required: true,
@@ -440,7 +455,7 @@ const Editprofile = (props) => {
                 </Form.Item>
                 <Form.Item
                   label="New Password"
-                  name="New Password"
+                  name="newPassword"
                   rules={[
                     {
                       required: true,
@@ -452,7 +467,7 @@ const Editprofile = (props) => {
                 </Form.Item>
                 <Form.Item
                   label="Confirm New Password"
-                  name="Confirm New Password"
+                  name="confirmNewPassword"
                   rules={[
                     {
                       required: true,
