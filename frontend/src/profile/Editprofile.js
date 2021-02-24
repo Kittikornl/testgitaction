@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import bg from "../img/vegetables.jpg";
+import bg from "../img/main-veg.jpg";
 import { Form, Input, Button, DatePicker, Modal, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import "./Editprofile.scss";
@@ -12,6 +12,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { uploadUserPic } from "../service/firebase.service";
+import {
+  getUserData,
+  putEditProfile,
+  deleteProfile,
+} from "../service/user.service";
+import { getUserInfo } from "../service/auth.service";
 
 const initData = {
   name: "siras",
@@ -28,32 +35,55 @@ const initData = {
   ],
 };
 
-const CardInfo = (props) => {
-  const deleteCard = () => {
-    initData.credit = initData.credit.filter((card) => {
-      return card !== props.card;
-    });
-    props.pageRefresh();
-  };
-  return (
-    <div className="credit-card flex-row">
-      {`xxxx xxxx xxxx ${props.card.slice(15, 19)}`}
-      <a onClick={() => deleteCard()}>
-        <FontAwesomeIcon className="trash-icon" icon={faTrash} />
-      </a>
-    </div>
-  );
-};
-
 const Editprofile = (props) => {
   const [data, setData] = useState(initData);
-  const [image, setImage] = useState();
   const [refresh, setRefresh] = useState(true);
-  const dateFormat = "DD/MM/YYYY";
+  const [url, setUrl] = useState("");
+  const [form] = Form.useForm();
+  const [userId, setUserID] = useState(getUserInfo()["userId"]);
+  const dateFormat = "DD-MM-YYYY";
+  console.log(userId);
 
-  useEffect(() => {
-    setData(initData);
+  useEffect(async () => {
+    fetchdata(userId);
   }, []);
+
+  const fetchdata = async (user_id) => {
+    const result = await getUserData(user_id);
+    const userData = result.data.Userdata;
+    setData(userData);
+    setUrl(userData.url_profile_pic);
+    form.setFieldsValue({
+      firstname: `${userData.firstname}`,
+      lastname: `${userData.lastname}`,
+      phone: `${userData.phoneNo}`,
+      houseNo: `${userData.houseNo}`,
+      street: `${userData.street}`,
+      subDistrict: `${userData.subDistrict}`,
+      district: `${userData.district}`,
+      city: `${userData.city}`,
+      zipcode: `${userData.zipcode}`,
+      birthdate: moment(userData.birthdate, dateFormat),
+    });
+    console.log(userData);
+  };
+
+  const CardInfo = (props) => {
+    const deleteCard = () => {
+      data.credit = data.credit.filter((card) => {
+        return card !== props.card;
+      });
+      props.pageRefresh();
+    };
+    return (
+      <div className="credit-card flex-row">
+        {`xxxx xxxx xxxx ${props.card.slice(15, 19)}`}
+        <a onClick={() => deleteCard()}>
+          <FontAwesomeIcon className="trash-icon" icon={faTrash} />
+        </a>
+      </div>
+    );
+  };
 
   const configBirthdate = {
     rules: [
@@ -70,28 +100,53 @@ const Editprofile = (props) => {
   };
 
   const onFinishInfo = (fieldsValue) => {
-    // Should format date value before submit.
-    const rangeValue = fieldsValue["range-picker"];
-    const rangeTimeValue = fieldsValue["range-time-picker"];
     const values = {
       ...fieldsValue,
-      "date-picker": fieldsValue["date-picker"].format("YYYY-MM-DD"),
+      "date-picker": fieldsValue["birthdate"].format(dateFormat),
     };
-    console.log("Received values of form: ", values);
+    console.log("Received values of form: ", fieldsValue);
+    let paylaod = {};
+
+    paylaod.firstname = fieldsValue.firstname;
+    paylaod.lastname = fieldsValue.lastname;
+    paylaod.phoneNo = fieldsValue.phone;
+    paylaod.url_profile_pic = url;
+    paylaod.birthdate = fieldsValue.birthdate.format(dateFormat);
+    paylaod.houseNo = fieldsValue.houseNo;
+    paylaod.street = fieldsValue.street;
+    paylaod.subDistrict = fieldsValue.subDistrict;
+    paylaod.district = fieldsValue.district;
+    paylaod.city = fieldsValue.city;
+    paylaod.zipcode = fieldsValue.zipcode;
+
+    putEditProfile(userId, paylaod);
+    console.log(paylaod);
   };
 
   const propsUpload = {
     maxCount: 1,
-    onChange: (info) => {
+    beforeUpload: () => false,
+    onChange: async (info) => {
       const type = info.file.name.split(".")[1];
       if (type === "png" || type === "jpg") {
-        setImage(info.file);
-        console.log(info.file);
+        // setImage(await getBase64(info.file.originFileObj));
+        console.log("image", info.file);
+        uploadUserPic(info.file, setUrl);
       } else {
         console.error("Type error!");
       }
     },
+    showUploadList: false,
   };
+
+  // const getBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.readAsDataURL(file);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
 
   const renderCreditCard = (card, index) => {
     return <CardInfo card={card} pageRefresh={pageRefresh} />;
@@ -99,6 +154,7 @@ const Editprofile = (props) => {
 
   const [visibleCredit, setVisibleCredit] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
+  const [visibleChange, setVisibleChange] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModalCredit = () => {
@@ -109,13 +165,18 @@ const Editprofile = (props) => {
     setVisibleDelete(true);
   };
 
+  const showModalChangePassword = () => {
+    setVisibleChange(true);
+  };
+
   const modalCreditLayout = {
     labelCol: { span: 6 },
     wrapperCol: { offset: 1, span: 12 },
   };
 
-  const handleSave = () => {
-    console.log("save");
+  const modalChangePasswordLayout = {
+    labelCol: { span: 9 },
+    wrapperCol: { offset: 1, span: 12 },
   };
 
   const handleSubmitCard = () => {
@@ -134,8 +195,15 @@ const Editprofile = (props) => {
     setVisibleDelete(false);
   };
 
+  const handleCancelChange = () => {
+    setVisibleChange(false);
+  };
+
+  const onFinishChangePassword = (e) => {};
+
   const handleYes = () => {
     setVisibleDelete(false);
+    deleteProfile(userId);
   };
 
   const handleNo = () => {
@@ -147,30 +215,16 @@ const Editprofile = (props) => {
       <div className="edit-info">
         <img className="bg" preview={false} src={bg} />
         <div className="profile flex-row">
-          <div className="img-col">
-            <Upload {...propsUpload}>
-              <Button icon={<UploadOutlined />}>Upload png only</Button>
-            </Upload>
-            <img
-              src={
-                image ||
-                "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              }
-            />
+          <div className="img-col flex-col">
+            <img src={url === "" ? `${data.url_profile_pic}` : `${url}`} />
+            <div className="uploadButton">
+              <Upload {...propsUpload}>
+                <Button icon={<UploadOutlined />}>Upload photo</Button>
+              </Upload>
+            </div>
           </div>
           <div className="info-container">
-            <Form
-              name="basic"
-              onFinish={onFinishInfo}
-              initialValues={{
-                firstname: `${data.name}`,
-                lastname: `${data.surname}`,
-                email: `${data.mail}`,
-                phone: `${data.Tel}`,
-                address: `${data.Addr}`,
-                birthdate: moment(data.Birthdate, dateFormat),
-              }}
-            >
+            <Form form={form} name="basic" onFinish={onFinishInfo}>
               <div className="info-header">Edit Information</div>
               <Form.Item
                 label="First name"
@@ -182,7 +236,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input className="input" id="firstname" allowClear />
+                <Input className="inputEdit" allowClear />
               </Form.Item>
               <Form.Item
                 label="Last name"
@@ -194,20 +248,7 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input className="input" id="lastname" allowClear />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  { required: true, message: "Please input your email!" },
-                  {
-                    type: "email",
-                    message: "Invalid email format",
-                  },
-                ]}
-              >
-                <Input className="input" id="email" allowClear />
+                <Input className="inputEdit" allowClear />
               </Form.Item>
               <Form.Item
                 label="Phone"
@@ -219,34 +260,77 @@ const Editprofile = (props) => {
                   },
                 ]}
               >
-                <Input type="tel" className="input" id="phone" allowClear />
+                <Input className="inputEdit" allowClear />
               </Form.Item>
-              <Form.Item
-                label="Address"
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your address!",
-                  },
-                ]}
-              >
-                <Input className="input" id="address" allowClear />
+              <Form.Item label="Address">
+                <div className="flex-row" style={{ columnGap: "20px" }}>
+                  <Form.Item style={{ width: "45%" }} name="houseNo">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="House number"
+                      allowClear
+                    />
+                  </Form.Item>
+                  <Form.Item style={{ width: "45%" }} name="street">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="Street"
+                      allowClear
+                    />
+                  </Form.Item>
+                </div>
+                <div className="flex-row" style={{ columnGap: "20px" }}>
+                  <Form.Item style={{ width: "45%" }} name="subDistrict">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="Sub-district"
+                      allowClear
+                    />
+                  </Form.Item>
+                  <Form.Item style={{ width: "45%" }} name="district">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="District"
+                      allowClear
+                    />
+                  </Form.Item>
+                </div>
+                <div className="flex-row" style={{ columnGap: "20px" }}>
+                  <Form.Item style={{ width: "45%" }} name="city">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="City"
+                      allowClear
+                    />
+                  </Form.Item>
+                  <Form.Item style={{ width: "45%" }} name="zipcode">
+                    <Input
+                      style={{ width: "100%" }}
+                      className="input"
+                      placeholder="Zipcode"
+                      allowClear
+                    />
+                  </Form.Item>
+                </div>
               </Form.Item>
               <Form.Item
                 label="Birth date"
                 name="birthdate"
                 {...configBirthdate}
+                style={{ marginTop: "-20px" }}
               >
-                <DatePicker format={dateFormat} id="birthdate" allowClear />
+                <DatePicker format={dateFormat} />
               </Form.Item>
-              <Button
-                htmlType="submit"
-                className="button-green"
-                onClick={handleSave}
-              >
-                Save
-              </Button>
+              <div className="button-align">
+                <Button htmlType="submit" className="button-green">
+                  Save
+                </Button>
+              </div>
             </Form>
           </div>
         </div>
@@ -254,7 +338,7 @@ const Editprofile = (props) => {
       <div className="payment-management-container flex-col">
         <div className="header">Payment card management</div>
         <div className="warning">* We will kept this part secret</div>
-        <div className="credit-card">{data.credit.map(renderCreditCard)}</div>
+        {/* <div className="credit-card">{data.credit.map(renderCreditCard)}</div> */}
         <div className="add-card flex-row">
           <Button
             htmlType="submit"
@@ -268,7 +352,6 @@ const Editprofile = (props) => {
             centered
             confirmLoading={confirmLoading}
             onCancel={handleCancelCredit}
-            //width={800}
             footer={false}
           >
             <div className="add-creditcard-modal flex-col">
@@ -276,6 +359,7 @@ const Editprofile = (props) => {
                 {...modalCreditLayout}
                 name="basic"
                 initialValues={{ remember: true }}
+                onFinish={onFinishChangePassword}
               >
                 <div className="creditcard-header flex-row">
                   <p>Credit card</p>
@@ -319,11 +403,74 @@ const Editprofile = (props) => {
         <div className="header">Account management</div>
         <div className="warning">* This part will affect your account</div>
         <div className="button group flex-row">
-          <Link to="/password/reset">
-            <Button htmlType="submit" className="button-green">
-              Change password
-            </Button>
-          </Link>
+          <Button
+            htmlType="submit"
+            className="button-green"
+            onClick={showModalChangePassword}
+          >
+            Change password
+          </Button>
+          <Modal
+            visible={visibleChange}
+            centered
+            onCancel={handleCancelChange}
+            footer={false}
+            width={600}
+          >
+            <div className="change-password-modal flex-col">
+              <Form
+                {...modalChangePasswordLayout}
+                name="basic"
+                initialValues={{ remember: true }}
+              >
+                <div className="change-password-header flex-row">
+                  <p>Change Password</p>
+                </div>
+                <Form.Item
+                  label="Current Password"
+                  name="Current Password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your current password",
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  label="New Password"
+                  name="New Password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your new password",
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  label="Confirm New Password"
+                  name="Confirm New Password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please confirm your new password",
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+                <div className="button-container">
+                  <Button htmlType="submit" className="button-green">
+                    Change Password
+                  </Button>
+                </div>
+              </Form>
+            </div>
+          </Modal>
+
           <Button
             htmlType="submit"
             className="button-red"
