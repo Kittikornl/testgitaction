@@ -108,15 +108,18 @@
                 background-color: #a7e6b9;
                 border: none;
             }
+            .logout-tab {
+                color: $dark-green;
+                &:hover {
+                    background-color: $green;
+                    color: #FFFFFF;
+                }
+            }
         }
 
     }
     .logout-tab {
         color: $dark-green;
-        &:hover {
-            background-color: $green;
-            color: #FFFFFF;
-        }
     }
 
     @media screen and(min-width: 768px) {
