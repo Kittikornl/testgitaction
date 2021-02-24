@@ -6,8 +6,8 @@ import ResetPassword from "./login/resetpassword";
 import { useHistory } from "react-router-dom";
 import Profile from "./profile/profile";
 import Editprofile from "./profile/Editprofile";
-import PrivateRoute from './components/privateroute'
-import Notification from './components/notification'
+import PrivateRoute from "./components/privateroute";
+import Notification from "./components/notification";
 
 function App() {
   const history = useHistory();
@@ -41,9 +41,7 @@ function App() {
           component={ResetPassword}
         />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
-        
       </Switch>
-
     </Router>
   );
 }

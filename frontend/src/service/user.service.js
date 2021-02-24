@@ -22,17 +22,18 @@ export const postRegister = async (values) => {
 };
 
 export const postResetPassword = async (values) => {
-    try {
-      return await axios.post(API_URL + "/users/reset-pwd", values);
-    } catch (error) {
-      console.log("error reset password");
-      throw error;
-    }
+
+  try {
+    return await axios.post(API_URL + "/users/reset-pwd", values);
+  } catch (error) {
+    console.log("error reset password");
+    throw error;
+  }
 };
 
-export const postChangePassword = async (userId, values) => {
+export const patchChangePassword = async (userId, values) => {
   try {
-    return await axios.post(API_URL + `/users/${userId}`, values, {
+    return await axios.patch(API_URL + `/users/${userId}/change-pwd`, values, {
       headers: authHeader(),
     });
   } catch (error) {
@@ -57,10 +58,8 @@ export const deleteProfile = async (userId) => {
     return await axios.delete(API_URL + `/users/${userId}`, {
       headers: authHeader(),
     });
-  } catch (error) {                                                         
+  } catch (error) {
     console.log("error delete profile");
     throw error;
   }
 };
-
-
