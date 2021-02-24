@@ -12,17 +12,6 @@ export const getUserData = async (id) => {
   }
 };
 
-const API_URL = "http://localhost:8080/api"
-
-export const getUserData = async (id) => {
-    try {
-        return await axios.get(API_URL + `/users/${id}`);
-    } catch (error) {
-        console.log("error get userdata");
-        throw error;
-    }
-};
-
 export const postRegister = async (values) => {
   try {
     return await axios.post(API_URL + "/users", values);
