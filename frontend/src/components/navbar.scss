@@ -80,6 +80,45 @@
             // width: 153px;
         }
     }
+
+    .menu-mobile {
+        position: absolute;
+        width: 200px;
+        height: 100%;
+        top: 54px;
+        .ant-menu {
+            height: 100%;
+            .ant-menu-item {
+                a {
+                    color: $dark-green;
+                }
+
+                &:hover {
+                    background-color: $green;
+                    a {
+                        color: #FFFFFF;
+                    }
+                }
+                &:active {
+                    background-color: #a7e6b9;
+                }
+            }
+            &:not(.ant-menu-horizontal) .ant-menu-item-selected {
+
+                background-color: #a7e6b9;
+                border: none;
+            }
+        }
+
+    }
+    .logout-tab {
+        color: $dark-green;
+        &:hover {
+            background-color: $green;
+            color: #FFFFFF;
+        }
+    }
+
     @media screen and(min-width: 768px) {
         // height: 90px;
         .desktop {
@@ -88,6 +127,9 @@
             align-items: center;
         }
         .moblie {
+            display: none;
+        }
+        .menu-mobile {
             display: none;
         }
     }
