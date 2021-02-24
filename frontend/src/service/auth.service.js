@@ -18,12 +18,17 @@ export const login = async (email, password) => {
 }
 
 export const getUserInfo = () => {
-    const token = sessionStorage.getItem('user')
-    const user_info = jwt_decode(token)
-    const info = {}
-    info['userId'] = user_info['userID']
-    info['role'] = user_info['role']
-    return info
+    try {
+        const token = sessionStorage.getItem('user')
+        const user_info = jwt_decode(token)
+        const info = {}
+        info['userId'] = user_info['userID']
+        info['role'] = user_info['role']
+        return info
+    } catch (error) {
+        return false
+    }
+    
 }
 
 export const logout = () => {

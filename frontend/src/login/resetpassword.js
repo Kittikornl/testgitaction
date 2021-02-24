@@ -12,9 +12,11 @@ const ResetPassword = () => {
         try {
             console.log(e)
             const res = await postResetPassword(e)
-            Notification({type :'success', message:'reset password', desc:'Your new password was sent to your email'} )
+            Notification({type :'success', message:'Reset password success', desc:'your new password was sent to your email'} )
             history.push('/login')
         } catch (error) {
+            Notification({type :'error', message:'Reset password fail', desc:'email is not exist'} )
+
             console.log('error')
         }
         console.log(e)

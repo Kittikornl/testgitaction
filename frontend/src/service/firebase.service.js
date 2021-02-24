@@ -1,7 +1,7 @@
 import { storage } from "../config/firebase"
 
 const uploadUserPic = (image, userID, setUrl) => {
-    const uploadTask = storage.ref(`images/user/${userID}`).put(image)
+    const uploadTask = storage.ref(`images/user/user_${userID}`).put(image)
     uploadTask.on(
         "stated_changed",
         snapshot => {},
@@ -11,7 +11,7 @@ const uploadUserPic = (image, userID, setUrl) => {
         () => {
             storage
                 .ref('images/user/')
-                .child(image.name)
+                .child(`user_${userID}`)
                 .getDownloadURL()
                 .then(url => {
                     setUrl(url)
