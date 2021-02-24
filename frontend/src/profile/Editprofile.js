@@ -20,24 +20,10 @@ import {
   patchChangePassword,
 } from "../service/user.service";
 import { getUserInfo } from "../service/auth.service";
-
-const initData = {
-  name: "siras",
-  surname: "jaroenpoj",
-  mail: "siras_2543@hotmail.com",
-  Tel: "0931459894",
-  Addr: "123 abc street",
-  Birthdate: "12/02/2020",
-  credit: [
-    "1234 5678 9012 1234",
-    "4567 8901 1234 5678",
-    "4567 8901 2345 6789",
-    "9999 9999 9999 9999",
-  ],
-};
+import Notification from "../components/notification";
 
 const Editprofile = (props) => {
-  const [data, setData] = useState(initData);
+  const [data, setData] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [url, setUrl] = useState("");
   const [form] = Form.useForm();
@@ -140,15 +126,6 @@ const Editprofile = (props) => {
     showUploadList: false,
   };
 
-  // const getBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.readAsDataURL(file);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // };
-
   const renderCreditCard = (card, index) => {
     return <CardInfo card={card} pageRefresh={pageRefresh} />;
   };
@@ -203,14 +180,28 @@ const Editprofile = (props) => {
   const onFinishChangePassword = async (e) => {
     let payload = {};
     if (e.newPassword !== e.confirmNewPassword) {
+      Notification({
+        type: "error",
+        message: "Fail to change password",
+        desc: "Confirm Password doesn't match",
+      });
     } else {
       try {
         payload["old-pwd"] = e.currentPassword;
         payload["new-pwd"] = e.newPassword;
         const res = await patchChangePassword(userId, payload);
         setVisibleChange(false);
+        Notification({
+          type: "success",
+          message: "Change password success",
+          desc: "Your password have been changed",
+        });
       } catch {
-        console.log("sus");
+        Notification({
+          type: "error",
+          message: "Fail to change password",
+          desc: "Current Password incorrect",
+        });
       }
     }
   };

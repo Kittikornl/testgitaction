@@ -3,6 +3,7 @@ import { Button, Input, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import "./resetpassword.scss"
 import { postResetPassword } from '../service/user.service'
+import Notification from '../components/notification'
 
 const ResetPassword = () => {
     const history = useHistory()
@@ -11,6 +12,7 @@ const ResetPassword = () => {
         try {
             console.log(e)
             const res = await postResetPassword(e)
+            Notification({type :'success', message:'reset password', desc:'Your new password was sent to your email'} )
             history.push('/login')
         } catch (error) {
             console.log('error')
