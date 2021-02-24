@@ -11,6 +11,7 @@ const ResetPassword = () => {
         try {
             console.log(e)
             const res = await postResetPassword(e)
+            console.log(res);
             history.push('/login')
         } catch (error) {
             console.log('error')
