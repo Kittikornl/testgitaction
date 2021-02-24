@@ -132,7 +132,7 @@ const Editprofile = (props) => {
       if (type === "png" || type === "jpg") {
         // setImage(await getBase64(info.file.originFileObj));
         console.log("image", info.file);
-        uploadUserPic(info.file, setUrl);
+        uploadUserPic(info.file, userId, setUrl);
       } else {
         console.error("Type error!");
       }
