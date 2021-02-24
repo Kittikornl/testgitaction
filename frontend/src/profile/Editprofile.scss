@@ -115,11 +115,24 @@
 }
 
 .editprofile-container {
+  background-image: url("../img/main-veg.jpg");
+  width: 100vw;
+  .empty-box {
+    height: 220px;
+  }
+  .editprofile-page {
+    background-color: white;
+    width: 100%;
+  }
   .edit-info {
     justify-content: center;
     align-items: center;
     opacity: 1;
     background-color: white;
+
+    .ant-form-item-control {
+      width: 100%;
+    }
 
     .bg {
       object-fit: cover;
@@ -151,7 +164,6 @@
 
       .info-container {
         color: $dark-green;
-        font-size: 100px;
 
         label {
           color: $dark-green;
@@ -186,11 +198,8 @@
   }
 
   .payment-management-container {
-    margin-top: 40px;
-    width: 70vw;
-    justify-content: space-around;
-    align-items: flex-start;
-    margin-left: 100px;
+    margin: 40px auto 0;
+    width: 80%;
 
     .header {
       font-size: 40px;
@@ -226,11 +235,8 @@
   }
 
   .account-management {
-    margin-top: 40px;
-    width: 70vw;
-    justify-content: space-around;
-    align-items: flex-start;
-    margin-left: 100px;
+    margin: 40px auto 0;
+    width: 80%;
 
     .header {
       font-size: 40px;
@@ -275,7 +281,6 @@
   }
 
   .inputEdit {
-    width: 380px;
     border: none;
     border-bottom: solid 1px #aaaaaa;
   }
@@ -283,4 +288,143 @@
 
 .ant-modal-body {
   padding: 36px;
+}
+
+@media screen and (max-width: 853px) {
+  .editprofile-container .edit-info .profile {
+    flex-direction: column;
+  }
+  .editprofile-container {
+    align-items: center;
+    .edit-info .profile .info-container .info-header {
+      font-size: 40px;
+    }
+    .ant-form-item {
+      width: 300px;
+    }
+  }
+
+  .uploadButton {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .add-creditcard-modal {
+    .creditcard-header {
+      p {
+        font-size: 15px;
+      }
+    }
+    img {
+      margin-top: 1px;
+      max-width: 100px;
+      max-height: 20px;
+    }
+  }
+
+  .change-password-modal {
+    .change-password-header {
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+
+  // .credit-card {
+  //   width: 150px;
+  //   justify-content: space-between;
+  // }
+
+  // .trash-icon {
+  //   color: $dark-green;
+  //   margin-left: 10px;
+  // }
+
+  .editprofile-container {
+    align-items: center;
+
+    .edit-info {
+      .profile {
+        .img-col img {
+          width: 200px;
+          height: 200px;
+        }
+
+        .info-container {
+          label {
+            font-size: 15px;
+          }
+
+          .info-header {
+            font-size: 24px;
+            margin-bottom: 10px;
+          }
+
+          .button-green {
+            font-size: 14px;
+            height: 35px;
+            width: 100px;
+          }
+        }
+      }
+    }
+
+    .payment-management-container {
+      .header {
+        font-size: 24px;
+      }
+
+      .warning {
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .add-card {
+        flex-direction: column;
+        .button-green {
+          font-size: 14px;
+          width: 180px;
+          height: 35px;
+          margin-right: 30px;
+          margin-bottom: 14px;
+        }
+
+        img {
+          max-width: 100px;
+          max-height: 30px;
+        }
+      }
+    }
+
+    .account-management {
+      .header {
+        font-size: 24px;
+      }
+
+      .warning {
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+      .button-group {
+        flex-direction: column;
+      }
+      .button-green {
+        width: 180px;
+        height: 35px;
+        margin-bottom: 14px;
+      }
+
+      .button-red {
+        width: 135px;
+        height: 35px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .ant-form-item {
+      width: 220px;
+    }
+  }
 }
