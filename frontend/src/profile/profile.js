@@ -7,9 +7,18 @@ import Scores from '../components/scores';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
 import { getUserData } from '../service/user.service';
+import { getUserInfo } from '../service/auth.service';
 
 const renderRole = (role) => {
     return role === 1 ? "Customer" : "Product Seller"
+}
+
+const getAge = (date) => {
+    const now = new Date()
+    const [day, month, year] = date.split("/")
+    const birth = new Date(`${month}/${day}/${year}`)
+
+    return parseInt((now - birth) / (1000 * 60 * 60 * 24) / 365, 10)
 }
 
 const renderButtonContentText = (shop) => {
@@ -63,16 +72,18 @@ const Profile = () => {
     }
 
     const [data, setData] = useState(initData);
-    const [role, setRole] = useState(2);
+    const [role, setRole] = useState(getUserInfo().role);
+    const [userId, setUserId] = useState(getUserInfo().userId);
 
     useEffect(() => {
-        fetchData(9)
+        fetchData(userId)
     }, []);
 
     const fetchData = async (user_id) => {
         const result = await getUserData(user_id)
         const userdata = result.data.Userdata 
         console.log(userdata)
+        userdata['age'] = getAge(userdata.birthdate)
         setData(userdata)
     }
 
@@ -89,7 +100,7 @@ const Profile = () => {
                         <div className="name">{`${data.firstname} ${data.lastname}`}</div>
                         <a className="edit-info" href="/editprofile"><FontAwesomeIcon icon={faUserEdit} />&nbsp;<div>Edit Profile</div></a>
                     </div>
-                    <div className="role">{renderRole(data.role)}</div>
+                    <div className="role">{renderRole(role)}</div>
                     <div className="info-container flex-col">
                         <div className="info-data flex-row">
                             <div className="info-title">
