@@ -8,20 +8,10 @@ import (
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
 	"github.com/sec33_Emparty/backend/services"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
-
-type ResetPasswordInput struct {
-	Email string `json:"email"`
-}
-
-type ChangePasswordInput struct {
-	OldPassword string `json:"old-pwd"`
-	NewPassword string `json:"new-pwd"`
-}
 
 //example handle function for api
 func GetAllUser(c *gin.Context) {
@@ -49,135 +39,6 @@ func GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
-}
-
-func SaveUser(c *gin.Context) {
-
-	var userData models.Userdata
-	var userTable models.Usertable
-
-	if err := c.ShouldBindBodyWith(&userData, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		println(err.Error())
-		return
-	}
-
-	if err := c.ShouldBindBodyWith(&userTable, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
-	//check valid email
-	if err := database.DB.Where("email = ?", userTable.Email).First(&userTable).Error; err != nil {
-		if err := database.DB.Save(&userData).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			return
-		}
-
-		if err := database.DB.Save(&userData).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			println("2")
-			return
-		}
-
-		passwordHash, err := bcrypt.GenerateFromPassword([]byte(userTable.Password), bcrypt.DefaultCost)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-			return
-		}
-
-		userTable.Password = string(passwordHash)
-		userTable.Userdata = userData
-		if err := database.DB.Save(&userTable).Error; err != nil {
-			c.Status(http.StatusInternalServerError)
-			return
-		}
-		c.JSON(http.StatusOK, &userTable)
-
-	} else {
-		c.JSON(http.StatusFound, "enter valid email")
-		return
-	}
-
-}
-
-func DeleteUser(c *gin.Context) {
-
-	id := c.Param("id")
-	userTable := models.Usertable{}
-	userData := models.Userdata{}
-
-	if err := database.DB.Find(&userTable, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
-		return
-	}
-	if err := database.DB.Find(&userData, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
-		return
-	}
-	database.DB.Delete(&userTable)
-	database.DB.Delete(&userData)
-	c.Status(http.StatusNoContent)
-}
-
-func ResetPassword(c *gin.Context) {
-	var userTable models.Usertable
-	var emailIn ResetPasswordInput
-
-	if err := c.ShouldBindBodyWith(&emailIn, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		println(err.Error())
-		return
-	}
-
-	new_password := services.GeneratePassword()
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(new_password), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-		return
-	}
-
-	if err := database.DB.Where("email = ?", emailIn.Email).First(&userTable).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("Email is not exist"))
-		return
-	}
-	database.DB.Model(&userTable).Where("email = ?", emailIn.Email).Update("password", passwordHash)
-
-	text := "This is your new password\n\n" + new_password + "\n\n you can change your password in profile page\n\n Best Regards\n Pugsod team <3"
-	services.SendEmail(userTable.Email, "Reset Password", text)
-	c.JSON(http.StatusOK, services.ReturnMessage("Your new password was sent to your Email"))
-}
-
-func ChangePassword(c *gin.Context) {
-
-	id := c.Param("id")
-
-	var changePassword ChangePasswordInput
-
-	if err := c.ShouldBindBodyWith(&changePassword, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		println(err.Error())
-		return
-	}
-
-	new_password_hash, err := bcrypt.GenerateFromPassword([]byte(changePassword.NewPassword), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-		return
-	}
-
-	var userTable models.Usertable
-
-	if err := database.DB.First(&userTable, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+"is not exist"))
-		return
-	}
-	if err := bcrypt.CompareHashAndPassword([]byte(userTable.Password), []byte(changePassword.OldPassword)); err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage("Old password is invalid!!"))
-		return
-	}
-	database.DB.Model(&userTable).Where("id", id).Update("password", new_password_hash)
-	c.JSON(http.StatusOK, services.ReturnMessage("Your password have been changed"))
 }
 
 func UpdateUser(c *gin.Context) {
