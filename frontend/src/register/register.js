@@ -1,20 +1,31 @@
 import React from 'react'
-import { Button, Input, Form , Select} from 'antd'
+import { Button, Input, Form , Select, DatePicker} from 'antd'
 import "./register.scss"
-import postRegister from '../service/user.service'
+import { postRegister } from '../service/user.service'
+import moment from 'moment'
+import { useHistory } from 'react-router-dom'
+import Notification from '../components/notification'
 
-const register = () => {
+const Register = () => {
     const { Option } = Select;
-
-    const handleRegister = (e) => {
-        // history.push("/order")
-        console.log(e)
+    const dateFormat = 'DD/MM/YYYY';
+    const history = useHistory()
+    
+    const handleRegister = async (e) => {
+        e['birthdate'] = moment(e.birthdate).format(dateFormat)
+        e['role'] = parseInt(e.role)
+        try {
+            const res = await postRegister(e)
+            Notification({type: 'success', message:'Create account successful', desc: "Let's login!"})
+            history.push('/login')
+        } catch (error) {
+            Notification({type: 'error', message:'Create account error', desc: "Please inform your information again"})
+        }
     }
 
     const handleRegisterFailed = (e) => {
         console.log(e)
     }
-
 
     return (
         <div className="register-container">
@@ -57,10 +68,10 @@ const register = () => {
                                     required: true, 
                                     message: 'Please enter your password' 
                                 },
-                                {
-                                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                    message: 'Password must contain at least 8 characters which is one uppercase letter, one lowercase letter and one number' 
-                                },
+                                // {
+                                //     pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                                //     message: 'Password must contain at least 8 characters which is one uppercase letter, one lowercase letter and one number' 
+                                // },
                             ]}
                         >
                             <Input.Password placeholder="Enter your password" className="input" />
@@ -75,10 +86,10 @@ const register = () => {
                                     required: true, 
                                     message: 'Please enter your re-type password' 
                                 },
-                                {
-                                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                                    message: 'Password must contain at least 8 characters which is one uppercase letter, one lowercase letter and one number' 
-                                },
+                                // {
+                                //     pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                                //     message: 'Password must contain at least 8 characters which is one uppercase letter, one lowercase letter and one number' 
+                                // },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                       if (!value || getFieldValue('password') === value) {
@@ -90,6 +101,9 @@ const register = () => {
                             ]}
                         >
                             <Input.Password placeholder="Enter your re-type password" className="input" />
+                        </Form.Item>
+                        <Form.Item label="birthdate" name="birthdate"> 
+                            <DatePicker format={dateFormat}/>
                         </Form.Item>
                         <Form.Item 
                             label="Phone number" 
@@ -124,4 +138,4 @@ const register = () => {
     )
 }
 
-export default register
+export default Register

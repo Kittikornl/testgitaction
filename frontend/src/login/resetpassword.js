@@ -2,16 +2,21 @@ import React from 'react'
 import { Button, Input, Form } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import "./resetpassword.scss"
-import resetPassword from '../service/user.service'
+import { postResetPassword } from '../service/user.service'
+import Notification from '../components/notification'
 
 const ResetPassword = () => {
     const history = useHistory()
 
-    const handleSentReset = (e) => {
+    const handleSentReset = async (e) => {
         try {
-            // await resetPassword(values)
+            console.log(e)
+            const res = await postResetPassword(e)
+            Notification({type :'success', message:'Reset password success', desc:'your new password was sent to your email'} )
             history.push('/login')
         } catch (error) {
+            Notification({type :'error', message:'Reset password fail', desc:'email is not exist'} )
+
             console.log('error')
         }
         console.log(e)

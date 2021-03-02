@@ -1,8 +1,11 @@
-@import 'antd/dist/antd.css';
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import "antd/dist/antd.css";
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-$green: #5DB075;
-$dark-green: #4E7852;
+$green: #5db075;
+$dark-green: #4e7852;
+$yellow: #f3c652;
+$red: #ff0000;
+$button-red: #d66969;
 
 $gray: #979797;
 
@@ -14,25 +17,25 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: $dark-green;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 .input {
     width: 280px;
     border: none;
-    border-bottom: solid 1px #AAAAAA;
+    border-bottom: solid 1px #aaaaaa;
 }
 .input-small {
     width: 250px;
     border: none;
-    border-bottom: solid 1px #AAAAAA;
+    border-bottom: solid 1px #aaaaaa;
 }
 .flex-row {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
 }
 .flex-col {
     display: flex;
-    flex-direction: column;
+    flex-flow: column wrap;
 }
 .text-center {
     text-align: center;
