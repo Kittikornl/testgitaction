@@ -1,8 +1,8 @@
 package models
 
-import {
+import (
 	"gorm.io/gorm"
-}
+)
 
 type Shop struct {
 	gorm.Model
