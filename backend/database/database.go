@@ -19,5 +19,8 @@ func Initdatabase() {
 	DB.AutoMigrate(&models.Usertable{})
 	DB.AutoMigrate(&models.Shop{})
 	DB.AutoMigrate(&models.Token{})
+	DB.AutoMigrate(&models.Product{})
+	DB.AutoMigrate(&models.Category{})
+	DB.AutoMigrate(&models.ProductCategory{})
 
 }

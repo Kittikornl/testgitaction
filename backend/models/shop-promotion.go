@@ -1,12 +1,12 @@
 package models
 
-import {
-	"gorm.io/gorm"
-}
+import (
+	_"gorm.io/gorm"
+)
 
 type ShopPromotion struct {
 	// Auto-generated Promotion ID
-	Shop	shop		`gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
+	Shop	Shop		`gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
 	// Wait for promotion to be created, may edit later
-	Promotion promotion `gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
+	// Promotion Promotion `gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
 }
