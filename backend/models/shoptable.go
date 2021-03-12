@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Shop struct {
+type Shoptable struct {
 	gorm.Model
 	// Auto-generated Shop id
 	Userdata    Userdata `gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
