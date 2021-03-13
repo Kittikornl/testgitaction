@@ -1,0 +1,122 @@
+@import '../index.scss';
+
+.manage-product-page-container {
+    background-image: url("../img/main-veg.jpg");
+    width: 100vw;
+    .manage-product-container {
+        margin-top: 220px ; 
+        background-color: white;
+    }
+
+    .shop-header {
+        margin-top: 10px;
+        text-align: center;
+        .go-back {
+            align-self: center;
+
+            margin-left: 10px;
+
+            font-family: $thai-font;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 25px;
+
+            color: $gray;
+
+            width: 120px;
+
+            z-index: 1;
+        }
+        .shop-title {
+            margin: 0px 0px 0px -120px;
+            flex: 1 0;
+
+            font-family: $thai-font;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 40px;
+            color: $green;
+
+            width: calc(100vw - 120px);
+        }
+    }
+
+    .manage-product {
+        margin-top: 30px;
+        justify-content: space-evenly;
+        .product-img {
+            align-items: center;
+            row-gap: 20px;
+
+            img {
+                max-width: 300px;
+                max-height: 300px;
+                width: auto;
+                height: auto;
+                border-radius: 50%;
+            }
+            
+        }
+
+        .manage-product-form {
+            h1 {
+                color: $green;
+                
+                font-style: normal;
+                font-weight: bold;
+                font-size: 40px;
+                
+            }
+        }
+
+        .form-group {
+            column-gap: 40px;
+            .ant-form-item { 
+                width: 100px;
+            }
+
+        }
+
+        .ant-form-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ant-form-item-required {
+            color: $dark-green;
+            font-size: 20px;
+        }
+
+        .inputEdit, .ant-select-selector  {
+            
+            border: none;
+            border-bottom: solid 1px #aaaaaa;
+        }
+
+        .SelectEdit {
+            width: 120px;
+        }
+        .button-wrapper {
+            column-gap: 15px;
+
+            .button {
+                color: white;
+                border-radius: 10px;
+                height: 40px;
+                border: none;
+                width: 150px;
+            }
+            .button-green {  
+                background-color: $green;      
+            }
+          
+            .button-yellow {
+                background-color: $yellow;
+             }
+
+        }
+
+        
+    }
+}

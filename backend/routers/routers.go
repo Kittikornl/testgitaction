@@ -20,7 +20,7 @@ func InitRouter() *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	})
 	r.Use(CORSHandler)
-
+	r.GET("/api/homepage", user.GetHomePage)
 	r.GET("/api/users", user.GetAllUser)
 	r.GET("/api/accounts", user.GetAllAccount)
 	r.POST("/api/users", user.SaveUser)
