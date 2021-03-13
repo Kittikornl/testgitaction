@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/user"
 )
 
@@ -29,8 +30,10 @@ func InitRouter() *gin.Engine {
 	r.GET("/api/users/:id", user.GetUser)
 	r.PUT("/api/users/:id", user.UpdateUser)
 	r.PATCH("/api/users/:id/change-pwd", user.ChangePassword)
-	r.POST("/api/shops", user.CreateShop)
-	r.GET("/api/shops", user.GetAllShop)
-	r.GET("/api/shops/:id", user.GetShop)
+	r.POST("/api/shops", shop.CreateShop)
+	r.GET("/api/shops", shop.GetAllShop)
+	r.GET("/api/shops/:id", shop.GetShop)
+	r.DELETE("/api/shops/:id", shop.DeleteShop)
+	r.PUT("/api/shops/:id", shop.UpdateShop)
 	return r
 }
