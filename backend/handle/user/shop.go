@@ -30,7 +30,20 @@ func GetShop(c *gin.Context) {
 
 // Create a new shop
 func CreateShop(c *gin.Context) {
+	var shoptable models.Shoptable
 
+	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+	// Save the format data into DB: Shoptable
+	if err := database.DB.Save(&shoptable).Error; err != nil {
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, &shoptable)
 }
 
 // Update shop's info
@@ -44,10 +57,12 @@ func UpdateShop(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
 	}
+	// check if exist
 	if err := database.DB.First(&shoptable, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(id)+" does not exist"))
 		return
 	}
+	// Update the data
 	if err := database.DB.Model(&shoptable).Updates(shoptableIN).Error; err != nil {
 		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		return
@@ -60,6 +75,7 @@ func DeleteShop(c *gin.Context) {
 	id := c.Param("id")
 	shoptable := models.Shoptable{}
 
+	// Check if in the database
 	if err := database.DB.Find(&shoptable, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
