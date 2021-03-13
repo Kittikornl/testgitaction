@@ -1,5 +1,6 @@
 @import "antd/dist/antd.css";
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@200&display=swap');
 
 $green: #5db075;
 $dark-green: #4e7852;
@@ -8,6 +9,8 @@ $red: #ff0000;
 $button-red: #d66969;
 
 $gray: #979797;
+
+$thai-font : 'Mitr', sans-serif;
 
 body {
     margin: 0;
