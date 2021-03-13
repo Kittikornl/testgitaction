@@ -51,7 +51,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 	if err := database.DB.First(&userData, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+" is not exist"))
+		c.JSON(http.StatusNotFound, services.ReturnMessage("user_id: "+string(id)+" does not exist"))
 		return
 	}
 	if err := database.DB.Model(&userData).Updates(userDataIN).Error; err != nil {
