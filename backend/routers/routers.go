@@ -38,6 +38,6 @@ func InitRouter() *gin.Engine {
 	r.POST("/api/shops", user.CreateShop)
 	r.GET("/api/shops", user.GetAllShop)
 	r.GET("/api/shops/:id", user.GetShop)
-	r.POST("/api/search", user.SearchProductOrShop)
+	
 	return r
 }
