@@ -20,6 +20,6 @@ func Initdatabase() {
 	DB.AutoMigrate(&models.Shoptable{})
 	DB.AutoMigrate(&models.Token{})
 	DB.AutoMigrate(&models.Product{})
-	DB.AutoMigrate(&models.Solditems{})
+	DB.AutoMigrate(&models.Soldproduct{})
 
 }
