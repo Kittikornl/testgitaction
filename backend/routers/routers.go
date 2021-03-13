@@ -29,5 +29,8 @@ func InitRouter() *gin.Engine {
 	r.GET("/api/users/:id", user.GetUser)
 	r.PUT("/api/users/:id", user.UpdateUser)
 	r.PATCH("/api/users/:id/change-pwd", user.ChangePassword)
+	r.POST("/api/shops", user.CreateShop)
+	r.GET("/api/shops", user.GetAllShop)
+	r.GET("/api/shops/:id", user.GetShop)
 	return r
 }
