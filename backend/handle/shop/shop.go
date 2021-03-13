@@ -33,12 +33,20 @@ func CreateShop(c *gin.Context) {
 	var shoptable models.Shoptable
 
 	// email, pass = services.ExtractToken(c.GetHeader())
+	// Get current user's token then call the Extractfunction to get the return of email
+	// to call userdata from database via email and then insert it into the models.
+	const BEARER_SCHEMA = "Bearer"
 
+	auth := c.GetHeader("Authorization")
+	tokenString := auth[len(BEARER_SCHEMA):]
+	userID, _ := services.ExtractToken(tokenString)
+	shoptable.UserID = userID
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
 		return
 	}
+
 	// Save the format data into DB: Shoptable
 	if err := database.DB.Save(&shoptable).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
