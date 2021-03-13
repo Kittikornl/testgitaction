@@ -20,12 +20,21 @@ func GetAllShop(c *gin.Context) {
 // Get a specific shop
 func GetShop(c *gin.Context) {
 	shop := models.Shoptable{}
+	products := []models.Product{}
+
 	id := c.Param("id")
+
+	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? ", id).Find(&products).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+	}
+
 	if err := database.DB.First(&shop, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
+
 	c.JSON(http.StatusOK, shop)
+	c.JSON(http.StatusOK, products)
 }
 
 // Create a new shop
@@ -38,9 +47,12 @@ func CreateShop(c *gin.Context) {
 	const BEARER_SCHEMA = "Bearer"
 
 	auth := c.GetHeader("Authorization")
-	tokenString := auth[len(BEARER_SCHEMA):]
-	userID, _ := services.ExtractToken(tokenString)
-	shoptable.UserID = userID
+	// tokenString := auth[len(BEARER_SCHEMA):]
+	// println(tokenString)
+	claims := services.ExtractToken(auth)
+	userID := claims["userID"]
+	println(userID)
+	shoptable.UserID = 1
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
