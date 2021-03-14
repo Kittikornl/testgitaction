@@ -5,15 +5,17 @@ import (
 )
 
 // return userID(int), role(int)
-func ExtractToken(tokenString string) jwt.MapClaims {
-	claims := jwt.MapClaims{}
-	_, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
-		// Verification key = 'Emparty'
-		return []byte("SECRET"), nil
+func ExtractToken(tokenString string) (int, int) {
+	token, err := jwt.ParseWithClaims(tokenString, &authCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
 	})
-	// error handling
-	if err != nil {
+	claims, ok := token.Claims.(*authCustomClaims)
+	if !ok || !token.Valid {
 		println(err.Error())
 	}
-	return claims
+
+	userId := claims.UserID
+	role := claims.Role
+
+	return userId, role
 }
