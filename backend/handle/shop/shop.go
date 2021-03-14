@@ -27,8 +27,7 @@ func GetShop(c *gin.Context) {
 
 	database.DB.Model(models.Soldproduct{}).
 		Joins("left JOIN products on products.id =  soldproducts.product_id").
-		Select("products.id , products.product_title, sum(soldproducts.amount) as total").
-		Where("shop_id = ? ", id).
+		Select("products.id , products.product_title, sum(soldproducts.amount) as total").Where("shop_id = ? ", id).
 		Group("products.id").Order("total desc").Limit(5).Scan(&top_selling)
 
 	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? ", id).Find(&new_products).Error; err != nil {
