@@ -7,8 +7,12 @@ import {uploadProductPic} from '../service/firebase.service'
 import vegThumb from '../img/veg-thumbnail.jpg'
 
 import './manageProduct.scss'
+import { useHistory } from 'react-router'
+import Notification from '../components/notification'
 
 const ManageProduct = () => {
+
+    const history = useHistory()
 
     const [mode, setMode] = useState(0); // 0 Add , 1 Edit
 
@@ -33,6 +37,19 @@ const ManageProduct = () => {
     const pageRefresh = () => {
         setRefresh(!refresh);
     };
+
+    const changeType = (value) => {
+        form.setFieldsValue({type: value})
+    }
+
+    const handleSubmit = (fieldsValue) => {
+        fieldsValue["url"] = url
+        const payload = fieldsValue
+        console.log(payload)
+        history.push('/shop')
+        Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
+    }
+
 
     const propsUpload = {
         maxCount: 1,
@@ -71,7 +88,7 @@ const ManageProduct = () => {
                     <div className="manage-product-form">
                         <h1>{(mode===0) ? "Add product" : "Edit product"}</h1>
                         <div>
-                            <Form form={form} name="basic">
+                            <Form form={form} name="basic" onFinish={handleSubmit}>
                                 <Form.Item
                                     label="Product name"
                                     name="productname"
@@ -121,9 +138,9 @@ const ManageProduct = () => {
                                         ]}
                                     >
                                         <div className="SelectEdit">
-                                            <Select defaultValue="Vegetable">
-                                                <Option value="Vegetable">Vegetable</Option>
-                                                <Option value="Fruit">Fruit</Option>
+                                            <Select defaultValue="Select Type" onChange={changeType}>
+                                                <Select.Option value="Vegetable">Vegetable</Select.Option>
+                                                <Select.Option value="Fruit">Fruit</Select.Option>
                                             </Select>
                                         </div>
                                     </Form.Item>
