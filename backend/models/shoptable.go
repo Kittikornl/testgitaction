@@ -7,7 +7,7 @@ import (
 type Shoptable struct {
 	gorm.Model
 	// Auto-generated Shop id
-	UserID      int    `gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
+	UserID      int    `json:"user_id"`
 	ShopName    string `json:"shopname"`
 	Description string `json:"description"`
 	PhoneNo     string `json:"phone_number"`
