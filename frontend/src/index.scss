@@ -50,7 +50,13 @@ body {
     align-items: center;
     justify-content: center;
 }
-
+.grid {
+    display: grid;
+}
+.grid-center {
+    display: grid;
+    justify-content: center;
+}
 .p-y-24 {
     padding: 24px 0;
 }
