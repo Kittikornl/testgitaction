@@ -6,12 +6,12 @@ import (
 
 type Product struct {
 	gorm.Model
-	Shop          Shop 	 `gorm:"foreignKey: id; constraint:OnUpdate:RESTRICT,OnDelete:RESTRICT;"`
-	PictureURL 	  string `json:"PictureURL"`
-	ProductTitle  string `json:"ProductTitle"`
-	Price 		  int    `json:"Price"`
-	Amount 		  int 	 `json:"Amount"`
-	ProductDetail string `json:"ProductDetail"`
-	Rating 	      int    `json:"Rating"`
-
+	ShopID        int     `json:"ShopID"`
+	PictureURL    string  `json:"PictureURL"`
+	ProductTitle  string  `json:"ProductTitle"`
+	Price         float32 `json:"Price"`
+	Amount        int     `json:"Amount"`
+	ProductType   int     `json:"ProductType"`
+	ProductDetail string  `json:"ProductDetail"`
+	Rating        float32 `json:"Rating"`
 }
