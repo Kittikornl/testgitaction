@@ -4,7 +4,7 @@ import { Option } from 'antd/lib/mentions'
 import React, { useEffect, useState } from 'react'
 
 import {uploadProductPic} from '../service/firebase.service'
-import profileThumb from '../img/profile_thumb.png'
+import vegThumb from '../img/veg-thumbnail.jpg'
 
 import './manageProduct.scss'
 
@@ -61,7 +61,7 @@ const ManageProduct = () => {
                 </div>
                 <div className="manage-product flex-row">
                     <div className="product-img flex-col">
-                    <img src={url === "" ? `${profileThumb}` : `${url}`} />
+                    <img src={url === "" ? `${vegThumb}` : `${url}`} />
                         <div className="uploadButton">
                             <Upload {...propsUpload}>
                                 <Button icon={<UploadOutlined />}>Upload photo</Button>
