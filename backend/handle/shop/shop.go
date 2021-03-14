@@ -24,7 +24,7 @@ func GetShop(c *gin.Context) {
 
 	id := c.Param("id")
 
-	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? ", id).Find(&products).Error; err != nil {
+	if err := database.DB.Order("created_at desc").Limit(5).Where("ID = ? ", id).Find(&products).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 	}
 
@@ -33,26 +33,22 @@ func GetShop(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, shop)
-	c.JSON(http.StatusOK, products)
+	c.JSON(http.StatusOK, gin.H{"shop_information": shop, "new_arrival_products": products})
 }
 
 // Create a new shop
 func CreateShop(c *gin.Context) {
 	var shoptable models.Shoptable
+	const BEARER_SCHEMA = "Bearer "
 
-	// email, pass = services.ExtractToken(c.GetHeader())
-	// Get current user's token then call the Extractfunction to get the return of email
-	// to call userdata from database via email and then insert it into the models.
-	const BEARER_SCHEMA = "Bearer"
+	// Get current user's token then call the Extractfunction to get the return of userID
+	// to add into the shoptable model before saving into the database.
 
 	auth := c.GetHeader("Authorization")
-	// tokenString := auth[len(BEARER_SCHEMA):]
-	// println(tokenString)
-	claims := services.ExtractToken(auth)
-	userID := claims["userID"]
-	println(userID)
-	shoptable.UserID = 1
+	tokenString := auth[len(BEARER_SCHEMA):]
+	userID, _ := services.ExtractToken(tokenString)
+
+	shoptable.UserID = userID
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
