@@ -20,11 +20,17 @@ func GetAllShop(c *gin.Context) {
 // Get a specific shop
 func GetShop(c *gin.Context) {
 	shop := models.Shoptable{}
-	products := []models.Product{}
+	new_products := []models.Product{}
+	top_selling := []models.Product{}
 
 	id := c.Param("id")
 
-	if err := database.DB.Order("created_at desc").Limit(5).Where("ID = ? ", id).Find(&products).Error; err != nil {
+	database.DB.Model(models.Soldproduct{}).
+		Joins("left JOIN products on products.id =  soldproducts.product_id").
+		Select("products.id, products.created_at, products.updated_at, products.deleted_at, products.shop_id, products.picture_url, products.product_title, products.price, products.amount, products.product_type, products.product_detail, products.rating, sum(soldproducts.amount) as total").
+		Group("products.id").Order("total desc").Where("ID = ?").Limit(5).Scan(&top_selling)
+
+	if err := database.DB.Order("created_at desc").Limit(5).Where("ID = ? ", id).Find(&new_products).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 	}
 
@@ -33,7 +39,7 @@ func GetShop(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"shop_information": shop, "new_arrival_products": products})
+	c.JSON(http.StatusOK, gin.H{"shop_information": shop, "new_arrival_products": new_products, "top_selling_product": top_selling})
 }
 
 // Create a new shop
