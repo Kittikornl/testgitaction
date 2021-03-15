@@ -10,6 +10,8 @@ import PrivateRoute from "./components/privateroute";
 import Notification from "./components/notification";
 import Header from './components/static/banner'
 import EditShop from './shop/editShop'
+import ManageProduct from "./product/manageProduct";
+import Product from "./product/product";
 
 function App() {
   const history = useHistory();
@@ -34,6 +36,8 @@ function App() {
         />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
         <PrivateRoute exact key="edit shop" path="/edit/shop" component={EditShop}/>
+        <PrivateRoute exact key="add-product" path="/add-product" component={ManageProduct} />
+        <PrivateRoute exact key="product" path="/product/:id" component={Product} />
       </Switch>
     </Router>
   );
