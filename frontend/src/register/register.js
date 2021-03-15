@@ -4,6 +4,7 @@ import "./register.scss"
 import { postRegister } from '../service/user.service'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
+import Notification from '../components/notification'
 
 const Register = () => {
     const { Option } = Select;
@@ -15,9 +16,10 @@ const Register = () => {
         e['role'] = parseInt(e.role)
         try {
             const res = await postRegister(e)
+            Notification({type: 'success', message:'Create account successful', desc: "Let's login!"})
             history.push('/login')
         } catch (error) {
-            console.log('error')
+            Notification({type: 'error', message:'Create account error', desc: "Please inform your information again"})
         }
     }
 

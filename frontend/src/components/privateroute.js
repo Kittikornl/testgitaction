@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import AuthService from '../service/auth.service'
+import { getUserInfo } from '../service/auth.service'
 import Navbar from './navbar'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-    // const { currentUserValue } = AuthService.getCurrentUser;
-
-    const user = true
+    const  user = getUserInfo()
 
     return (
         <>

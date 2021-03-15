@@ -3,11 +3,13 @@ import Viewshopbutton from "../components/viewshopbutton";
 import Viewhistory from "../components/viewhistory";
 import "./profile.scss";
 import Scores from "../components/scores";
+import profileThumb from '../img/profile_thumb.png'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUserEdit, faUserFriends} from '@fortawesome/free-solid-svg-icons'
 import { getUserData } from '../service/user.service';
 import { getUserInfo } from '../service/auth.service';
+import { Image } from "antd";
 
 const renderRole = (role) => {
     return role === 1 ? "Customer" : "Product Seller"
@@ -16,8 +18,14 @@ const renderRole = (role) => {
 const getAge = (date) => {
     const now = new Date()
     const [day, month, year] = date.split("/")
-    const birth = new Date(`${month}/${day}/${year}`)
-
+    let birth
+    if (day && month && year) {
+        birth = new Date(`${month}/${day}/${year}`)
+    }
+    else {
+        const [day, month, year] = date.split("-")
+        birth = new Date(`${month}/${day}/${year}`)
+    }
     return parseInt((now - birth) / (1000 * 60 * 60 * 24) / 365, 10)
 }
 
@@ -91,9 +99,10 @@ const Profile = () => {
         <div className="profile-page-container">
             <div>.</div>
             <div className="profile-container flex-row">
-                <img className="profile-img"
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    alt="profile-img"
+                <Image className="profile-img"
+                    src={data.url_profile_pic}
+                    fallback={profileThumb}
+                    preview={false}
                 />
                 <div className="profile-title flex-col">
                     <div className="full-name">

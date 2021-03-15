@@ -1,137 +1,140 @@
-@import "../index.scss";
+@import '../index.scss';
 
 .navbar-container {
-  background-color: white;
-  .height {
-    min-height: 55px;
-    max-height: 90px;
-  }
-  .desktop {
-    display: none;
-    .ant-menu-horizontal {
-      display: flex;
-      align-items: center;
-      border: none;
-      a {
-        color: $dark-green;
-        height: 70px;
-      }
-    }
-    .desktop-logo {
-      width: calc(100vw - 560px);
-      text-align: center;
-      a {
-        color: $green;
-        font-size: 36px;
-      }
-      &.ant-menu-item {
-        a:hover {
-          color: $green;
-          border: none;
-        }
-        &:hover {
-          border-color: transparent;
-          color: $green;
-        }
-      }
-    }
-    .ant-menu-item {
-      // height: 65px;
-      a:hover {
-        color: $dark-green;
-      }
-      &:hover {
-        // border: none;
-        border-bottom: 2px solid $green;
-        color: $dark-green;
-      }
-    }
-    .ant-menu-submenu {
-      height: 70px;
-    }
-  }
 
-  .moblie {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    a {
-      color: $dark-green;
+    background-color: white;
+    .height {
+        min-height: 55px;
+        max-height: 90px;
     }
-    .cart-moblie {
-      margin-right: 18px;
-      svg {
-        font-size: 20px;
-      }
-    }
-    .ant-btn {
-      color: $dark-green;
-      border: none;
-      margin-left: 5px;
-      box-shadow: none;
-    }
-    .moblie-logo {
-      position: absolute;
-      top: 0;
-      left: calc(50vw - 77px);
-      color: $green;
-      font-size: 36px;
-      // width: 153px;
-    }
-  }
-
-  .menu-mobile {
-    position: absolute;
-    width: 200px;
-    height: 100%;
-    top: 54px;
-    z-index: 1;
-    .ant-menu {
-      height: 100%;
-      .ant-menu-item {
-        a {
-          color: $dark-green;
-        }
-
-        &:hover {
-          background-color: $green;
-          a {
-            color: #ffffff;
-          }
-        }
-        &:active {
-          background-color: #a7e6b9;
-        }
-      }
-      &:not(.ant-menu-horizontal) .ant-menu-item-selected {
-        background-color: #a7e6b9;
-        border: none;
-      }
-      .logout-tab {
-        color: $dark-green;
-        &:hover {
-          background-color: $green;
-          color: #ffffff;
-        }
-      }
-    }
-  }
-  .logout-tab {
-    color: $dark-green;
-  }
-
-  @media screen and(min-width: 768px) {
-    // height: 90px;
     .desktop {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        display: none;
+        .ant-menu-horizontal {
+            display: flex;
+            align-items: center;
+            border: none;
+            a {
+                color: $dark-green;
+                height: 70px;
+            }
+        }
+        .desktop-logo {
+            width: calc(100vw - 560px);
+            text-align: center;
+            a {
+                color: $green;
+                font-size: 36px;
+            }
+            &.ant-menu-item {
+                a:hover {
+                    color: $green;
+                    border: none;
+                }
+                &:hover {
+                    border-color: transparent;
+                    color: $green;
+                }
+            }
+        }
+        .ant-menu-item {
+            // height: 65px;
+            a:hover {
+                color: $dark-green;
+            }
+            &:hover {
+                // border: none;
+                border-bottom: 2px solid $green;
+                color: $dark-green;
+            }
+        }
+        .ant-menu-submenu {
+            height: 70px;
+        }
     }
+
     .moblie {
-      display: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        a {
+            color: $dark-green;
+        }
+        .cart-moblie {
+            margin-right: 18px;
+            svg {
+                font-size: 20px;
+            }
+        }
+        .ant-btn {
+            color: $dark-green;
+            border: none;
+            margin-left: 5px;
+            box-shadow: none;
+        }
+        .moblie-logo {
+            position: absolute;
+            top: 0;
+            left: calc(50vw - 77px);
+            color: $green;
+            font-size: 36px;
+            // width: 153px;
+        }
     }
+
     .menu-mobile {
-      display: none;
+        position: absolute;
+        width: 200px;
+        height: 100%;
+        top: 54px;
+        z-index: 1;
+        .ant-menu {
+            height: 100%;
+            .ant-menu-item {
+                a {
+                    color: $dark-green;
+                }
+
+                &:hover {
+                    background-color: $green;
+                    a {
+                        color: #FFFFFF;
+                    }
+                }
+                &:active {
+                    background-color: #a7e6b9;
+                }
+            }
+            &:not(.ant-menu-horizontal) .ant-menu-item-selected {
+
+                background-color: #a7e6b9;
+                border: none;
+            }
+            .logout-tab {
+                color: $dark-green;
+                &:hover {
+                    background-color: $green;
+                    color: #FFFFFF;
+                }
+            }
+        }
+
     }
-  }
+    .logout-tab {
+        color: $dark-green;
+    }
+
+    @media screen and(min-width: 768px) {
+        // height: 90px;
+        .desktop {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .moblie {
+            display: none;
+        }
+        .menu-mobile {
+            display: none;
+        }
+    }
 }
