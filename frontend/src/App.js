@@ -37,7 +37,7 @@ function App() {
           component={ResetPassword}
         />
         <PrivateRoute exact key="home" path="/home" component={Home} />
-        <PrivateRoute exact key="shop" path="/shop" component={Shop} />
+        <PrivateRoute exact key="shop" path="/shop/:id" component={Shop} />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
         <PrivateRoute
           exact
