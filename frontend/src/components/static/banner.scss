@@ -1,0 +1,14 @@
+@import '../../index.scss';
+
+.structure-container {
+    background-image: url("../../img/main-veg.jpg");
+    background-attachment: fixed;
+    background-position: center center;
+    height: 150px;
+    @media screen and(min-width: 375px) {
+        height: 200px;
+    }
+    @media screen and(min-width: 768px) {
+        height: 300px;
+    }
+}
