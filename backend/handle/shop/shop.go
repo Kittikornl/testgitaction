@@ -54,7 +54,7 @@ func GetShop(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"shop_information":     shop,
 		"new_arrival_products": new_products,
-		"top_selling_product":  top_selling,
+		"top_selling_products": top_selling,
 		"all_product_type1":    all_products_1,
 		"all_product_type2":    all_products_2,
 	})
