@@ -6,13 +6,50 @@ import { Button, Input } from 'antd'
 import Scores from '../components/scores'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { useParams } from 'react-router'
+
+import { getProduct } from '../service/product.service'
+import { getShopData } from '../service/shop.service'
 
 const Product = () => {
 
+    const initData = {
+        "ShopID": 0,
+        "PictureURL": "",
+        "ProductTitle": "ข้าวโพดแสนอร่อย",
+        "Price": 10,
+        "Amount": 2,
+        "ProductType": 1,
+        "ProductDetail": "อร่อยจริงๆนะ",
+        "Rating": 0
+    }
+
+    const initShopData = { 
+
+    }
+
+
+    let { id } = useParams();
+
     const [amount, setAmount] = useState(1);
+    const [data, setData] = useState(initData);
+    const [shop, setShop] = useState(initShopData);
 
     useEffect(() => {
+        fetchdata(id)
     }, []);
+
+    const fetchdata = async (id) => {
+        const result = await getProduct(id)
+        const productData = result.data
+        console.log(productData)
+        setData(productData)
+
+        const shopResult = await getShopData(productData.ShopID)
+        const shopData = shopResult.data
+        console.log(shopData)
+        setShop(shopData)
+    }
 
     const handleUpDownAmount = (value) => {
         if (amount+value >= 1 && amount+value < 100)
@@ -24,17 +61,16 @@ const Product = () => {
         <div className="product-page-container">
             <div className="product-page-content grid">
                 <div className="product-image-wrapper">
-                    {/* <img src={"" === "" ? `${profileThumb}` : ``} /> */}
-                    <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2F6a394b9a-d621-44d3-bd42-5e08b3e3bcf3?alt=media&token=14133c64-89b2-404f-9679-163a0e97411a" />
+                    <img src={data.PictureURL === "" ? `${profileThumb}` : data.PictureURL} />
                 </div>
                 <div className="product-name-wrapper">
-                    <h1>ช้าวโพดต้มแสนอร่อย 1 ฟัก ลองข้อความยาวๆครับ</h1>
+                    <h1>{data.ProductTitle}</h1>
                     <div className="content">
-                        <div className="amount">26 Items available</div>
+                        <div className="amount">{`${data.Amount} Items available`}</div>
                         <div className="shop">ไร่เกษตรรวมใจ</div>
                         <div className="province">สระบุรี</div>
                         <div className="score flex-row">
-                            <div>5.0</div>
+                            <div>{data.Rating}</div>
                             <Scores score={5.0}/>
                             <div>36 reviews</div>
                         </div>
@@ -43,16 +79,13 @@ const Product = () => {
                 <div className="product-desc-wrapper">
                     <h1>รายละเอียดสินค้า</h1>
                     <div className="shop-desc">
-                        ช้าวโพดต้มปลอดสารพิษ 100% 
-                        ขนาดบรรจุ 1 ฟัก
-                        สั่งมากกว่า 10 ฟักส่งฟรี
-                        ส่งภายในจังหวัดสระบุรี
+                        {data.ProductDetail}
                     </div>
                 </div>
                 <div className="product-price-wrapper">
                     <h1>Price</h1>
                     <div className="content">
-                        <div className="price">40 บาท</div>
+                        <div className="price">{`${data.Price} บาท`}</div>
                         <div className="amount-button">
                             <Button className="button-left" onClick={(e)=>handleUpDownAmount(-1)}>-</Button>
                             <Input 

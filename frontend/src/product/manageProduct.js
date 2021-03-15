@@ -9,6 +9,7 @@ import vegThumb from '../img/veg-thumbnail.jpg'
 import './manageProduct.scss'
 import { useHistory } from 'react-router'
 import Notification from '../components/notification'
+import { postAddProduct } from '../service/product.service'
 
 const ManageProduct = () => {
 
@@ -43,10 +44,20 @@ const ManageProduct = () => {
     }
 
     const handleSubmit = (fieldsValue) => {
-        fieldsValue["url"] = url
-        const payload = fieldsValue
+        // {productname: "ข้าวโพดแสนอร่อย", price: "10", amount: 2, type: "Fruit", detail: "อร่อยจริงๆนะ"}
+        let payload = {}
+
+        payload["PictureURL"] = url
+        payload["ProductTitle"] = fieldsValue["productname"]
+        payload["Price"] = parseInt(fieldsValue["price"])
+        payload["Amount"] = fieldsValue["amount"]
+        payload["ProductType"] = fieldsValue["type"]
+        payload["ProductDetail"] = fieldsValue["detail"]
+
         console.log(payload)
-        history.push('/shop')
+
+        postAddProduct(payload)
+        // history.push('/shop')
         Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
     }
 
@@ -139,8 +150,8 @@ const ManageProduct = () => {
                                     >
                                         <div className="SelectEdit">
                                             <Select defaultValue="Select Type" onChange={changeType}>
-                                                <Select.Option value="Vegetable">Vegetable</Select.Option>
-                                                <Select.Option value="Fruit">Fruit</Select.Option>
+                                                <Select.Option value={0}>Vegetable</Select.Option>
+                                                <Select.Option value={1}>Fruit</Select.Option>
                                             </Select>
                                         </div>
                                     </Form.Item>
