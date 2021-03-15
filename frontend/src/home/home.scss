@@ -11,8 +11,8 @@ img {
   justify-content: center;
   .home-page {
     background-color: white;
-    width: 100vw;
-    align-content: center;
+    width: 80vw;
+    align-self: center;
     .promo-banner {
       background-color: $green;
       width: 80vw;
@@ -46,7 +46,8 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
+        grid-template-rows: auto;
         column-gap: 25px;
         justify-content: center;
       }
@@ -63,7 +64,7 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
         grid-template-rows: auto;
         column-gap: 25px;
         justify-content: center;
@@ -81,12 +82,24 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
         grid-template-rows: auto;
         column-gap: 25px;
         row-gap: 25px;
         justify-content: center;
       }
     }
+  }
+}
+
+@media screen and (max-width: 1025px) {
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+  }
+
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getHomeData, getAllProduct } from "../service/product.service";
+import { getHomeData, getAllProduct } from "../service/home.service";
 import "./home.scss";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
 
@@ -19,6 +19,7 @@ const Home = () => {
     const result = await getHomeData();
     setNewArrival(result.data.new_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
+    console.log(newArrival);
   };
 
   const fetchAllProduct = async () => {
@@ -53,13 +54,19 @@ const Home = () => {
   const Product = (props) => {
     return (
       <div className="product flex-col">
-        <img
-          src={
-            props.product.PictureURL === ""
-              ? `${vegThumbnail}`
-              : props.product.PictureURL
-          }
-        />
+        <a
+          href={`/product/${
+            props.product.ID === undefined ? null : props.product.ID
+          }`}
+        >
+          <img
+            src={
+              props.product.PictureURL === ""
+                ? `${vegThumbnail}`
+                : props.product.PictureURL
+            }
+          />
+        </a>
         <div className="name">
           {props.product.length === 0 ? "" : props.product.ProductTitle}
         </div>
@@ -71,23 +78,23 @@ const Home = () => {
     return <Product product={product} />;
   };
 
-  // const handleClick = (product) => {
-  //   console.log("click");
-  // };
-
   const ProductHidden = (props) => {
     console.log(props);
     return (
       <div className="product flex-col">
-        <img
-          // onClick={handleClick}
-          src={
-            props.product.PictureURL === ""
-              ? `${vegThumbnail}`
-              : props.product.PictureURL
-          }
-        />
-
+        <a
+          href={`/product/${
+            props.product.ID === undefined ? null : props.product.ID
+          }`}
+        >
+          <img
+            src={
+              props.product.PictureURL === ""
+                ? `${vegThumbnail}`
+                : props.product.PictureURL
+            }
+          />
+        </a>
         <div className="name">{props.product.ProductTitle}</div>
       </div>
     );
@@ -99,7 +106,7 @@ const Home = () => {
 
   return (
     <div className="home-container flex-col">
-      <div className="home-page flex-col">
+      <div className="home-page">
         <div className="promo-banner m-y-24">
           <div className="promo-code semi-bold flex-col">
             <div>Save 10% off | code ABC2D3</div>
