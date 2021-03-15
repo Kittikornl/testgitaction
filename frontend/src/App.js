@@ -10,20 +10,14 @@ import PrivateRoute from "./components/privateroute";
 import Notification from "./components/notification";
 import Home from "./home/home";
 import Shop from "./shop/shop";
+import Header from "./components/static/banner";
+import EditShop from "./shop/editShop";
+import ManageProduct from "./product/manageProduct";
+import Product from "./product/product";
 
 function App() {
   const history = useHistory();
-  // const location = useLocation();
-  // const auth = useContext(Authentication);
-  // const { currentUser } = auth;
-  // const [user, setUser] = useState("");
 
-  // const checkPath = (path) => {
-  //   if (path === "/login") {
-  //     return false;
-  //   }
-  //   return true;
-  // };
   return (
     <Router history={history}>
       <Switch>
@@ -45,6 +39,24 @@ function App() {
         <PrivateRoute exact key="home" path="/home" component={Home} />
         <PrivateRoute exact key="shop" path="/shop" component={Shop} />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
+        <PrivateRoute
+          exact
+          key="edit shop"
+          path="/edit/shop"
+          component={EditShop}
+        />
+        <PrivateRoute
+          exact
+          key="add-product"
+          path="/add-product"
+          component={ManageProduct}
+        />
+        <PrivateRoute
+          exact
+          key="product"
+          path="/product/:id"
+          component={Product}
+        />
       </Switch>
     </Router>
   );

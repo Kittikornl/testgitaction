@@ -1,0 +1,154 @@
+@import '../index.scss';
+
+.manage-product-page-container {
+    background-image: url("../img/main-veg.jpg");
+    width: 100vw;
+    .manage-product-container {
+        margin-top: 220px ; 
+        background-color: white;
+    }
+
+    .shop-header {
+        margin-top: 10px;
+        text-align: center;
+        .go-back {
+            align-self: center;
+
+            margin-left: 10px;
+
+            font-family: $thai-font;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 25px;
+
+            color: $gray;
+
+            width: 120px;
+
+            z-index: 1;
+        }
+        .shop-title {
+            margin: 0px 0px 0px -120px;
+            flex: 1 0;
+
+            font-family: $thai-font;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 40px;
+            color: $green;
+
+            width: calc(100vw - 120px);
+        }
+    }
+
+    .manage-product {
+        margin-top: 30px;
+        justify-content: center;
+        column-gap: 10vw;
+        .product-img {
+            align-items: center;
+            row-gap: 20px;
+
+            img {
+                max-width: 300px;
+                max-height: 300px;
+                width: 100vw;
+                height: auto;
+                object-fit: contain;
+                // border-radius: 50%;
+            }
+            
+        }
+
+        .manage-product-form {
+            h1 {
+                margin-top: 20px;
+
+                color: $green;
+                
+                font-style: normal;
+                font-weight: bold;
+                font-size: 40px;
+                
+            }
+        }
+
+        .form-group {
+            column-gap: 40px;
+            .ant-form-item { 
+                width: 100px;
+            }
+
+        }
+
+        .ant-form-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ant-form-item-required {
+            color: $dark-green;
+            font-size: 20px;
+        }
+
+        .inputEdit, .ant-select-selector  {
+            
+            border: none;
+            border-bottom: solid 1px #aaaaaa;
+        }
+
+        .SelectEdit {
+            width: 120px;
+        }
+        .button-wrapper {
+            column-gap: 15px;
+
+            margin-bottom: 20px;
+
+            .button {
+                color: white;
+                border-radius: 10px;
+                height: 40px;
+                border: none;
+                width: 150px;
+            }
+            .button-green {  
+                background-color: $green;      
+            }
+          
+            .button-yellow {
+                background-color: $yellow;
+             }
+
+        }  
+    }
+}
+
+@media screen and (max-width: 756px) {
+    .manage-product-page-container {
+        .shop-header {
+            flex-flow: column wrap;
+            margin-top: 0px;
+            .go-back {
+                align-self: start;
+            }
+            .shop-title {
+                align-self: center;
+                width: 100vw;
+
+                margin: 0px 0px 10px 0px;
+
+                order: -1;
+
+                color: #FFF;
+                background-color: #478F5C;
+            }
+        }
+        .manage-product .manage-product-form {
+            h1 {
+                text-align: center;
+            }
+        }
+    }
+}

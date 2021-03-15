@@ -3,20 +3,11 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8080/api";
 
-export const getTopSelling = async () => {
+export const getShopData = async (id) => {
   try {
-    return await axios.get(API_URL + `/products/top-selling`);
+    return await axios.get(API_URL + `/shops/${id}`);
   } catch (error) {
-    console.log("error get topselling");
-    throw error;
-  }
-};
-
-export const getNewArrival = async () => {
-  try {
-    return await axios.get(API_URL + `/products/new-arrival`);
-  } catch (error) {
-    console.log("error get newarrival");
+    console.log("error get shopdata");
     throw error;
   }
 };
