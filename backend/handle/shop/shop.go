@@ -22,6 +22,8 @@ func GetShop(c *gin.Context) {
 	shop := models.Shoptable{}
 	new_products := []models.Product{}
 	top_selling := []models.Product{}
+	all_products_1 := []models.Product{}
+	all_products_2 := []models.Product{}
 
 	id := c.Param("id")
 
@@ -30,6 +32,15 @@ func GetShop(c *gin.Context) {
 		Select("products.id, products.created_at, products.updated_at, products.deleted_at, products.shop_id, products.picture_url, products.product_title, products.price, products.amount, products.product_type, products.product_detail, products.rating, sum(soldproducts.amount) as total").
 		Where("shop_id = ? ", id).
 		Group("products.id").Order("total desc").Limit(5).Scan(&top_selling)
+
+	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? ", id).Where("product_type = ? ", 1).Find(&all_products_1).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+	}
+
+	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? ", id).Where("product_type = ? ", 2).Find(&all_products_2).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+	}
+	// SELECT * FROM Products WHERE ShopID = id ORDER BY ProductTitle ASC GROUP BY ProductType
 
 	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? ", id).Find(&new_products).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
@@ -40,7 +51,7 @@ func GetShop(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"shop_information": shop, "new_arrival_products": new_products, "top_selling_product": top_selling})
+	c.JSON(http.StatusOK, gin.H{"shop_information": shop, "new_arrival_products": new_products, "top_selling_product": top_selling, "all_product_type1": all_products_1, "all_product_type2": all_products_2})
 }
 
 // Create a new shop
