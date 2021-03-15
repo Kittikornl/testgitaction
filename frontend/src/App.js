@@ -8,6 +8,8 @@ import Profile from "./profile/profile";
 import Editprofile from "./profile/Editprofile";
 import PrivateRoute from "./components/privateroute";
 import Notification from "./components/notification";
+import Home from "./home/home";
+import Shop from "./shop/shop";
 
 function App() {
   const history = useHistory();
@@ -40,6 +42,8 @@ function App() {
           path="/password/reset"
           component={ResetPassword}
         />
+        <PrivateRoute exact key="home" path="/home" component={Home} />
+        <PrivateRoute exact key="shop" path="/shop" component={Shop} />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
       </Switch>
     </Router>
