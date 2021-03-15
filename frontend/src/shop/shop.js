@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./shop.scss";
 import Scores from "../components/scores";
 import { Button } from "antd";
+import { getTopSelling, getNewArrival } from "../service/shop.service";
 
 const Shop = () => {
   const initData = {
@@ -49,6 +50,20 @@ const Shop = () => {
   const [data, setData] = useState(initData);
   const [showMoreBest, setShowMoreBest] = useState(false);
   const [showMoreNew, setShowMoreNew] = useState(false);
+
+  useEffect(async () => {
+    fetchTopSelling();
+  }, []);
+
+  const fetchTopSelling = async () => {
+    const result = await getTopSelling();
+    console.log(result);
+  };
+
+  const fetchNewArrival = async () => {
+    const result = await getNewArrival();
+    console.log(result);
+  };
 
   const handleSeeMoreBestSell = () => {
     setShowMoreBest(!showMoreBest);
