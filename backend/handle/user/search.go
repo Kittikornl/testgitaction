@@ -43,7 +43,7 @@ func SearchProductOrShop(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"products_information": products,
-			"allproducts_for_shop": products_spec})
+			"allproducts_for_shop": productsSpec})
 	
 	}else{	//1 param
 		//query products
