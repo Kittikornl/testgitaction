@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getHomeData, getAllProduct } from "../service/home.service";
 import "./home.scss";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
+import Searchbar from "../components/searchbar";
+import { postSearchProduct } from "../service/search.service";
 
 const Home = () => {
   const [showMoreBest, setShowMoreBest] = useState(false);
@@ -9,6 +11,8 @@ const Home = () => {
   const [newArrival, setNewArrival] = useState([]);
   const [topSell, setTopSell] = useState([]);
   const [allProduct, setAllProduct] = useState([]);
+  const [showBest, setShowBest] = useState(true);
+  const [showNew, setShowNew] = useState(true);
 
   useEffect(async () => {
     fetchHomeData();
@@ -19,7 +23,6 @@ const Home = () => {
     const result = await getHomeData();
     setNewArrival(result.data.new_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
-    console.log(newArrival);
   };
 
   const fetchAllProduct = async () => {
@@ -79,7 +82,6 @@ const Home = () => {
   };
 
   const ProductHidden = (props) => {
-    console.log(props);
     return (
       <div className="product flex-col">
         <a
@@ -104,8 +106,63 @@ const Home = () => {
     return <ProductHidden product={product} />;
   };
 
+  const getSearchData = async (data) => {
+    const payload = {
+      Search: data.keyword,
+      ProductType: data.type === "" ? null : data.type,
+    };
+
+    const result = await postSearchProduct(payload);
+    console.log(result.data);
+    var showMoreN = document.getElementById("showMoreN");
+    var showMoreB = document.getElementById("showMoreB");
+    var bestSellText = document.getElementById("bestSellText");
+    var newArriveText = document.getElementById("newArriveText");
+
+    if (payload.Search === "" && payload.ProductType === null) {
+      fetchAllProduct();
+      setShowBest(true);
+      setShowNew(true);
+      showMoreN.innerHTML = "See more >";
+      showMoreB.innerHTML = "See more >";
+      bestSellText.innerHTML = "Best seller";
+      newArriveText.innerHTML = "New arrivals";
+    } else if (payload.Search === "" && payload.ProductType !== null) {
+      if (result.data.q_by_type !== undefined) {
+        setAllProduct(result.data.q_by_type);
+        setShowNew(false);
+        setShowBest(false);
+        showMoreN.innerHTML = "";
+        showMoreB.innerHTML = "";
+        bestSellText.innerHTML = "";
+        newArriveText.innerHTML = "";
+      }
+    } else if (payload.Search !== "" && payload.ProductType === null) {
+      if (result.data.q_by_productname !== undefined) {
+        setAllProduct(result.data.q_by_productname);
+        setShowNew(false);
+        setShowBest(false);
+        showMoreN.innerHTML = "";
+        showMoreB.innerHTML = "";
+        bestSellText.innerHTML = "";
+        newArriveText.innerHTML = "";
+      }
+    } else if (payload.Search !== "" && payload.ProductType !== null) {
+      if (result.data.products_information) {
+        setAllProduct(result.data.products_information);
+        setShowNew(false);
+        setShowBest(false);
+        showMoreN.innerHTML = "";
+        showMoreB.innerHTML = "";
+        bestSellText.innerHTML = "";
+        newArriveText.innerHTML = "";
+      }
+    }
+  };
+
   return (
     <div className="home-container flex-col">
+      <Searchbar getSearchData={getSearchData} />
       <div className="home-page">
         <div className="promo-banner m-y-24">
           <div className="promo-code semi-bold flex-col">
@@ -115,7 +172,7 @@ const Home = () => {
         </div>
         <div className="best-seller-grid">
           <div className="header flex-row">
-            <div>Best seller</div>
+            <div id="bestSellText">Best seller</div>
             <a
               className="see-more"
               id="showMoreB"
@@ -125,9 +182,11 @@ const Home = () => {
             </a>
           </div>
           <div class="grid-container m-t-16">
-            {topSell.slice(0, 4).length === 0
-              ? null
-              : topSell.slice(0, 4).map(renderProduct)}
+            {showBest
+              ? topSell.slice(0, 4).length === 0
+                ? null
+                : topSell.slice(0, 4).map(renderProduct)
+              : null}
             {showMoreBest
               ? topSell.slice(4, 8).length === 0
                 ? null
@@ -137,7 +196,7 @@ const Home = () => {
         </div>
         <div className="new-arrivals-grid m-t-20">
           <div className="header flex-row">
-            <div>New arrivals</div>
+            <div id="newArriveText">New arrivals</div>
             <a
               className="see-more"
               id="showMoreN"
@@ -147,9 +206,11 @@ const Home = () => {
             </a>
           </div>
           <div class="grid-container m-t-16">
-            {newArrival.slice(0, 4).length === 0
-              ? null
-              : newArrival.slice(0, 4).map(renderProduct)}
+            {showNew
+              ? newArrival.slice(0, 4).length === 0
+                ? null
+                : newArrival.slice(0, 4).map(renderProduct)
+              : null}
             {showMoreNew
               ? newArrival.slice(4, 8).length === 0
                 ? null
