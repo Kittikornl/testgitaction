@@ -87,6 +87,11 @@
         align-content: center;
         column-gap: 10px;
     }
+
+    .green {
+        color: $green;
+        font-weight: 600;
+    }
     
     .button-content .score-text, .button-content .vote-count-text {
         align-self: center;
