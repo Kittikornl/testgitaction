@@ -20,6 +20,7 @@ func SearchProductOrShop(c *gin.Context) {
 
 	var search search
 	products := make([]models.Product, 0)
+	productsSpec := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
 
 	if err := c.ShouldBindBodyWith(&search, binding.JSON); err != nil {
@@ -36,12 +37,13 @@ func SearchProductOrShop(c *gin.Context) {
 
 		}
 		//query shops
-		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{
-			c.JSON(http.StatusBadRequest, &products)
+		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&productsSpec).Error; err != nil{
+			c.JSON(http.StatusBadRequest, &productsSpec)
 
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"products_information": products})
+			"products_information": products,
+			"allproducts_for_shop": productsSpec})
 	
 	}else{	//1 param
 		//query products
