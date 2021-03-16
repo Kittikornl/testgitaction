@@ -10,30 +10,14 @@ import { useParams } from 'react-router'
 
 import { getProduct } from '../service/product.service'
 import { getShopData } from '../service/shop.service'
+import { Link } from 'react-router-dom'
 
 const Product = () => {
-
-    const initData = {
-        "ShopID": 0,
-        "PictureURL": "",
-        "ProductTitle": "ข้าวโพดแสนอร่อย",
-        "Price": 10,
-        "Amount": 2,
-        "ProductType": 1,
-        "ProductDetail": "อร่อยจริงๆนะ",
-        "Rating": 0
-    }
-
-    const initShopData = { 
-
-    }
-
-
     let { id } = useParams();
 
     const [amount, setAmount] = useState(1);
-    const [data, setData] = useState(initData);
-    const [shop, setShop] = useState(initShopData);
+    const [data, setData] = useState({});
+    const [shop, setShop] = useState({});
 
     useEffect(() => {
         fetchdata(id)
@@ -54,9 +38,9 @@ const Product = () => {
     const handleUpDownAmount = (value) => {
         if (amount+value >= 1 && amount+value < 100)
             setAmount(amount+value)
-        
     }
 
+    if (data.length !== 0 && shop.length !== 0)
     return (
         <div className="product-page-container">
             <div className="product-page-content grid">
@@ -114,10 +98,12 @@ const Product = () => {
                         <div>บรรทัดที่ 2</div>
                     </div>
                     <div className="visit-shop-button">
-                        <Button className="fs-20">
-                            <FontAwesomeIcon icon={faHome} />   
-                            &nbsp;&nbsp;Visit Shop
-                        </Button>
+                        <Link to={`/shop/${data.ShopID}`}>
+                            <Button className="fs-20">
+                                <FontAwesomeIcon icon={faHome} />   
+                                &nbsp;&nbsp;Visit Shop
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
