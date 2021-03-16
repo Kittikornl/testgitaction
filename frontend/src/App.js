@@ -14,6 +14,7 @@ import Header from "./components/static/banner";
 import EditShop from "./shop/editShop";
 import ManageProduct from "./product/manageProduct";
 import Product from "./product/product";
+import ManageShop from "./shop/manageShop";
 
 function App() {
   const history = useHistory();
@@ -39,24 +40,11 @@ function App() {
         <PrivateRoute exact key="home" path="/home" component={Home} />
         <PrivateRoute exact key="shop" path="/shop/:id" component={Shop} />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
-        <PrivateRoute
-          exact
-          key="edit shop"
-          path="/edit/shop"
-          component={EditShop}
-        />
-        <PrivateRoute
-          exact
-          key="add-product"
-          path="/add-product"
-          component={ManageProduct}
-        />
-        <PrivateRoute
-          exact
-          key="product"
-          path="/product/:id"
-          component={Product}
-        />
+        <PrivateRoute exact key="edit shop" path="/edit/shop" component={EditShop}/>
+        <PrivateRoute exact key="manage-product" path="/manage/product" component={ManageProduct} />
+        <PrivateRoute exact key="product" path="/product/:id" component={Product} />
+
+        <PrivateRoute exact key="manage-shop" path="/manage/shop" component={ManageShop} />
       </Switch>
     </Router>
   );

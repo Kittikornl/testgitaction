@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import './product.scss'
-import profileThumb from '../img/profile_thumb.png'
+import vegThumb from '../img/veg-thumbnail.jpg'
 import { Button, Input } from 'antd'
 import Scores from '../components/scores'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -61,7 +61,7 @@ const Product = () => {
         <div className="product-page-container">
             <div className="product-page-content grid">
                 <div className="product-image-wrapper">
-                    <img src={data.PictureURL === "" ? `${profileThumb}` : data.PictureURL} />
+                    <img src={data.PictureURL === "" ? `${vegThumb}` : data.PictureURL} />
                 </div>
                 <div className="product-name-wrapper">
                     <h1>{data.ProductTitle}</h1>
@@ -71,8 +71,8 @@ const Product = () => {
                         <div className="province">สระบุรี</div>
                         <div className="score flex-row">
                             <div>{data.Rating}</div>
-                            <Scores score={5.0}/>
-                            <div>36 reviews</div>
+                            <Scores score={data.Rating}/>
+                            <div>0 reviews</div>
                         </div>
                     </div>
                 </div>

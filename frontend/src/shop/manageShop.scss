@@ -1,0 +1,83 @@
+@import '../index.scss';
+
+.manage-shop-page-container {
+    background-image: url("../img/main-veg.jpg");
+    width: 100vw;
+    .cover-box {
+        height: 220px;
+
+        color: #FFF;
+
+        font-weight: bold;
+        font-size: 36px;
+
+    }
+    .manage-shop-container {
+        background-color: #FFF;
+
+        h1, a {
+            padding: 5px;
+
+            text-align: center;
+            background-color: $green;
+
+            color: #FFF;
+        }
+        
+        h2 {
+            font-size: 25px;
+        }
+
+
+        .veg-container, .fruit-container {
+            margin: 0px 30px 0px 30px;
+        }
+
+        .veg-container {
+            margin-bottom: 20px;
+        }
+        
+
+        .product-wrapper {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+            column-gap: 20px;
+            img {
+                max-width: 300px;
+                max-height: 300px;
+
+                width: auto;
+                height: auto;
+            }
+
+            h2 {
+                text-align: center;
+                font-size: 25px;
+            }
+            .product-content {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 18px;
+
+                color: black;
+
+                margin-bottom: 10px;
+            }
+
+            .ant-btn {
+                background-color: $green;
+                color: #FFF;
+
+                height: 40px;
+                border-radius: 10px;
+            }
+
+            .red-button {
+                background-color: $red;
+            }
+
+            .button-wrapper {
+                column-gap: 10px;
+            }
+        }
+    }
+}

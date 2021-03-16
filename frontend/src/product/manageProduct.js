@@ -9,26 +9,51 @@ import vegThumb from '../img/veg-thumbnail.jpg'
 import './manageProduct.scss'
 import { useHistory } from 'react-router'
 import Notification from '../components/notification'
-import { postAddProduct } from '../service/product.service'
+import { getProduct, postAddProduct } from '../service/product.service'
 
-const ManageProduct = () => {
+const ManageProduct = (props) => {
 
     const history = useHistory()
 
-    const [mode, setMode] = useState(0); // 0 Add , 1 Edit
-
     const [form] = Form.useForm();
 
+    const [mode, setMode] = useState(0);
+    const [data, setData] = useState({});
     const [url, setUrl] = useState("");
+
     const [refresh, setRefresh] = useState(0);
 
     useEffect(() => {
-        if (mode==1)
-            fetchdata()
+        const prop = props.location.state
+
+        if (prop === undefined)
+            history.goBack()
+        setMode(prop.mode)
+        
+        if (prop.mode==1) {
+            const product_id = prop.product_id
+            fetchdata(product_id)
+            setFormValue()
+            
+        }
+
     }, []);
 
-    const fetchdata = () => {
-        
+    const fetchdata = async (id) => {
+        const result = await getProduct(id)
+        const productData = result.data
+        console.log(productData)
+        setData(productData)
+    }
+
+    const setFormValue = () => {
+        form.setFieldsValue({
+            productname : "Test",
+            price : 100,
+            amount : 10,
+            type : 1,
+            detail : "test"
+        })
     }
 
     const onReset = () => {
@@ -84,7 +109,7 @@ const ManageProduct = () => {
             <div>.</div>
             <div className="manage-product-container flex-col">
                 <div className="shop-header flex-row">
-                    <a className="go-back">{"< ย้อนกลับ"}</a>
+                    <a className="go-back" href="shop">{"< ย้อนกลับ"}</a>
                     <h1 className="shop-title flex-col">ไร่เกษตรรวมใจ</h1>
                 </div>
                 <div className="manage-product flex-row">
@@ -123,7 +148,7 @@ const ManageProduct = () => {
                                             },
                                         ]}
                                     >
-                                        <Input className="inputEdit" defaultValue={0} suffix="฿" />
+                                        <Input className="inputEdit" suffix="฿" />
                                     </Form.Item>
                                     <Form.Item
                                         label="Amount"
@@ -136,7 +161,7 @@ const ManageProduct = () => {
                                             },
                                         ]}
                                     >
-                                        <InputNumber className="inputEdit" min={1} max={99} defaultValue={1} />
+                                        <InputNumber className="inputEdit" min={1} max={99}/>
                                     </Form.Item>
                                     <Form.Item
                                         label="Type"
