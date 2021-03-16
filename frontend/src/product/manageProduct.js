@@ -87,7 +87,7 @@ const ManageProduct = (props) => {
         console.log(payload)
 
         postAddProduct(payload)
-        // history.push('/shop')
+        history.push('shop')
         Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
     }
 
@@ -180,8 +180,8 @@ const ManageProduct = (props) => {
                                     >
                                         <div className="SelectEdit">
                                             <Select defaultValue="Select Type" onChange={changeType}>
-                                                <Select.Option value={0}>Vegetable</Select.Option>
-                                                <Select.Option value={1}>Fruit</Select.Option>
+                                                <Select.Option value={1}>Vegetable</Select.Option>
+                                                <Select.Option value={2}>Fruit</Select.Option>
                                             </Select>
                                         </div>
                                     </Form.Item>
