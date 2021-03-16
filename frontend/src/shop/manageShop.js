@@ -10,6 +10,7 @@ import { deleteProduct } from '../service/product.service'
 
 import './manageShop.scss'
 import Modal from 'antd/lib/modal/Modal'
+import Notification from '../components/notification'
 
 const ProductCard = ({data, refreshPage}) => {
 
@@ -32,7 +33,7 @@ const ProductCard = ({data, refreshPage}) => {
     }
 
     return (
-        <div>
+        <div classname="product-card">
             <img src={data.PictureURL} />
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
@@ -87,6 +88,7 @@ const ManageShop = () => {
     const [fruitData, setFruitData] = useState([]);
 
     const [userID] = useState(getUserInfo().userId);
+    const [shopID, setShopID] = useState(-1);
 
     const [refresh, setRefresh] = useState(true);
 
@@ -96,15 +98,13 @@ const ManageShop = () => {
 
     const fetchdata = async () => {
         let result = await getUserData(userID)
-        const shop_id = result.data.shop_information.ID
+        setShopID(result.data.shop_information.ID)
         
-        let result1 = await getShopData(shop_id)
+        let result1 = await getShopData(result.data.shop_information.ID)
         const shopData = result1.data
 
         setVegData(shopData.all_product_type1)
         setFruitData(shopData.all_product_type2)
-
-        console.log(shopData.all_product_type2)
     }
 
     const refreshPage = () => {
@@ -125,8 +125,16 @@ const ManageShop = () => {
         )
     }
 
-    if (getUserInfo().role !== 2)
-        history.goBack()
+    if (getUserInfo().role !== 2) {
+        Notification({type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!'})
+        history.push("/profile")
+        return <div></div>
+    }
+    else if (shopID === 0) {
+        Notification({type: 'error', message: 'Shop not found!.', desc: 'create your shop first!'})
+        history.push("/profile")
+        return <div></div>
+    }
     else return (
         <div className="manage-shop-page-container">
             <div className="cover-box flex-center">
