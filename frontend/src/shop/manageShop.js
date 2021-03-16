@@ -33,7 +33,7 @@ const ProductCard = ({data, refreshPage}) => {
     }
 
     return (
-        <div>
+        <div classname="product-card">
             <img src={data.PictureURL} />
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
