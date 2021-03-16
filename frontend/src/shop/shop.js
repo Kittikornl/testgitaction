@@ -134,13 +134,6 @@ const Shop = () => {
           </div>
           <div className="name">{shopDescription.shopname}</div>
           <div className="button-group flex-row">
-            {/* <Button
-              htmlType="edit"
-              className="button-green"
-              onClick={handleEdit}
-            >
-              Edit Product
-            </Button> */}
             <Link to="/manage/shop">
               <Button
                 htmlType="edit"
