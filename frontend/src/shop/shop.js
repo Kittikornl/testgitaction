@@ -67,10 +67,6 @@ const Shop = () => {
     }
   };
 
-  const handleEdit = () => {};
-
-  const handleAdd = () => {};
-
   const Product = (props) => {
     return (
       <div className="product flex-col">
@@ -135,11 +131,7 @@ const Shop = () => {
           <div className="name">{shopDescription.shopname}</div>
           <div className="button-group flex-row">
             <Link to="/manage/shop">
-              <Button
-                htmlType="edit"
-                className="button-green"
-                onClick={handleAdd}
-              >
+              <Button htmlType="edit" className="button-green">
                 Manage Product
               </Button>
             </Link>
@@ -156,7 +148,7 @@ const Shop = () => {
             <Scores score={Shop.rating} />
           </div>
           <div className="name">{shopDescription.shopname}</div>
-          <Button htmlType="edit" className="button-green" onClick={handleEdit}>
+          <Button htmlType="edit" className="button-green">
             Review
           </Button>
         </div>
@@ -235,11 +227,21 @@ const Shop = () => {
           </div>
         </div>
       </div>
-      <div className="contact flex-row">
-        <div>Shop Contact: {shopDescription.phone_number}</div>
-        <div>
-          Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
-          {userData.district} {userData.city} {userData.zipcode}
+
+      <div className="contact-container flex-col">
+        <div className="contact flex-row">
+          {console.log(shopDescription)}
+          <div>Shop Contact: {shopDescription.phone_number}</div>
+          <div>
+            Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
+            {userData.district} {userData.city} {userData.zipcode}
+          </div>
+        </div>
+        <div className="social flex-row">
+          <div>Line: {shopDescription.line}</div>
+          <div>Instagram: {shopDescription.ig}</div>
+          <div>Twitter: {shopDescription.twitter}</div>
+          <div>Facebook: {shopDescription.facebook}</div>
         </div>
       </div>
     </div>
