@@ -32,13 +32,23 @@ func GetAllAccount(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
 	user := models.Usertable{}
+	shop := models.Shoptable{}
+
 	id := c.Param("id")
 	if err := database.DB.Joins("Userdata").First(&user, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
+	if err := database.DB.Joins("shoptables").Where("shoptables.user_id = ?", id).Find(&shop).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"Userdata":         user.Userdata,
+		"email":            user.Email,
+		"password":         user.Password,
+		"shop_information": shop,
+	})
 }
 
 func UpdateUser(c *gin.Context) {
