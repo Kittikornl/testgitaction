@@ -61,7 +61,7 @@
         max-width: 550px;
     
         font-weight: 500;
-        font-size: 23px;
+        font-size: 20px;
 
         padding-bottom: 20px;
         border-bottom: 1px solid $gray;
@@ -70,7 +70,7 @@
     .ant-btn {
         background-color: $green;
         border-radius: 10px;
-        height: 80px;
+        height: 60px;
         border: none;
     
         font-weight: 600;
@@ -92,11 +92,6 @@
         align-self: center;
     }
     
-    .view-shop-btn .button {
-        margin-right:"10px";
-        font-size:"35px";
-    }
-    
     .star-icon {
         color: #FFC107;
         font-size: 30px;
@@ -114,12 +109,12 @@
         margin-top: 10px;
         color: $green;
         font-weight: bold;
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .address-data {
         color: $gray;
-        font-size: 23px;
+        font-size: 20px;
     }
 
     @media screen and (max-width: 925px) {
@@ -168,8 +163,8 @@
             font-size: 15px;
         }
     
-        .view-shop-btn .ant-btn {
-            height: 40px;
+        .ant-btn {
+            height: 30px;
             font-size: 13px;
         }
     
@@ -197,7 +192,7 @@
         }
 
         .view-shop-btn .ant-btn {
-            height: 30px;
+
             font-size: 8px;
         }
 
