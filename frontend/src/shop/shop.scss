@@ -20,11 +20,16 @@ img {
     font-weight: 700;
     height: 220px;
   }
-  .shop-page {
-    padding-top: 20px;
+  .container {
     background-color: white;
     width: 100vw;
-    align-content: center;
+    display: flex;
+    justify-content: center;
+  }
+  .shop-page {
+    padding-top: 20px;
+    width: 80vw;
+    align-self: center;
 
     .head {
       .button-content {
@@ -51,7 +56,7 @@ img {
         column-gap: 20px;
         .button-green {
           justify-content: center;
-          width: 120px;
+          width: 150px;
           background-color: #008c5b;
           color: white;
           border-radius: 10px;
@@ -92,7 +97,8 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
+        grid-template-rows: auto;
         column-gap: 25px;
         justify-content: center;
       }
@@ -109,7 +115,7 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
         grid-template-rows: auto;
         column-gap: 25px;
         justify-content: center;
@@ -128,7 +134,7 @@ img {
       }
       .grid-container {
         display: grid;
-        grid-template-columns: 250px 250px 250px 250px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 250px));
         grid-template-rows: auto;
         column-gap: 25px;
         row-gap: 25px;
@@ -139,11 +145,25 @@ img {
   .contact {
     background-color: $green;
     width: 100vw;
-    height: 6vw;
     align-content: center;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     padding-left: 20px;
+    column-gap: 100px;
+    min-height: 60px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .shop-container .shop-page .head .button-content .name {
+    order: -1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .shop-page .contact {
+    font-size: 2px;
+    color: red;
   }
 }

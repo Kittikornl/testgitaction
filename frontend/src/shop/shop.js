@@ -134,20 +134,13 @@ const Shop = () => {
           </div>
           <div className="name">{shopDescription.shopname}</div>
           <div className="button-group flex-row">
-            <Button
-              htmlType="edit"
-              className="button-green"
-              onClick={handleEdit}
-            >
-              Edit Product
-            </Button>
-            <Link to="/add-product">
+            <Link to="/manage/shop">
               <Button
                 htmlType="edit"
                 className="button-green"
                 onClick={handleAdd}
               >
-                Add Product
+                Manage Product
               </Button>
             </Link>
           </div>
@@ -174,75 +167,77 @@ const Shop = () => {
   return (
     <div className="shop-container flex-col">
       <div className="empty-box">{shopDescription.description}</div>
-      <div className="shop-page flex-col">
-        <div className="head flex-row">
-          {renderButtonContentText(shopDescription)}
-        </div>
-        <div className="best-seller-grid">
-          <div className="header flex-row">
-            <div>Best seller</div>
-            <a
-              className="see-more"
-              id="showMoreB"
-              onClick={handleSeeMoreBestSell}
-            >
-              See more{" >"}
-            </a>
+      <div className="container">
+        <div className="shop-page">
+          <div className="head flex-row">
+            {renderButtonContentText(shopDescription)}
           </div>
-          <div class="grid-container m-t-16">
-            {topSell.slice(0, 4).length === 0
-              ? null
-              : topSell.slice(0, 4).map(renderProduct)}
-            {showMoreBest
-              ? topSell.slice(4, 8).length === 0
+          <div className="best-seller-grid">
+            <div className="header flex-row">
+              <div>Best seller</div>
+              <a
+                className="see-more"
+                id="showMoreB"
+                onClick={handleSeeMoreBestSell}
+              >
+                See more{" >"}
+              </a>
+            </div>
+            <div class="grid-container m-t-16">
+              {topSell.slice(0, 4).length === 0
                 ? null
-                : topSell.slice(4, 8).map(renderHidden)
-              : null}
+                : topSell.slice(0, 4).map(renderProduct)}
+              {showMoreBest
+                ? topSell.slice(4, 8).length === 0
+                  ? null
+                  : topSell.slice(4, 8).map(renderHidden)
+                : null}
+            </div>
           </div>
-        </div>
-        <div className="new-arrivals-grid m-t-20">
-          <div className="header flex-row">
-            <div>New arrivals</div>
-            <a
-              className="see-more"
-              id="showMoreN"
-              onClick={handleSeeMoreNewArrive}
-            >
-              See more{" >"}
-            </a>
-          </div>
-          <div class="grid-container m-t-16">
-            {newArrival.slice(0, 4).length === 0
-              ? null
-              : newArrival.slice(0, 4).map(renderProduct)}
-            {showMoreNew
-              ? newArrival.slice(4, 8).length === 0
+          <div className="new-arrivals-grid m-t-20">
+            <div className="header flex-row">
+              <div>New arrivals</div>
+              <a
+                className="see-more"
+                id="showMoreN"
+                onClick={handleSeeMoreNewArrive}
+              >
+                See more{" >"}
+              </a>
+            </div>
+            <div class="grid-container m-t-16">
+              {newArrival.slice(0, 4).length === 0
                 ? null
-                : newArrival.slice(4, 8).map(renderHidden)
-              : null}
+                : newArrival.slice(0, 4).map(renderProduct)}
+              {showMoreNew
+                ? newArrival.slice(4, 8).length === 0
+                  ? null
+                  : newArrival.slice(4, 8).map(renderHidden)
+                : null}
+            </div>
           </div>
-        </div>
-        <div className="all-products-grid m-t-20">
-          <div className="header flex-row">
-            <div>All products</div>
-          </div>
-          <div className="type m-t-10 flex-row">
-            <div> Vegetables</div>
-          </div>
-          <div class="grid-container m-t-16">
-            {allProduct1.length === 0 ? null : allProduct1.map(renderProduct)}
-          </div>
-          <div className="type flex-row">
-            <div> Fruits</div>
-          </div>
-          <div class="grid-container m-t-16">
-            {allProduct2.length === 0 ? null : allProduct2.map(renderProduct)}
+          <div className="all-products-grid m-t-20">
+            <div className="header flex-row">
+              <div>All products</div>
+            </div>
+            <div className="type m-t-10 flex-row">
+              <div> Vegetables</div>
+            </div>
+            <div class="grid-container m-t-16">
+              {allProduct1.length === 0 ? null : allProduct1.map(renderProduct)}
+            </div>
+            <div className="type flex-row">
+              <div> Fruits</div>
+            </div>
+            <div class="grid-container m-t-16">
+              {allProduct2.length === 0 ? null : allProduct2.map(renderProduct)}
+            </div>
           </div>
         </div>
       </div>
       <div className="contact flex-row">
         <div>Shop Contact: {shopDescription.phone_number}</div>
-        <div style={{ marginLeft: "100px" }}>
+        <div>
           Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
           {userData.district} {userData.city} {userData.zipcode}
         </div>
