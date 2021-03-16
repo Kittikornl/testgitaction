@@ -21,7 +21,7 @@ func SearchProductOrShop(c *gin.Context) {
 	var search search
 	products := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
-	
+
 	if err := c.ShouldBindBodyWith(&search, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
@@ -33,36 +33,36 @@ func SearchProductOrShop(c *gin.Context) {
 		//query products
 		if err := database.DB.Where("product_type = ? AND product_title LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &products)
-			
+
 		}else{
-			c.JSON(http.StatusFound, &products)
+			c.JSON(http.StatusOK, &products)
 		}
 		//query shops
-		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{	
+		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &products)
-			
+
 		}else{
-			c.JSON(http.StatusFound, &products)
-		} 
-	 
+			c.JSON(http.StatusOK, &products)
+		}
+
 	}else{	//1 param
 
-		if err := database.DB.Where("product_type = ? OR product_title LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{	
+		if err := database.DB.Where("product_type = ? OR product_title LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &products)
-			
+
 		}else{
-			c.JSON(http.StatusFound, &products)
+			c.JSON(http.StatusOK, &products)
 		}
 		//query shops
-		if err := database.DB.Where("shop_name LIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil{	
+		if err := database.DB.Where("shop_name LIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &shops)
 			println("1")
 
 		}else{
-			c.JSON(http.StatusFound, &shops)
+			c.JSON(http.StatusOK, &shops)
 			println("2")
-		} 
+		}
 	}
-	
+
 
 }
