@@ -15,6 +15,21 @@
     .manage-shop-container {
         background-color: #FFF;
 
+        .add-product-button {
+            margin: 0px 0px 10px 30px;
+
+            .ant-btn {
+                background-color: $green;
+
+                font-size: 20px;
+                color: #FFF;
+
+                height: 40px;
+
+                border-radius: 15px;
+            }
+        }
+
         h1, a {
             padding: 5px;
 
@@ -26,6 +41,7 @@
         
         h2 {
             font-size: 25px;
+            font-weight: bold;
         }
 
 
@@ -41,6 +57,7 @@
         .product-wrapper {
             grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
             column-gap: 20px;
+
             img {
                 max-width: 300px;
                 max-height: 300px;
@@ -77,6 +94,11 @@
 
             .button-wrapper {
                 column-gap: 10px;
+            }
+
+            .no-product {
+                font-size: 20px;
+                color: #000;
             }
         }
     }

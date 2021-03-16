@@ -22,3 +22,14 @@ export const postAddProduct = async (values) => {
     throw error;
   }
 };
+
+export const deleteProduct = async (id) => {
+  try {
+    return await axios.delete(API_URL + `/products/${id}`, {
+      headers: authHeader(),
+    });
+  } catch (error) {
+    console.log("error delete product");
+    throw error;
+  }
+};
