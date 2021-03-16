@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from 'antd'
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
+import { getUserInfo } from '../service/auth.service';
 import { getShopData } from '../service/shop.service'
 
 import './manageShop.scss'
@@ -30,8 +31,9 @@ const ManageShop = () => {
             mode: 0
         })
     }
-
-    return (
+    if (getUserInfo().role !== 2)
+        history.goBack()
+    else return (
         <div className="manage-shop-page-container">
             <div className="cover-box flex-center">
                 Manage Shop
