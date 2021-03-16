@@ -12,7 +12,7 @@ import (
 
 type search struct {
 	gorm.Model
-	Search 		string	`json:"Search"; default:""`
+	Search 		string	`json:"Search"; default: "test"`
 	ProductType int 	`json:"ProductType"; default: 0`
 }
 
@@ -20,6 +20,7 @@ func SearchProductOrShop(c *gin.Context) {
 
 	var search search
 	products := make([]models.Product, 0)
+	types := make([]models.Product, 0)
 	productsSpec := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
 
@@ -46,19 +47,23 @@ func SearchProductOrShop(c *gin.Context) {
 			"allproducts_for_shop": productsSpec})
 	
 	}else{	//1 param
-		//query products
-		if err := database.DB.Where("product_type = ? OR product_title LIKE ?", search.ProductType, "%"+search.Search+"%").Find(&products).Error; err != nil{
+		//query by product name
+		if err := database.DB.Where("product_title LIKE ?", "%"+search.Search+"%").Find(&products).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &products)
 		}
-		//query shops
+		//query by type
+		if err := database.DB.Where("product_type = ?", search.ProductType).Find(&types).Error; err != nil{
+			c.JSON(http.StatusBadRequest, &types)
+		}
+		//query by shop name
 		if err := database.DB.Where("shop_name LIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil{
 			c.JSON(http.StatusBadRequest, &shops)
-			println("1")
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"shop_information":     shops,
-			"products_information": products})
+			"q_by_shopname":     shops,
+			"q_by_productname": products,
+			"q_by_type": types})
 	}
 
 
