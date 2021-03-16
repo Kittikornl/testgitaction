@@ -1,6 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
 import {Form, Button, Input, Upload, InputNumber, Select } from 'antd'
-import { Option } from 'antd/lib/mentions'
 import React, { useEffect, useState } from 'react'
 
 import {uploadProductPic} from '../service/firebase.service'
@@ -10,6 +9,8 @@ import './manageProduct.scss'
 import { useHistory } from 'react-router'
 import Notification from '../components/notification'
 import { getProduct, postAddProduct } from '../service/product.service'
+import { getShopIDByUserID, getUserData } from '../service/user.service'
+import { getUserInfo } from '../service/auth.service'
 
 const ManageProduct = (props) => {
 
@@ -19,12 +20,15 @@ const ManageProduct = (props) => {
 
     const [mode, setMode] = useState(0);
     const [data, setData] = useState({});
+    const [shopID, setShopID] = useState(0);
     const [url, setUrl] = useState("");
 
     const [refresh, setRefresh] = useState(0);
 
-    useEffect(() => {
+    useEffect(async () => {
         const prop = props.location.state
+        const result = await getShopIDByUserID(getUserInfo().userId)
+        setShopID(result)
 
         if (prop === undefined)
             history.goBack()
@@ -34,7 +38,6 @@ const ManageProduct = (props) => {
             const product_id = prop.product_id
             fetchdata(product_id)
             setFormValue()
-            
         }
 
     }, []);
@@ -78,6 +81,8 @@ const ManageProduct = (props) => {
         payload["Amount"] = fieldsValue["amount"]
         payload["ProductType"] = fieldsValue["type"]
         payload["ProductDetail"] = fieldsValue["detail"]
+        payload["ProductDetail"] = fieldsValue["detail"]
+        payload["ShopID"] = shopID
 
         console.log(payload)
 
