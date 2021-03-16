@@ -1,22 +1,35 @@
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { getUserInfo } from '../service/auth.service';
 import { getShopData } from '../service/shop.service'
+import { getUserData } from '../service/user.service'
 
 import './manageShop.scss'
 
 const ManageShop = () => {
     const history = useHistory()
 
+    const [vegData, setVegData] = useState([]);
+    const [fruitData, setFruitData] = useState([]);
+
+    const [userID] = useState(getUserInfo().userId);
+
     useEffect(() => {
-        
+        fetchdata()
       }, []);
 
-    const fetchdata = () => {
-        getShopData()
+    const fetchdata = async () => {
+        let result = await getUserData(userID)
+        const shop_id = result.data.shop_information.ID
+        
+        let result1 = await getShopData(shop_id)
+        const shopData = result1.data
+
+        setVegData(shopData.all_product_type1)
+        setFruitData(shopData.all_product_type2)
     }
 
     const handleEditProduct = (product_id) => {
@@ -25,12 +38,32 @@ const ManageShop = () => {
             mode: 1
         })
     }
+
     const handleAddProduct = () => {
-        console.log(555)
         history.push("product", {
             mode: 0
         })
     }
+
+    const renderProduct = (e, idx) => {
+        console.log(e)
+        return (
+            <div id={idx} className="product-item-wrapper">
+                <img src={e.PictureURL} />
+                <h2>{e.ProductTitle}</h2>
+                <div className="product-content">
+                    <div>{`${e.Amount} Items avaliable`}</div>
+                    <div>{`${e.Price} Bath`}</div>
+                </div>
+                <div className="button-wrapper flex-row">
+                    <Button onClick={() => handleEditProduct(2)} >Edit Product</Button>
+                    <Button className="red-button">Delete</Button>
+                </div>
+            </div>
+        )
+    }
+
+
     if (getUserInfo().role !== 2)
         history.goBack()
     else return (
@@ -51,107 +84,13 @@ const ManageShop = () => {
                 <div className="veg-container">
                     <h2>Vegetables</h2>
                     <div className="product-wrapper grid">
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button onClick={()=>handleEditProduct(2)}>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
+                        {(vegData.length !== 0) ? vegData.map(renderProduct) : "No any vegetable product"}
                     </div>
                 </div>
                 <div className="fruit-container">
                     <h2>Fruits</h2>
                     <div className="product-wrapper grid">
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
-                        <div className="product-item-wrapper">
-                            <img src="https://firebasestorage.googleapis.com/v0/b/pugsod-storage.appspot.com/o/images%2Fproduct%2Fb445ae87-0abf-4735-9064-7644b8f81d74?alt=media&token=b1859441-be3c-49a2-9699-e4510024e1aa" />
-                            <h2>ข้าวโพดแสนอร่อย</h2>
-                            <div className="product-content">
-                                <div>20 Items avaliable</div>
-                                <div>80 Bath</div>
-                            </div>
-                            <div className="button-wrapper flex-row">
-                                <Button>Edit Product</Button>
-                                <Button className="red-button">Delete</Button>
-                            </div>
-                        </div>
+                        {(fruitData.length !== 0) ? fruitData.map(renderProduct) : "No any fruit product"}
                     </div>
                 </div>
             </div>
