@@ -5,7 +5,7 @@ import vegThumb from '../img/veg-thumbnail.jpg'
 import { Button, Input } from 'antd'
 import Scores from '../components/scores'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faMapMarkerAlt, faPhone, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { useParams } from 'react-router'
 
 import { getProduct } from '../service/product.service'
@@ -58,8 +58,14 @@ const Product = () => {
                     <h1>{data.ProductTitle}</h1>
                     <div className="content">
                         <div className="amount">{`${data.Amount} Items available`}</div>
-                        <div className="shop">{shop.shopname}</div>
-                        <div className="province">{owner.city}</div>
+                        <div className="shop">
+                            <FontAwesomeIcon icon={faShoppingCart} />
+                            &nbsp;{shop.shopname}
+                        </div>
+                        <div className="province">
+                            <FontAwesomeIcon icon={faMapMarkerAlt} />
+                            &nbsp;{owner.city}
+                        </div>
                         <div className="score flex-row">
                             <div>{data.Rating}</div>
                             <Scores score={data.Rating}/>
@@ -100,9 +106,15 @@ const Product = () => {
                 <div className="shop-contact-wrapper">
                     <h1>ติดต่อร้านค้าได้ที่</h1>
                     <div className="content">
-                        <div>{`Tel. ${shop.phone_number}`}</div>
+                        <div>
+                            <FontAwesomeIcon icon={faPhone} />
+                            &nbsp;{shop.phone_number}
+                        </div>
                         <div className="flex-row">
-                            <div>Address :&nbsp;&nbsp;</div>
+                            <div>
+                                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                &nbsp;&nbsp;
+                            </div>
                             <div>
                                 <div>{`${owner.houseNo} ${owner.street} ${owner.subDistrict}`.replace("-", "")}</div>
                                 <div>{`${owner.district} ${owner.city} ${owner.zipcode}`.replace("-", "")}</div>
