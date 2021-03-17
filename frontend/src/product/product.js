@@ -10,6 +10,7 @@ import { useParams } from 'react-router'
 
 import { getProduct } from '../service/product.service'
 import { getShopData } from '../service/shop.service'
+import { getUserData } from '../service/user.service'
 import { Link } from 'react-router-dom'
 
 const Product = () => {
@@ -18,6 +19,7 @@ const Product = () => {
     const [amount, setAmount] = useState(1);
     const [data, setData] = useState({});
     const [shop, setShop] = useState({});
+    const [owner, setOwner] = useState({});
 
     useEffect(() => {
         fetchdata(id)
@@ -30,9 +32,14 @@ const Product = () => {
         setData(productData)
 
         const shopResult = await getShopData(productData.ShopID)
-        const shopData = shopResult.data
+        const shopData = shopResult.data.shop_information
         console.log(shopData)
         setShop(shopData)
+
+        const ownerResult = await getUserData(shopData.user_id)
+        const ownerData = ownerResult.data.Userdata
+        console.log(ownerData)
+        setOwner(ownerData)
     }
 
     const handleUpDownAmount = (value) => {
@@ -51,8 +58,8 @@ const Product = () => {
                     <h1>{data.ProductTitle}</h1>
                     <div className="content">
                         <div className="amount">{`${data.Amount} Items available`}</div>
-                        <div className="shop">ไร่เกษตรรวมใจ</div>
-                        <div className="province">สระบุรี</div>
+                        <div className="shop">{shop.shopname}</div>
+                        <div className="province">{owner.city}</div>
                         <div className="score flex-row">
                             <div>{data.Rating}</div>
                             <Scores score={data.Rating}/>
@@ -67,7 +74,7 @@ const Product = () => {
                     </div>
                 </div>
                 <div className="product-price-wrapper">
-                    <h1>Price</h1>
+                    <h1>ราคาสินค้า</h1>
                     <div className="content">
                         <div className="price">{`${data.Price} บาท`}</div>
                         <div className="amount-button">
@@ -80,7 +87,7 @@ const Product = () => {
                                 }} 
                                 maxLength={2}>
                             </Input>
-                            <Button className="button-right" onClick={(e)=>handleUpDownAmount(1)}>+</Button>
+                            <Button className="button-right" onClick={()=>handleUpDownAmount(1)}>+</Button>
                         </div>
                         <div className="add-cart">
                             <Button className="fs-20">
@@ -91,11 +98,16 @@ const Product = () => {
                     </div>     
                 </div>
                 <div className="shop-contact-wrapper">
-                    <h1>Shop contact</h1>
+                    <h1>ติดต่อร้านค้าได้ที่</h1>
                     <div className="content">
-                        <div>Tel. 061-4807734</div>
-                        <div>Address: ไร่เกษตรรวมใจ </div>
-                        <div>บรรทัดที่ 2</div>
+                        <div>{`Tel. ${shop.phone_number}`}</div>
+                        <div className="flex-row">
+                            <div>Address :&nbsp;&nbsp;</div>
+                            <div>
+                                <div>{`${owner.houseNo} ${owner.street} ${owner.subDistrict}`.replace("-", "")}</div>
+                                <div>{`${owner.district} ${owner.city} ${owner.zipcode}`.replace("-", "")}</div>
+                            </div>
+                        </div>
                     </div>
                     <div className="visit-shop-button">
                         <Link to={`/shop/${data.ShopID}`}>

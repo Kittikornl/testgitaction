@@ -11,6 +11,7 @@ import { deleteProduct } from '../service/product.service'
 import './manageShop.scss'
 import Modal from 'antd/lib/modal/Modal'
 import Notification from '../components/notification'
+import { Link } from 'react-router-dom'
 
 const ProductCard = ({ data, refreshPage }) => {
 
@@ -29,14 +30,13 @@ const ProductCard = ({ data, refreshPage }) => {
     const handleDeleteProduct = async (product_id) => {
         console.log(product_id)
         deleteProduct(product_id)
-        // history.push("/manage/shop")
         window.location.reload()
         setShowModal(false)
     }
 
     return (
         <div className="product-card">
-            <img src={data.PictureURL} />
+            <Link to={`/product/${productID}`}><img src={data.PictureURL} /></Link>
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
                 <div>{`ID : ${productID}`}</div>
@@ -90,7 +90,7 @@ const ManageShop = () => {
     const [fruitData, setFruitData] = useState([]);
 
     const [userID] = useState(getUserInfo().userId);
-    const [shopID, setShopID] = useState(-1);
+    const [shop, setShop] = useState({});
 
     const [refresh, setRefresh] = useState(true);
 
@@ -100,13 +100,12 @@ const ManageShop = () => {
 
     const fetchdata = async (user_id) => {
         let result = await getUserData(user_id)
-        setShopID(result.data.shop_information.ID)
 
         let result1 = await getShopData(result.data.shop_information.ID)
-        const shopData = result1.data
+        setShop(result1.data.shop_information)
 
-        setVegData(shopData.all_product_type1)
-        setFruitData(shopData.all_product_type2)
+        setVegData(result1.data.all_product_type1)
+        setFruitData(result1.data.all_product_type2)
     }
 
     const refreshPage = () => {
@@ -122,7 +121,6 @@ const ManageShop = () => {
     const renderProduct = (e, idx) => {
         return (
             <div key={idx} className="product-item-wrapper">
-                {console.log("each pro", e)}
                 <ProductCard data={e} refreshPage={refreshPage} />
             </div>
         )
@@ -133,7 +131,7 @@ const ManageShop = () => {
         history.push("/profile")
         return <div></div>
     }
-    else if (shopID === 0) {
+    else if (shop.ID === 0) {
         Notification({ type: 'error', message: 'Shop not found!.', desc: 'create your shop first!' })
         history.push("/profile")
         return <div></div>
@@ -145,7 +143,9 @@ const ManageShop = () => {
             </div>
             <div className="manage-shop-container">
                 <h1>
-                    ไร่เกษตรรวมใจ&nbsp;&nbsp;
+                    <a href={`/shop/${shop.ID}`} className="shop-name">
+                        {shop.shopname}&nbsp;&nbsp;
+                    </a>
                     <a href="/edit/shop">
                         <FontAwesomeIcon icon={faEdit} />
                     </a>
