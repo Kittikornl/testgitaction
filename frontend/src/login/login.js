@@ -12,7 +12,7 @@ const Login = () => {
         try {
             const res = await  login(e.email, e.password)
             Notification({type: 'success', message: 'Login success', desc: 'enjoy your shopping!'})
-            history.push('/profile')
+            history.push('/home')
         } catch (error) {
             console.log(error)
             Notification({type: 'error', message: 'Login fail', desc: 'email or password incorrect'})

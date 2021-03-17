@@ -7,15 +7,17 @@ import { useHistory, useParams } from "react-router";
 import Notification from '../components/notification'
 
 
-const EditShop = () => {
+const EditShop = (props) => {
     const [form] = Form.useForm()
     const [data, setData] = useState()
     const [editData, setEditData] = useState()
-    const { id } = useParams();
+    // const { id } = useParams();
     const [visibleDelete, setVisibleDelete] = useState(false)
     const [visibleEdit, setVisibleEdit] = useState(false)
     const history = useHistory()
 
+    // console.log();
+    const id = props.location.aboutProps.shopId
     useEffect(() => {
         getData()
     },[])

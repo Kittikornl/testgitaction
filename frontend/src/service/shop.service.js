@@ -6,10 +6,14 @@ const API_URL = "http://localhost:8080/api";
 const header = {
     'Content-Type': 'application/json',
     'Authorization': authHeader()
-  }
+}
 export const getShopData = async (id) => {
   try {
-    return await axios.get(API_URL + `/shops/${id}`, { headers: header });
+    console.log("data",header);
+    return await axios.get(API_URL + `/shops/${id}`, {
+      headers: {
+        'Authorization': authHeader()
+    }});
   } catch (error) {
     console.log("error get shopdata");
     throw error;
@@ -18,8 +22,11 @@ export const getShopData = async (id) => {
 
 export const postShop = async (values) => {
   try {
+    console.log(header)
     return await axios.post(API_URL + "/shops", values, {
-      headers: header,
+      headers: {
+        'Authorization': authHeader()
+      },
     });
   } catch (error) {
     console.log("error create shop");
@@ -30,8 +37,9 @@ export const postShop = async (values) => {
 export const editShop = async (id, data) => {
   try {
     return await axios.put(API_URL + `/shops/${id}`, data, {
-      headers: header,
-    });
+      headers: {
+        'Authorization': authHeader()
+    }});
   } catch (error) {
     console.log("error create shop");
     throw error;
@@ -40,9 +48,10 @@ export const editShop = async (id, data) => {
 
 export const deleteShop = async (id) => {
   try {
-    return await axios.delete(API_URL + `/shops/${id}`,{
-      headers: header,
-    })
+    return await axios.delete(API_URL + `/shops/${id}`, {
+      headers: {
+        'Authorization': authHeader()
+    }})
   } catch (error) {
     console.log("error get shopdata");
     throw error;

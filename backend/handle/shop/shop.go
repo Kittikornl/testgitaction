@@ -71,14 +71,14 @@ func CreateShop(c *gin.Context) {
 	auth := c.GetHeader("Authorization")
 	tokenString := auth[len(BEARER_SCHEMA):]
 	userID, _ := services.ExtractToken(tokenString)
-	shoptable.UserID = userID
-
+	println("token:", auth)
+	println(userID)
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
 		return
 	}
-
+	shoptable.UserID = userID
 	// Save the format data into DB: Shoptable
 	if err := database.DB.Save(&shoptable).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
