@@ -3,9 +3,16 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8080/api";
 
+const header = {
+  'Content-Type': 'application/json',
+  'Authorization': authHeader()
+}
+
 export const getProduct = async (id) => {
   try {
-    return await axios.get(API_URL + `/products/${id}`);
+    return await axios.get(API_URL + `/products/${id}`, {
+      headers: header,
+    });
   } catch (error) {
     console.log("error get product");
     throw error;
@@ -15,7 +22,7 @@ export const getProduct = async (id) => {
 export const postAddProduct = async (values) => {
   try {
     return await axios.post(API_URL + "/products", values, {
-      headers: authHeader(),
+      headers: header,
     });
   } catch (error) {
     console.log("error add product");
@@ -26,7 +33,7 @@ export const postAddProduct = async (values) => {
 export const putEditProduct = async (values, id) => {
   try {
     return await axios.put(API_URL + `/products/${id}`, values, {
-      headers: authHeader(),
+      headers: header,
     });
   } catch (error) {
     console.log("error add product");
@@ -37,7 +44,7 @@ export const putEditProduct = async (values, id) => {
 export const deleteProduct = async (id) => {
   try {
     return await axios.delete(API_URL + `/products/${id}`, {
-      headers: authHeader(),
+      headers: header,
     });
   } catch (error) {
     console.log("error delete product");

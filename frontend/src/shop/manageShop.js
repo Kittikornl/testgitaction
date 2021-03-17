@@ -41,7 +41,7 @@ const ProductCard = ({ data, refreshPage }) => {
             <div className="product-content">
                 <div>{`ID : ${productID}`}</div>
                 <div>{`${data.Amount} Items avaliable`}</div>
-                <div>{`${data.Price} Bath`}</div>
+                <div>{`${data.Price} Baht`}</div>
             </div>
             <div className="button-wrapper flex-row">
                 <Button onClick={() => handleEditProduct()} >Edit Product</Button>
@@ -112,9 +112,8 @@ const ManageShop = () => {
 
     const fetchdata = async (user_id) => {
         let result = await getUserData(user_id)
-        setShopId(result.data.shop_information.ID)
         checkpermission(result.data.shop_information)
-
+        
         let result1 = await getShopData(result.data.shop_information.ID)
         setShop(result1.data.shop_information)
 
@@ -140,6 +139,7 @@ const ManageShop = () => {
         )
     }
 
+
     return (
         <div className="manage-shop-page-container">
             <div className="cover-box flex-center">
@@ -147,10 +147,12 @@ const ManageShop = () => {
             </div>
             <div className="manage-shop-container">
                 <h1>
-                    ไร่เกษตรรวมใจ&nbsp;&nbsp;
-                    <a href={`/edit/shop/${shopId}`}>
-                        <FontAwesomeIcon icon={faEdit} />
+                    <a href={`/shop/${shop.ID}`} className="shop-name">
+                        {shop.shopname}&nbsp;&nbsp;
                     </a>
+                    <Link to={{pathname: "/edit/shop", aboutProps: {shopId: shop.ID}}}>
+                        <FontAwesomeIcon icon={faEdit} />
+                    </Link>
                 </h1>
                 <div className="add-product-button">
                     <Button onClick={() => handleAddProduct()}>Add Product</Button>
