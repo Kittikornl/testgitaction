@@ -91,6 +91,7 @@ const ManageShop = () => {
 
     const [userID] = useState(getUserInfo().userId);
     const [shop, setShop] = useState({});
+    const [shopId, setShopId] = useState()
 
     const [refresh, setRefresh] = useState(true);
 
@@ -111,6 +112,7 @@ const ManageShop = () => {
 
     const fetchdata = async (user_id) => {
         let result = await getUserData(user_id)
+        setShopId(result.data.shop_information.ID)
         checkpermission(result.data.shop_information)
 
         let result1 = await getShopData(result.data.shop_information.ID)
@@ -138,7 +140,6 @@ const ManageShop = () => {
         )
     }
 
-
     return (
         <div className="manage-shop-page-container">
             <div className="cover-box flex-center">
@@ -146,10 +147,8 @@ const ManageShop = () => {
             </div>
             <div className="manage-shop-container">
                 <h1>
-                    <a href={`/shop/${shop.ID}`} className="shop-name">
-                        {shop.shopname}&nbsp;&nbsp;
-                    </a>
-                    <a href="/edit/shop">
+                    ไร่เกษตรรวมใจ&nbsp;&nbsp;
+                    <a href={`/edit/shop/${shopId}`}>
                         <FontAwesomeIcon icon={faEdit} />
                     </a>
                 </h1>
