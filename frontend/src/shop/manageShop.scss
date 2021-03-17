@@ -51,15 +51,13 @@
 
         .veg-container, .fruit-container {
             margin: 0px 30px 0px 30px;
+            margin-bottom: 20px;
             .product-card a { 
                 background-color: transparent;
             }
 
         }
 
-        .veg-container {
-            margin-bottom: 20px;
-        }
         
 
         .product-wrapper {
@@ -70,8 +68,8 @@
                 max-width: 300px;
                 max-height: 300px;
 
-                width: auto;
-                height: auto;
+                width: 300px;
+                height: 300px;
             }
 
             h2 {
