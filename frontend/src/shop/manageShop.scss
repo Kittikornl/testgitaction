@@ -102,4 +102,40 @@
             }
         }
     }
+    @media screen and (max-width: 1000px) {
+        .manage-shop-container {
+            .add-product-button {
+                margin-left: 0px;
+                text-align: center;
+            }
+            .veg-container, .fruit-container {
+                margin: 0px 0px 0px 0px;
+                h2 {
+                    text-align: center;
+                }
+            }
+            .product-wrapper {
+                justify-content: center;
+            }
+        }
+    }
+    @media screen and (max-width: 620px) {
+        .manage-shop-container {
+            .veg-container, .fruit-container {
+                .product-card {
+                    img {
+                        width: 100vw;
+                    }
+                    .product-content {
+                        text-align: center;
+                    }
+
+                    .button-wrapper {
+                        justify-content: center;
+                        column-gap: 5px;
+                    }
+                }
+            }
+        }
+    }
 }
