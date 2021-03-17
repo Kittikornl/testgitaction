@@ -132,9 +132,9 @@ const Home = () => {
       fetchAllProduct();
       setShowBest(true);
       setShowNew(true);
-      allProduct.length > 4 ? (showMoreN.innerHTML = "See more >") : (showMoreN.innerHTML = "");
-      // showMoreN.innerHTML = "See more >";
-      // showMoreB.innerHTML = "See more >";
+      allProduct.length > 4
+        ? (showMoreN.innerHTML = "See more >")
+        : (showMoreN.innerHTML = "");
       bestSellText.innerHTML = "Best seller";
       newArriveText.innerHTML = "New arrivals";
     } else if (payload.Search === "" && payload.ProductType !== null) {
