@@ -15,6 +15,10 @@
     .manage-shop-container {
         background-color: #FFF;
 
+        .shop-name {
+            font-size: 30px;
+        }
+
         .add-product-button {
             margin: 0px 0px 10px 30px;
 
@@ -47,6 +51,10 @@
 
         .veg-container, .fruit-container {
             margin: 0px 30px 0px 30px;
+            .product-card a { 
+                background-color: transparent;
+            }
+
         }
 
         .veg-container {
