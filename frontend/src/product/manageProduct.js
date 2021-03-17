@@ -8,8 +8,8 @@ import vegThumb from '../img/veg-thumbnail.jpg'
 import './manageProduct.scss'
 import { useHistory } from 'react-router'
 import Notification from '../components/notification'
-import { getProduct, postAddProduct } from '../service/product.service'
-import { getShopIDByUserID, getUserData } from '../service/user.service'
+import { getProduct, postAddProduct, putEditProduct } from '../service/product.service'
+import { getShopByUserID } from '../service/user.service'
 import { getUserInfo } from '../service/auth.service'
 
 const ManageProduct = (props) => {
@@ -18,17 +18,17 @@ const ManageProduct = (props) => {
 
     const [form] = Form.useForm();
 
-    const [mode, setMode] = useState(0);
+    const [mode, setMode] = useState(0); // 0 add 1 edit
     const [data, setData] = useState({});
-    const [shopID, setShopID] = useState(0);
+    const [shop, setShop] = useState({});
     const [url, setUrl] = useState("");
 
     const [refresh, setRefresh] = useState(0);
 
     useEffect(async () => {
         const prop = props.location.state
-        const result = await getShopIDByUserID(getUserInfo().userId)
-        setShopID(result)
+        const result = await getShopByUserID(getUserInfo().userId)
+        setShop(result)
 
         if (prop === undefined)
             history.goBack()
@@ -37,7 +37,6 @@ const ManageProduct = (props) => {
         if (prop.mode==1) {
             const product_id = prop.product_id
             fetchdata(product_id)
-            setFormValue()
         }
 
     }, []);
@@ -47,20 +46,22 @@ const ManageProduct = (props) => {
         const productData = result.data
         console.log(productData)
         setData(productData)
+        setUrl(productData.PictureURL)
+        setFormValue(productData)
     }
 
-    const setFormValue = () => {
+    const setFormValue = (productData) => {
         form.setFieldsValue({
-            productname : "Test",
-            price : 100,
-            amount : 10,
-            type : 1,
-            detail : "test"
+            productname : productData.ProductTitle,
+            price : productData.Price,
+            amount : productData.Amount,
+            type : productData.ProductType,
+            detail : productData.ProductDetail
         })
     }
 
-    const onReset = () => {
-        form.resetFields();
+    const onCancel = () => {
+        history.goBack()
     };
 
     const pageRefresh = () => {
@@ -72,7 +73,6 @@ const ManageProduct = (props) => {
     }
 
     const handleSubmit = (fieldsValue) => {
-        // {productname: "ข้าวโพดแสนอร่อย", price: "10", amount: 2, type: "Fruit", detail: "อร่อยจริงๆนะ"}
         let payload = {}
 
         payload["PictureURL"] = url
@@ -82,13 +82,24 @@ const ManageProduct = (props) => {
         payload["ProductType"] = fieldsValue["type"]
         payload["ProductDetail"] = fieldsValue["detail"]
         payload["ProductDetail"] = fieldsValue["detail"]
-        payload["ShopID"] = shopID
+        payload["ShopID"] = shop.ID
+
+        console.log(shop)
 
         console.log(payload)
 
-        postAddProduct(payload)
-        history.push('shop')
-        Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
+        if (mode === 0) {
+            postAddProduct(payload)
+            Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
+        }
+        else if (mode === 1) {
+            putEditProduct(payload, data.ID)
+            Notification({type: 'success', message: 'Edit product successfully.', desc: 'check your product information!'})
+        }
+        else {
+            Notification({type: 'error', message: 'Mode error.', desc: 'something went wrong!'})
+        }
+        // history.push('shop')
     }
 
 
@@ -115,7 +126,7 @@ const ManageProduct = (props) => {
             <div className="manage-product-container flex-col">
                 <div className="shop-header flex-row">
                     <a className="go-back" href="shop">{"< ย้อนกลับ"}</a>
-                    <h1 className="shop-title flex-col">ไร่เกษตรรวมใจ</h1>
+                    <h1 className="shop-title flex-col">{shop.shopname}</h1>
                 </div>
                 <div className="manage-product flex-row">
                     <div className="product-img flex-col">
@@ -177,9 +188,10 @@ const ManageProduct = (props) => {
                                                 message: "Please insert your product type!",
                                             },
                                         ]}
+                                        
                                     >
                                         <div className="SelectEdit">
-                                            <Select defaultValue="Select Type" onChange={changeType}>
+                                            <Select defaultValue="Select Type" value={data.ProductType} onChange={changeType}>
                                                 <Select.Option value={1}>Vegetable</Select.Option>
                                                 <Select.Option value={2}>Fruit</Select.Option>
                                             </Select>
@@ -202,8 +214,8 @@ const ManageProduct = (props) => {
                                     <Button htmlType="submit" className="button button-green">
                                         {(mode===0) ? "Add product" : "Edit product"}
                                     </Button>
-                                    <Button htmlType="button" className="button button-yellow" onClick={onReset}>
-                                        Clear
+                                    <Button htmlType="button" className="button button-yellow" onClick={onCancel}>
+                                        Cancel
                                     </Button>
                                 </div>
                             </Form>
