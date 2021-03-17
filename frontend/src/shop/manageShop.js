@@ -143,7 +143,7 @@ const ManageShop = () => {
             <div className="manage-shop-container">
                 <h1>
                     ไร่เกษตรรวมใจ&nbsp;&nbsp;
-                    <a href="/edit/shop">
+                    <a href={`/edit/shop/${shopID}`}>
                         <FontAwesomeIcon icon={faEdit} />
                     </a> 
                 </h1>
