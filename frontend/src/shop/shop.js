@@ -29,17 +29,25 @@ const Shop = () => {
   }, []);
 
   const fetchShopData = async (id) => {
+    var showMoreB = document.getElementById("showMoreB");
+    var showMoreN = document.getElementById("showMoreN");
+
     const result = await getShopData(id);
     setNewArrival(result.data.new_arrival_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
     setAllProduct1(result.data.all_product_type1);
     setAllProduct2(result.data.all_product_type2);
     setShopDescription(result.data.shop_information);
+    if (result.data.new_arrival_products.slice(0, 8).length < 4) {
+      showMoreN.innerHTML = "";
+    }
+    if (result.data.top_selling_products.slice(0, 8).length < 4) {
+      showMoreB.innerHTML = "";
+    }
   };
 
   const fetchUserData = async () => {
     const data = await getUserData(userID);
-    console.log(data.data.Userdata);
     setUserData(data.data.Userdata);
   };
 
@@ -75,7 +83,6 @@ const Shop = () => {
             props.product.ID === undefined ? null : props.product.ID
           }`}
         >
-          {console.log(props.product.ID)}
           <img
             src={
               props.product.PictureURL === ""
@@ -171,6 +178,7 @@ const Shop = () => {
                 className="see-more"
                 id="showMoreB"
                 onClick={handleSeeMoreBestSell}
+                defaultValue=""
               >
                 See more{" >"}
               </a>
