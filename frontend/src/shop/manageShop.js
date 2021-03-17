@@ -11,8 +11,9 @@ import { deleteProduct } from '../service/product.service'
 import './manageShop.scss'
 import Modal from 'antd/lib/modal/Modal'
 import Notification from '../components/notification'
+import { Link } from 'react-router-dom'
 
-const ProductCard = ({data, refreshPage}) => {
+const ProductCard = ({ data, refreshPage }) => {
 
     const history = useHistory()
 
@@ -21,20 +22,21 @@ const ProductCard = ({data, refreshPage}) => {
 
     const handleEditProduct = (product_id) => {
         history.push("product", {
-            product_id : product_id,
+            product_id: product_id,
             mode: 1
         })
     }
 
     const handleDeleteProduct = async (product_id) => {
+        console.log(product_id)
         deleteProduct(product_id)
-        refreshPage()
+        window.location.reload()
         setShowModal(false)
     }
 
     return (
-        <div classname="product-card">
-            <img src={data.PictureURL} />
+        <div className="product-card">
+            <Link to={`/product/${productID}`}><img src={data.PictureURL} /></Link>
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
                 <div>{`ID : ${productID}`}</div>
@@ -88,23 +90,23 @@ const ManageShop = () => {
     const [fruitData, setFruitData] = useState([]);
 
     const [userID] = useState(getUserInfo().userId);
-    const [shopID, setShopID] = useState(-1);
+    const [shop, setShop] = useState({});
+    const [shopId, setShopId] = useState()
 
     const [refresh, setRefresh] = useState(true);
 
-    useEffect(() => {
-        fetchdata()
-      }, [refresh]);
+    useEffect(async () => {
+        fetchdata(userID)
+    }, [refresh]);
 
-    const fetchdata = async () => {
-        let result = await getUserData(userID)
-        setShopID(result.data.shop_information.ID)
-        
+    const fetchdata = async (user_id) => {
+        let result = await getUserData(user_id)
+        setShopId(result.data.shop_information.ID)
         let result1 = await getShopData(result.data.shop_information.ID)
-        const shopData = result1.data
+        setShop(result1.data.shop_information)
 
-        setVegData(shopData.all_product_type1)
-        setFruitData(shopData.all_product_type2)
+        setVegData(result1.data.all_product_type1)
+        setFruitData(result1.data.all_product_type2)
     }
 
     const refreshPage = () => {
@@ -126,12 +128,12 @@ const ManageShop = () => {
     }
 
     if (getUserInfo().role !== 2) {
-        Notification({type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!'})
+        Notification({ type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!' })
         history.push("/profile")
         return <div></div>
     }
-    else if (shopID === 0) {
-        Notification({type: 'error', message: 'Shop not found!.', desc: 'create your shop first!'})
+    else if (shop.ID === 0) {
+        Notification({ type: 'error', message: 'Shop not found!.', desc: 'create your shop first!' })
         history.push("/profile")
         return <div></div>
     }
@@ -143,16 +145,17 @@ const ManageShop = () => {
             <div className="manage-shop-container">
                 <h1>
                     ไร่เกษตรรวมใจ&nbsp;&nbsp;
-                    <a href={`/edit/shop/${shopID}`}>
+                    <a href={`/edit/shop/${shopId}`}>
                         <FontAwesomeIcon icon={faEdit} />
-                    </a> 
+                    </a>
                 </h1>
                 <div className="add-product-button">
-                    <Button onClick={()=>handleAddProduct()}>Add Product</Button>
+                    <Button onClick={() => handleAddProduct()}>Add Product</Button>
                 </div>
                 <div className="veg-container">
                     <h2>Vegetables</h2>
                     <div className="product-wrapper grid">
+                        {console.log(vegData)}
                         {(vegData.length !== 0) ? vegData.map(renderProduct) : <div className="no-product">No any vegetable product</div>}
                     </div>
                 </div>
