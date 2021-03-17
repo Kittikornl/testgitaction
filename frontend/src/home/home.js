@@ -20,9 +20,18 @@ const Home = () => {
   }, []);
 
   const fetchHomeData = async () => {
+    var showMoreB = document.getElementById("showMoreB");
+    var showMoreN = document.getElementById("showMoreN");
+
     const result = await getHomeData();
     setNewArrival(result.data.new_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
+    if (result.data.new_products.slice(0, 8).length < 4) {
+      showMoreN.innerHTML = "";
+    }
+    if (result.data.top_selling_products.slice(0, 8).length < 4) {
+      showMoreB.innerHTML = "";
+    }
   };
 
   const fetchAllProduct = async () => {

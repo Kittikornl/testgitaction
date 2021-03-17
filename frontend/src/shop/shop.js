@@ -29,17 +29,25 @@ const Shop = () => {
   }, []);
 
   const fetchShopData = async (id) => {
+    var showMoreB = document.getElementById("showMoreB");
+    var showMoreN = document.getElementById("showMoreN");
+
     const result = await getShopData(id);
     setNewArrival(result.data.new_arrival_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
     setAllProduct1(result.data.all_product_type1);
     setAllProduct2(result.data.all_product_type2);
     setShopDescription(result.data.shop_information);
+    if (result.data.new_arrival_products.slice(0, 8).length < 4) {
+      showMoreN.innerHTML = "";
+    }
+    if (result.data.top_selling_products.slice(0, 8).length < 4) {
+      showMoreB.innerHTML = "";
+    }
   };
 
   const fetchUserData = async () => {
     const data = await getUserData(userID);
-    console.log(data.data.Userdata);
     setUserData(data.data.Userdata);
   };
 
@@ -67,10 +75,6 @@ const Shop = () => {
     }
   };
 
-  const handleEdit = () => {};
-
-  const handleAdd = () => {};
-
   const Product = (props) => {
     return (
       <div className="product flex-col">
@@ -79,7 +83,6 @@ const Shop = () => {
             props.product.ID === undefined ? null : props.product.ID
           }`}
         >
-          {console.log(props.product.ID)}
           <img
             src={
               props.product.PictureURL === ""
@@ -135,11 +138,7 @@ const Shop = () => {
           <div className="name">{shopDescription.shopname}</div>
           <div className="button-group flex-row">
             <Link to="/manage/shop">
-              <Button
-                htmlType="edit"
-                className="button-green"
-                onClick={handleAdd}
-              >
+              <Button htmlType="edit" className="button-green">
                 Manage Product
               </Button>
             </Link>
@@ -156,7 +155,7 @@ const Shop = () => {
             <Scores score={Shop.rating} />
           </div>
           <div className="name">{shopDescription.shopname}</div>
-          <Button htmlType="edit" className="button-green" onClick={handleEdit}>
+          <Button htmlType="edit" className="button-green">
             Review
           </Button>
         </div>
@@ -179,6 +178,7 @@ const Shop = () => {
                 className="see-more"
                 id="showMoreB"
                 onClick={handleSeeMoreBestSell}
+                defaultValue=""
               >
                 See more{" >"}
               </a>
@@ -235,11 +235,21 @@ const Shop = () => {
           </div>
         </div>
       </div>
-      <div className="contact flex-row">
-        <div>Shop Contact: {shopDescription.phone_number}</div>
-        <div>
-          Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
-          {userData.district} {userData.city} {userData.zipcode}
+
+      <div className="contact-container flex-col">
+        <div className="contact flex-row">
+          {console.log(shopDescription)}
+          <div>Shop Contact: {shopDescription.phone_number}</div>
+          <div>
+            Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
+            {userData.district} {userData.city} {userData.zipcode}
+          </div>
+        </div>
+        <div className="social flex-row">
+          <div>Line: {shopDescription.line}</div>
+          <div>Instagram: {shopDescription.ig}</div>
+          <div>Twitter: {shopDescription.twitter}</div>
+          <div>Facebook: {shopDescription.facebook}</div>
         </div>
       </div>
     </div>
