@@ -99,7 +99,7 @@ const ManageProduct = (props) => {
         else {
             Notification({type: 'error', message: 'Mode error.', desc: 'something went wrong!'})
         }
-        // history.push('shop')
+        history.push('shop')
     }
 
 
