@@ -20,7 +20,7 @@
         }
 
         .add-product-button {
-            margin: 0px 0px 10px 30px;
+            margin: 0 0 10px 30px;
 
             .ant-btn {
                 background-color: $green;
@@ -34,7 +34,8 @@
             }
         }
 
-        h1, a {
+        h1,
+        a {
             padding: 5px;
 
             text-align: center;
@@ -42,16 +43,16 @@
 
             color: #FFF;
         }
-        
+
         h2 {
             font-size: 25px;
             font-weight: bold;
         }
 
-
-        .veg-container, .fruit-container {
-            margin: 0px 30px 0px 30px;
-            .product-card a { 
+        .veg-container,
+        .fruit-container {
+            margin: 0 30px;
+            .product-card a {
                 background-color: transparent;
             }
 
@@ -59,8 +60,11 @@
 
         .veg-container {
             margin-bottom: 20px;
+            .product-card a {
+                background-color: transparent;
+            }
+
         }
-        
 
         .product-wrapper {
             grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
@@ -70,8 +74,8 @@
                 max-width: 300px;
                 max-height: 300px;
 
-                width: auto;
-                height: auto;
+                width: 300px;
+                height: 300px;
             }
 
             h2 {
@@ -110,14 +114,15 @@
             }
         }
     }
-    @media screen and (max-width: 1000px) {
+    @media screen and(max-width: 1000px) {
         .manage-shop-container {
             .add-product-button {
-                margin-left: 0px;
+                margin-left: 0;
                 text-align: center;
             }
-            .veg-container, .fruit-container {
-                margin: 0px 0px 0px 0px;
+            .veg-container,
+            .fruit-container {
+                margin: 0;
                 h2 {
                     text-align: center;
                 }
@@ -127,9 +132,10 @@
             }
         }
     }
-    @media screen and (max-width: 620px) {
+    @media screen and(max-width: 620px) {
         .manage-shop-container {
-            .veg-container, .fruit-container {
+            .veg-container,
+            .fruit-container {
                 .product-card {
                     img {
                         width: 100vw;

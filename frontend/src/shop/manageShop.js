@@ -20,23 +20,23 @@ const ProductCard = ({ data, refreshPage }) => {
     const [showModal, setShowModal] = useState(false);
     const [productID] = useState(data.ID);
 
-    const handleEditProduct = (product_id) => {
+    const handleEditProduct = () => {
         history.push("product", {
-            product_id: product_id,
+            product_id: productID,
             mode: 1
         })
     }
 
-    const handleDeleteProduct = async (product_id) => {
-        console.log(product_id)
-        deleteProduct(product_id)
+    const handleDeleteProduct = async () => {
+        console.log(productID)
+        deleteProduct(productID)
         window.location.reload()
         setShowModal(false)
     }
 
     return (
         <div className="product-card">
-            <Link to={`/product/${productID}`}><img src={data.PictureURL} /></Link>
+            <a onClick={() => handleEditProduct()}><img src={data.PictureURL} /></a>
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
                 <div>{`ID : ${productID}`}</div>
@@ -44,7 +44,7 @@ const ProductCard = ({ data, refreshPage }) => {
                 <div>{`${data.Price} Bath`}</div>
             </div>
             <div className="button-wrapper flex-row">
-                <Button onClick={() => handleEditProduct(productID)} >Edit Product</Button>
+                <Button onClick={() => handleEditProduct()} >Edit Product</Button>
                 <Button className="red-button" onClick={() => setShowModal(true)}>Delete</Button>
                 <Modal
                     visible={showModal}
@@ -99,9 +99,22 @@ const ManageShop = () => {
         fetchdata(userID)
     }, [refresh]);
 
+    const checkpermission = (shop) => {
+        if (getUserInfo().role !== 2) {
+            Notification({ type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!' })
+            history.push("/profile")
+        }
+        else if (shop.ID ===0) {
+            Notification({ type: 'error', message: 'Shop not found!.', desc: 'create your shop first!' })
+            history.push("/profile")
+        }
+    }
+
     const fetchdata = async (user_id) => {
         let result = await getUserData(user_id)
         setShopId(result.data.shop_information.ID)
+        checkpermission(result.data.shop_information)
+
         let result1 = await getShopData(result.data.shop_information.ID)
         setShop(result1.data.shop_information)
 
@@ -127,17 +140,7 @@ const ManageShop = () => {
         )
     }
 
-    if (getUserInfo().role !== 2) {
-        Notification({ type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!' })
-        history.push("/profile")
-        return <div></div>
-    }
-    else if (shop.ID === 0) {
-        Notification({ type: 'error', message: 'Shop not found!.', desc: 'create your shop first!' })
-        history.push("/profile")
-        return <div></div>
-    }
-    else return (
+    return (
         <div className="manage-shop-page-container">
             <div className="cover-box flex-center">
                 Manage Shop
@@ -165,6 +168,7 @@ const ManageShop = () => {
                         {(fruitData.length !== 0) ? fruitData.map(renderProduct) : <div className="no-product">No any fruit product</div>}
                     </div>
                 </div>
+                .
             </div>
         </div>
     )
