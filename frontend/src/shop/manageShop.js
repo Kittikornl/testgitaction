@@ -12,7 +12,7 @@ import './manageShop.scss'
 import Modal from 'antd/lib/modal/Modal'
 import Notification from '../components/notification'
 
-const ProductCard = ({data, refreshPage}) => {
+const ProductCard = ({ data, refreshPage }) => {
 
     const history = useHistory()
 
@@ -21,19 +21,21 @@ const ProductCard = ({data, refreshPage}) => {
 
     const handleEditProduct = (product_id) => {
         history.push("product", {
-            product_id : product_id,
+            product_id: product_id,
             mode: 1
         })
     }
 
     const handleDeleteProduct = async (product_id) => {
+        console.log(product_id)
         deleteProduct(product_id)
-        refreshPage()
+        // history.push("/manage/shop")
+        window.location.reload()
         setShowModal(false)
     }
 
     return (
-        <div classname="product-card">
+        <div className="product-card">
             <img src={data.PictureURL} />
             <h2>{`${data.ProductTitle}`}</h2>
             <div className="product-content">
@@ -92,14 +94,14 @@ const ManageShop = () => {
 
     const [refresh, setRefresh] = useState(true);
 
-    useEffect(() => {
-        fetchdata()
-      }, [refresh]);
+    useEffect(async () => {
+        fetchdata(userID)
+    }, [refresh]);
 
-    const fetchdata = async () => {
-        let result = await getUserData(userID)
+    const fetchdata = async (user_id) => {
+        let result = await getUserData(user_id)
         setShopID(result.data.shop_information.ID)
-        
+
         let result1 = await getShopData(result.data.shop_information.ID)
         const shopData = result1.data
 
@@ -120,18 +122,19 @@ const ManageShop = () => {
     const renderProduct = (e, idx) => {
         return (
             <div key={idx} className="product-item-wrapper">
+                {console.log("each pro", e)}
                 <ProductCard data={e} refreshPage={refreshPage} />
             </div>
         )
     }
 
     if (getUserInfo().role !== 2) {
-        Notification({type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!'})
+        Notification({ type: 'error', message: 'Permission Denied.', desc: 'customer cannot reach manage shop page!' })
         history.push("/profile")
         return <div></div>
     }
     else if (shopID === 0) {
-        Notification({type: 'error', message: 'Shop not found!.', desc: 'create your shop first!'})
+        Notification({ type: 'error', message: 'Shop not found!.', desc: 'create your shop first!' })
         history.push("/profile")
         return <div></div>
     }
@@ -145,14 +148,15 @@ const ManageShop = () => {
                     ไร่เกษตรรวมใจ&nbsp;&nbsp;
                     <a href="/edit/shop">
                         <FontAwesomeIcon icon={faEdit} />
-                    </a> 
+                    </a>
                 </h1>
                 <div className="add-product-button">
-                    <Button onClick={()=>handleAddProduct()}>Add Product</Button>
+                    <Button onClick={() => handleAddProduct()}>Add Product</Button>
                 </div>
                 <div className="veg-container">
                     <h2>Vegetables</h2>
                     <div className="product-wrapper grid">
+                        {console.log(vegData)}
                         {(vegData.length !== 0) ? vegData.map(renderProduct) : <div className="no-product">No any vegetable product</div>}
                     </div>
                 </div>
