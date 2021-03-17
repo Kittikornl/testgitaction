@@ -64,11 +64,11 @@ export const deleteProfile = async (userId) => {
   }
 };
 
-export const getShopIDByUserID = async (userId) => {
+export const getShopByUserID = async (userId) => {
   try {
     const result = await axios.get(API_URL + `/users/${userId}`);
     const userData = result.data
-    return userData.shop_information.ID
+    return userData.shop_information
   } catch (error) {
     console.log("error delete profile");
     throw error;
