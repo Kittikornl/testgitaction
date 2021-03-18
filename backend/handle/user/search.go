@@ -8,7 +8,6 @@ import (
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
 	"gorm.io/gorm"
-	//"github.com/sec33_Emparty/backend/services"
 )
 
 type search struct {
