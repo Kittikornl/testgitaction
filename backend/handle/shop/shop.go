@@ -30,19 +30,19 @@ func GetShop(c *gin.Context) {
 	database.DB.Model(models.Soldproduct{}).
 		Joins("left JOIN products on products.id =  soldproducts.product_id").
 		Select("products.id, products.created_at, products.updated_at, products.deleted_at, products.shop_id, products.picture_url, products.product_title, products.price, products.amount, products.product_type, products.product_detail, products.rating, sum(soldproducts.amount) as total").
-		Where("shop_id = ? ", id).Where("amount > ?", 0).
-		Group("products.id").Order("total desc").Limit(5).Scan(&top_selling)
+		Where("shop_id = ? AND products.amount > ?", id, 0).
+		Group("products.id").Order("total desc").Limit(8).Scan(&top_selling)
 
-	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? ", id).Where("product_type = ? ", 1).Where("amount > ?", 0).Find(&all_products_1).Error; err != nil {
+	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? AND product_type = ? AND amount > ?", id, 1, 0).Find(&all_products_1).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 	}
 
-	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? ", id).Where("product_type = ? ", 2).Where("amount > ?", 0).Find(&all_products_2).Error; err != nil {
+	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? AND product_type = ? AND amount > ?", id, 2, 0).Find(&all_products_2).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 	}
 	// SELECT * FROM Products WHERE ShopID = id ORDER BY ProductTitle ASC GROUP BY ProductType
 
-	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? ", id).Where("amount > ?", 0).Find(&new_products).Error; err != nil {
+	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? AND amount > ?", id, 0).Find(&new_products).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 	}
 
