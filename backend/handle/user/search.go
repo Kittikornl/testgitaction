@@ -36,8 +36,6 @@ func SearchProductOrShop(c *gin.Context) {
 		if err := database.DB.Where("product_type = ? AND product_title ILIKE ? AND amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&products).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &products)
 
-		} else {
-			c.JSON(http.StatusFound, &products)
 		}
 		//query shops
 		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name ILIKE ? AND product.amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&productsSpec).Error; err != nil {
@@ -46,19 +44,19 @@ func SearchProductOrShop(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"products_information": products,
-			"allproducts_for_shop": productsSpec,
-		})
+			"allproducts_for_shop": productsSpec})
 
 	} else { //1 param
-
-		if err := database.DB.Where("product_type = ? OR product_title ILIKE ? AND amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&products).Error; err != nil {
+		//query by product name
+		if err := database.DB.Where("product_title ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&products).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &products)
-
-		} else {
-			c.JSON(http.StatusFound, &products)
 		}
-		//query shops
-		if err := database.DB.Where("shop_name ILIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil {
+		//query by type
+		if err := database.DB.Where("product_type = ? AND amount > ?", search.ProductType, 0).Find(&types).Error; err != nil {
+			c.JSON(http.StatusBadRequest, &types)
+		}
+		//query by shop name
+		if err := database.DB.Where("shop_name ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&shops).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &shops)
 		}
 
