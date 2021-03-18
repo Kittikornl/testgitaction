@@ -110,6 +110,12 @@ const Editprofile = (props) => {
 
     putEditProfile(userId, paylaod);
     console.log(paylaod);
+
+    Notification({
+      type: "success",
+      message: "Success",
+      desc: "Your information have been saved",
+    });
   };
 
   const propsUpload = {
@@ -225,12 +231,6 @@ const Editprofile = (props) => {
           <div className="profile flex-row">
             <div className="img-col flex-col">
               {console.log(url)};
-              {/* <Image
-                className="profile-img"
-                src={`${url}`}
-                fallback={profileThumb}
-                preview={false}
-              /> */}
               <img src={url === "" ? `${profileThumb}` : `${url}`} />
               <div className="uploadButton">
                 <Upload {...propsUpload}>

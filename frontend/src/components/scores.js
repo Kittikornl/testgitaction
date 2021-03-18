@@ -27,7 +27,7 @@ const renderStar = (score) => {
     return listStar
 }
 
-const scores = (props) => {
+const Scores = (props) => {
     return (
         <div className="star-group flex-row" >
             {renderStar(props.score)}
@@ -35,5 +35,5 @@ const scores = (props) => {
     );
 }
 
-export default scores
+export default Scores
 

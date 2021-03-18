@@ -13,7 +13,7 @@ import (
 
 type search struct {
 	gorm.Model
-	Search      string `json:"Search"; default:""`
+	Search      string `json:"Search"; default: "test"`
 	ProductType int    `json:"ProductType"; default: 0`
 }
 
@@ -21,6 +21,8 @@ func SearchProductOrShop(c *gin.Context) {
 
 	var search search
 	products := make([]models.Product, 0)
+	types := make([]models.Product, 0)
+	productsSpec := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
 
 	if err := c.ShouldBindBodyWith(&search, binding.JSON); err != nil {
@@ -56,12 +58,12 @@ func SearchProductOrShop(c *gin.Context) {
 		//query shops
 		if err := database.DB.Where("shop_name LIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &shops)
-			println("1")
-
-		} else {
-			c.JSON(http.StatusFound, &shops)
-			println("2")
 		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"q_by_shopname":    shops,
+			"q_by_productname": products,
+			"q_by_type":        types})
 	}
 
 }

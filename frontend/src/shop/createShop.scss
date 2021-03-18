@@ -1,6 +1,6 @@
 @import '../index.scss';
 
-.edit-container {
+.create-shop-container {
     padding-bottom: 20px;
     .text-title {
         font-size: 20px;
@@ -38,9 +38,11 @@
             background-color: $red;
         }
     }
-
     .btn-section {
         text-align: center;
+    }
+    .btn-btw {
+        justify-content: center;
     }
     @media screen and(min-width: 375px) {
         .text-title {
@@ -63,52 +65,4 @@
         }
 
     }
-}
-.ant-btn {
-    &.gray-btn {
-        color: white;
-        background-color: #aaaaaa;
-        width: 130px;
-        height: 40px;
-        border-radius: 8px;
-        border: none;
-        &:hover {
-            color: white;
-            background-color: #c7c5c5;
-            width: 130px;
-            height: 40px;
-        }
-    }
-
-    &.red-text {
-        color: $red;
-        background-color: white;
-        text-shadow: none;
-        box-shadow: none;
-        border: none;
-        width: 130px;
-        height: 40px;
-        & > span {
-            text-decoration: underline;
-        }
-    }
-    &.green-text {
-        color: $green;
-        background-color: white;
-        text-shadow: none;
-        box-shadow: none;
-        border: none;
-        width: 130px;
-        height: 40px;
-        & > span {
-            text-decoration: underline;
-        }
-    }
-
-}
-.text-alert {
-    font-size: 18px;
-}
-.ant-modal-content {
-    border-radius: 8px;
 }

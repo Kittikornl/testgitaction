@@ -3,6 +3,11 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8080/api";
 
+const header = {
+  'Content-Type': 'application/json',
+  'Authorization': authHeader()
+}
+
 export const getUserData = async (id) => {
   try {
     return await axios.get(API_URL + `/users/${id}`);
@@ -34,7 +39,7 @@ export const postResetPassword = async (values) => {
 export const patchChangePassword = async (userId, values) => {
   try {
     return await axios.patch(API_URL + `/users/${userId}/change-pwd`, values, {
-      headers: authHeader(),
+      headers: header,
     });
   } catch (error) {
     console.log("error change password");
@@ -45,7 +50,7 @@ export const patchChangePassword = async (userId, values) => {
 export const putEditProfile = async (userId, values) => {
   try {
     return await axios.put(API_URL + `/users/${userId}`, values, {
-      headers: authHeader(),
+      headers: header,
     });
   } catch (error) {
     console.log("error edit profile");
@@ -56,8 +61,21 @@ export const putEditProfile = async (userId, values) => {
 export const deleteProfile = async (userId) => {
   try {
     return await axios.delete(API_URL + `/users/${userId}`, {
-      headers: authHeader(),
+      headers: header,
     });
+  } catch (error) {
+    console.log("error delete profile");
+    throw error;
+  }
+};
+
+export const getShopByUserID = async (userId) => {
+  try {
+    const result = await axios.get(API_URL + `/users/${userId}`, {
+      headers: header,
+    });
+    const userData = result.data
+    return userData.shop_information
   } catch (error) {
     console.log("error delete profile");
     throw error;

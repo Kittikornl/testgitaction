@@ -10,7 +10,7 @@ $button-red: #d66969;
 
 $gray: #979797;
 
-$thai-font : 'Mitr', sans-serif;
+$thai-font: 'Mitr', sans-serif;
 
 body {
     margin: 0;
@@ -47,10 +47,18 @@ body {
     text-align: left;
 }
 .flex-center {
+    display: flex;
+
     align-items: center;
     justify-content: center;
 }
-
+.grid {
+    display: grid;
+}
+.grid-center {
+    display: grid;
+    justify-content: center;
+}
 .p-y-24 {
     padding: 24px 0;
 }
@@ -89,6 +97,9 @@ body {
 }
 .m-r-10 {
     margin-right: 10px;
+}
+.m-r-20 {
+    margin-right: 20px;
 }
 .text-big {
     font-size: 50px;
