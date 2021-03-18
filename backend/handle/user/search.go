@@ -8,7 +8,6 @@ import (
 	"github.com/sec33_Emparty/backend/database"
 	"github.com/sec33_Emparty/backend/models"
 	"gorm.io/gorm"
-	//"github.com/sec33_Emparty/backend/services"
 )
 
 type search struct {
@@ -37,8 +36,8 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, &products)
 
 		}
-		//query shops
-		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name ILIKE ? AND products.amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&productsSpec).Error; err != nil {
+		//query product for specify shops
+		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name ILIKE ? AND amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&productsSpec).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &productsSpec)
 
 		}
@@ -56,7 +55,7 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, &types)
 		}
 		//query by shop name
-		if err := database.DB.Where("shop_name ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&shops).Error; err != nil {
+		if err := database.DB.Where("shop_name ILIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &shops)
 		}
 
