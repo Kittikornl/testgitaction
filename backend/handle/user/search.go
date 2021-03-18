@@ -40,12 +40,14 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusFound, &products)
 		}
 		//query shops
-		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Where("amount > ?", 0).Find(&products).Error; err != nil {
-			c.JSON(http.StatusBadRequest, &products)
+		if err := database.DB.Joins("JOIN shoptables on products.shop_id = shoptables.id").Where("product_type = ? AND shop_name LIKE ?", search.ProductType, "%"+search.Search+"%").Where("amount > ?", 0).Find(&productsSpec).Error; err != nil {
+			c.JSON(http.StatusBadRequest, &productsSpec)
 
-		} else {
-			c.JSON(http.StatusFound, &products)
 		}
+		c.JSON(http.StatusOK, gin.H{
+			"products_information": products,
+			"allproducts_for_shop": productsSpec,
+		})
 
 	} else { //1 param
 
