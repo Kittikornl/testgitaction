@@ -56,7 +56,7 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, &types)
 		}
 		//query by shop name
-		if err := database.DB.Where("shop_name ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&shops).Error; err != nil {
+		if err := database.DB.Where("shop_name ILIKE ?", "%"+search.Search+"%").Find(&shops).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &shops)
 		}
 
