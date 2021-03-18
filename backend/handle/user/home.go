@@ -16,7 +16,7 @@ func GetHomePage(c *gin.Context) {
 	database.DB.Model(models.Soldproduct{}).
 		Joins("left JOIN products on products.id =  soldproducts.product_id").
 		Select("products.id, products.created_at, products.updated_at, products.deleted_at, products.shop_id, products.picture_url, products.product_title, products.price, products.amount, products.product_type, products.product_detail, products.rating, sum(soldproducts.amount) as total").
-		Group("products.id").Order("total desc").Limit(5).Scan(&top_selling_products)
+		Group("products.id").Order("total desc").Where("amount > ?", 0).Limit(5).Scan(&top_selling_products)
 
 	c.JSON(http.StatusOK, gin.H{
 		"top_selling_products": top_selling_products,
