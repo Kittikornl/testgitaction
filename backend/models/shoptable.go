@@ -16,4 +16,5 @@ type Shoptable struct {
 	Facebook    string  `json:"facebook"`
 	Twitter     string  `json:"twitter"`
 	Line        string  `json:"line"`
+	ReviewCount int     `json:"review_count"`
 }
