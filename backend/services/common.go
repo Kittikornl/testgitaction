@@ -6,6 +6,9 @@ import (
 
 // return userID(int), role(int)
 func ExtractToken(tokenString string) (int, int) {
+	const BEARER_SCHEMA = "Bearer "
+	tokenString = tokenString[len(BEARER_SCHEMA):]
+	
 	token, err := jwt.ParseWithClaims(tokenString, &authCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})

@@ -63,14 +63,11 @@ func GetShop(c *gin.Context) {
 // Create a new shop
 func CreateShop(c *gin.Context) {
 	var shoptable models.Shoptable
-	const BEARER_SCHEMA = "Bearer "
 
 	// Get current user's token then call the Extractfunction to get the return of userID
 	// to add into the shoptable model before saving into the database.
 
-	auth := c.GetHeader("Authorization")
-	tokenString := auth[len(BEARER_SCHEMA):]
-	userID, _ := services.ExtractToken(tokenString)
+	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
