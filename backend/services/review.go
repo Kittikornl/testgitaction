@@ -2,11 +2,9 @@ package services
 
 import (
 	"math"
-
-	"github.com/dgrijalva/jwt-go"
 )
 
-func NewRating(oldRating float32, totalReviews int, newRating int) float32{
-	rating := (oldRating +  newRating) / (totalReviews+1)
+func NewRating(oldRating float64, totalReviews int, newRating int) float64{
+	rating := (oldRating*float64(totalReviews) +  float64(newRating)) / float64(totalReviews+1)
 	return math.Round(rating*100)/100
 }
