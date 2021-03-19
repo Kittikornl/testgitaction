@@ -20,15 +20,14 @@ type ReviewOutput struct {
 	Comment string `json:"comment"`
 }
 
-ั
 // Get 5 latest review with comment by shopId
 func GetShopReviews(c *gin.Context) {
-	reviewsOutput := []reviewsOutput
+	reviewsOutput := []ReviewOutput{}
 	shop_id := c.Param("id")
 
 	database.DB.Model(models.Userdata{}).
 		Joins("left JOIN shopreviews on userdata.id =  shopreviews.user_id").
-		.Order("created_at desc").Where("shopreviews.shop_id = ? and len(shopreviews.comment) > 0", shop_id).
+		Order("created_at desc").Where("shopreviews.shop_id = ? and len(shopreviews.comment) > 0", shop_id).
 		Limit(5).Scan(&reviewsOutput)
 
 	c.JSON(http.StatusOK, reviewsOutput)
@@ -45,7 +44,7 @@ func CreateShopReview(c *gin.Context) {
 	
 	//find shop
 	if err := database.DB.First(&shop, shop_id).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(id)+" does not exist"))
+		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(shop_id)+" does not exist"))
 		println(err.Error())
 		return
 	}
@@ -58,7 +57,7 @@ func CreateShopReview(c *gin.Context) {
 	
 	// count total Reviews
 	if err := database.DB.Model(models.Shopreview{}).Select("count(id)").Where("shop_id = ?", shop_id).Scan(&totalReviews); err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		c.Status(http.StatusNotFound)
 		return
 	}
 
