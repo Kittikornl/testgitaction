@@ -1,0 +1,45 @@
+@import '../index.scss';
+
+.history-page-container {
+    display: flex;
+    align-items: center;
+
+    row-gap: 20px;
+
+    .history-container {
+        width: 80vw;
+
+        h1 {
+            font-size: 30px;
+            color: $dark-green;
+        }
+    }
+
+    .history-item-container {
+        row-gap: 20px;
+    }
+
+    .history-item {
+        justify-content: space-between;
+        .history-content-wrapper {
+            column-gap: 20px;
+            .history-content {
+                row-gap: 20px;
+                justify-content: center;
+
+                font-size: 18px;
+            }
+        }
+
+        .button-wrapper {
+            align-self: center;
+            .ant-btn {
+                background-color: $green;
+
+                color: #fff;
+            }
+            
+        }
+    }
+    
+}
