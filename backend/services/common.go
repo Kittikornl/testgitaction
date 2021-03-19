@@ -22,3 +22,7 @@ func ExtractToken(tokenString string) (int, int) {
 
 	return userId, role
 }
+
+func ReturnMessage(message string) gin.H {
+	return gin.H{"message": message}
+}
