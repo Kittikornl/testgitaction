@@ -1,0 +1,46 @@
+@import '../index.scss';
+
+.history-desc-container {
+
+    h1 {
+        margin-left: 8vw;
+    }
+
+    .order-content {
+        width: 80vw;
+        row-gap: 10px;
+        align-self: center;
+        .content-warpper {
+            border-bottom: 1px $gray solid;
+            padding-bottom: 10px;
+
+            .title {
+                width: 300px;
+            }
+
+            .title , .content {
+                row-gap: 10px;
+            }
+
+            .title-product {
+                margin-bottom: 10px;
+            }
+
+            .product-item {
+                column-gap: 100px;
+                
+                margin-bottom: 20px;
+
+                img {
+                    width: 200px;
+                    height: 200px;
+                }
+
+                .product-content {
+                    justify-content: center;
+                    row-gap: 10px;
+                }
+            }
+        }
+    }
+}
