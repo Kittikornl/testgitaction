@@ -47,7 +47,7 @@ const Navbar = () => {
                         <Link to="/home">Home</Link>
                     </Menu.Item>
                     <Menu.Item key="2" >
-                        <Link to="/historty">History</Link>
+                        <Link to="/history">History</Link>
                     </Menu.Item>
                     <Menu.Item key="3" >
                         <Link to="/aboutus">About us</Link>
