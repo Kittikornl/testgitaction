@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	gomail "gopkg.in/mail.v2"
 )
 
@@ -75,6 +74,4 @@ func SendEmail(userEmail, subject, text string) string {
 	return "Email Sent Successfully!"
 }
 
-func ReturnMessage(message string) gin.H {
-	return gin.H{"message": message}
-}
+
