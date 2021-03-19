@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 // return userID(int), role(int)
