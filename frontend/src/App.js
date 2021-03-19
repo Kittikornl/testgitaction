@@ -15,6 +15,8 @@ import Product from "./product/product";
 import ManageShop from "./shop/manageShop";
 import EditShop from './shop/editShop'
 import CreateShop from './shop/createShop'
+import History from "./history/history";
+import HistoryDesc from "./history/historyDesc";
 
 function App() {
   const history = useHistory();
@@ -45,6 +47,8 @@ function App() {
         <PrivateRoute exact key="manage-product" path="/manage/product" component={ManageProduct} />
         <PrivateRoute exact key="product" path="/product/:id" component={Product} />
         <PrivateRoute exact key="manage-shop" path="/manage/shop" component={ManageShop} />
+        <PrivateRoute exact key="history" path="/history" component={History} />
+        <PrivateRoute exact key="history-desc" path="/history/description" component={HistoryDesc} />
       </Switch>
     </Router>
   );
