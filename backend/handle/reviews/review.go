@@ -20,39 +20,62 @@ type ReviewOutput struct {
 	Comment string `json:"comment"`
 }
 
+ั
 // Get 5 latest review with comment by shopId
 func GetShopReviews(c *gin.Context) {
 	reviewsOutput := []reviewsOutput
-
-	id := c.Param("id")
+	shop_id := c.Param("id")
 
 	database.DB.Model(models.Userdata{}).
 		Joins("left JOIN shopreviews on userdata.id =  shopreviews.user_id").
-		.Order("created_at desc").Where("shopreviews.shop_id = ? and len(shopreviews.comment) > 0", id).
+		.Order("created_at desc").Where("shopreviews.shop_id = ? and len(shopreviews.comment) > 0", shop_id).
 		Limit(5).Scan(&reviewsOutput)
 
 	c.JSON(http.StatusOK, reviewsOutput)
 }
 
-func CreateShop(c *gin.Context) {
+
+func CreateShopReview(c *gin.Context) {
+	review := models.Shopreview{}
+	shop := models.Shoptable{}
+	totalReviews := 0 
 	//extract data from JWT
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
-
-
-	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
+	shop_id := c.Param("id")
+	
+	//find shop
+	if err := database.DB.First(&shop, shop_id).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(id)+" does not exist"))
 		println(err.Error())
 		return
 	}
 
-	shoptable.UserID = userID
-
-	// Save the format data into DB: Shoptable
-	if err := database.DB.Save(&shoptable).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
+	if err := c.ShouldBindBodyWith(&review, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+	
+	// count total Reviews
+	if err := database.DB.Model(models.Shopreview{}).Select("count(id)").Where("shop_id = ?", shop_id).Scan(&totalReviews); err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
 
-	c.JSON(http.StatusOK, &shoptable)
-}
+	// Save data into reviews
+	review.UserId = userID
+	if err := database.DB.Save(&review).Error; err != nil {
+		c.Status(http.StatusInternalServerError)
+		println(err.Error())
+		return
+	}
+	
+	// Update the data
+	shop.Rating = services.NewRating(shop.Rating, totalReviews, review.Rating)
+	if err := database.DB.Model(&models.Shoptable{}).Updates(&shop).Error; err != nil {
+		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+		println(err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, &review)
 }
