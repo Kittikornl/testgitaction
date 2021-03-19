@@ -11,7 +11,7 @@ type Shoptable struct {
 	ShopName    string  `json:"shopname"`
 	Description string  `json:"description"`
 	PhoneNo     string  `json:"phone_number"`
-	Rating      float32 `json:"rating"`
+	Rating      float64 `json:"rating"`
 	IG          string  `json:"ig"`
 	Facebook    string  `json:"facebook"`
 	Twitter     string  `json:"twitter"`
