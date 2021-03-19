@@ -44,6 +44,8 @@ func InitRouter() *gin.Engine {
 	r.GET("/api/products/:id", products.GetProduct)
 	r.PUT("/api/products/:id", products.UpdateProduct)
 	r.DELETE("/api/products/:id", products.DeleteProduct)
+	r.GET("/api/products/:id/reviews", reviews.GetProductReviews)
+	r.POST("/api/products/:id/reviews", reviews.CreateProductReview)
 	r.POST("/api/search", user.SearchProductOrShop)
 	return r
 }

@@ -13,6 +13,6 @@ type Product struct {
 	Amount        int     `json:"Amount"`
 	ProductType   int     `json:"ProductType"`
 	ProductDetail string  `json:"ProductDetail"`
-	Rating        float32 `json:"Rating"`
+	Rating        float64 `json:"Rating"`
 	ReviewCount   int     `json:"review_count"`
 }
