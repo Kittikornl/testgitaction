@@ -1,10 +1,22 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
+import { useHistory } from 'react-router'
 import Searchbar from '../components/searchbar'
 
 import './history.scss'
 
-const HistoryItem = () => {
+const HistoryItem = (props) => {
+
+    const history = useHistory()
+
+    const [ID] = useState(1);
+
+    const handleClick = () => {
+        history.push("history/description", {
+            ID : ID
+        })
+    }
+
     return (
         <div className="history-item flex-row">
             <div className="history-content-wrapper flex-row" >
@@ -17,7 +29,7 @@ const HistoryItem = () => {
                 </div>
             </div>
             <div className="button-wrapper">
-                <Button>{"Click >"}</Button>
+                <Button onClick={() => handleClick()}>{"Click >"}</Button>
             </div>
         </div>
     )
