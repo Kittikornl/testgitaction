@@ -2,7 +2,6 @@ package reviews
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -10,6 +9,14 @@ import (
 	"github.com/sec33_Emparty/backend/models"
 	"github.com/sec33_Emparty/backend/services"
 )
+type ReviewInput struct {
+	ShopID int `json:"shop_id"`
+	ShopRating int `json:"shop_rating"`
+	ShopComment string `json:"shop_comment"`
+	ProductList []int `json:"products"`
+	ProductsRating int `json:"products_rating"`
+	ProductsComment string `json:"products_comment"`
+}
 
 type ShopReviewOutput struct {
 	FirstName     string `json:"firstname"`
@@ -46,45 +53,76 @@ func GetShopReviews(c *gin.Context) {
 }
 
 //Create new review
-func CreateShopReview(c *gin.Context) {
-	review := models.Shopreview{}
-	shop := models.Shoptable{}
+func CreateReview(c *gin.Context) {
+	reviewInput := ReviewInput{}
+
+	shopReview := models.Shopreview{}
+	shop := models.Shoptable{}	
+
 	//extract data from JWT
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
-	shopID := c.Param("id")
 
-	if err := c.ShouldBindBodyWith(&review, binding.JSON); err != nil {
+	if err := c.ShouldBindBodyWith(&reviewInput, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
 		return
 	}
-	review.UserId = userID
-	shopIDInt, _ := strconv.Atoi(shopID)
-	review.ShopId = shopIDInt
-	
+	// shop review
+	shopReview.UserId = userID
+	shopReview.ShopId = reviewInput.ShopID
+	shopReview.Rating = reviewInput.ShopRating
+	shopReview.Comment = reviewInput.ShopComment
 	//find shop
-	if err := database.DB.First(&shop, shopID).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(shopID)+" does not exist"))
+	if err := database.DB.Where("id = ?", reviewInput.ShopID).First(&shop).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage("shop_id: "+string(reviewInput.ShopID)+" does not exist"))
 		println(err.Error())
 		return
 	}
-
 	// Save data into reviews
-	if err := database.DB.Save(&review).Error; err != nil {
+	if err := database.DB.Save(&shopReview).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
 		println(err.Error())
 		return
 	}
-	
 	// Update shop
-	shop.Rating = services.NewRating(shop.Rating, shop.ReviewCount, review.Rating)
+	shop.Rating = services.NewRating(shop.Rating, shop.ReviewCount, shopReview.Rating)
 	shop.ReviewCount = shop.ReviewCount + 1
-	if err := database.DB.Model(&models.Shoptable{}).Where("id = ?",shopID).Updates(&shop).Error; err != nil {
+	if err := database.DB.Model(&models.Shoptable{}).Where("id = ?", shop.ID).Updates(&shop).Error; err != nil {
 		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 		println(err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, &review)
+	
+	// product review
+	for i := 0; i < len(reviewInput.ProductList); i++ {
+		product := models.Product{}
+		productReview := models.Productreview{}
+		productReview.UserId = userID
+		productReview.Comment = reviewInput.ProductsComment
+		productReview.Rating = reviewInput.ProductsRating
+		productReview.ProductId = reviewInput.ProductList[i]
+		//find product
+		if err := database.DB.Where("id = ?",  productReview.ProductId).First(&product).Error; err != nil {
+			c.JSON(http.StatusNotFound, services.ReturnMessage("product_id: "+string(reviewInput.ProductList[i])+" does not exist"))
+			println(err.Error())
+			return
+		}
+		// Save data into reviews
+		if err := database.DB.Save(&productReview).Error; err != nil {
+			c.Status(http.StatusInternalServerError)
+			println(err.Error())
+			return
+		}
+		// Update the data
+		product.Rating = services.NewRating(product.Rating, product.ReviewCount, productReview.Rating)
+		product.ReviewCount = product.ReviewCount + 1
+		if err := database.DB.Model(&models.Product{}).Where("id = ?", product.ID).Updates(&product).Error; err != nil {
+			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			println(err.Error())
+			return
+		}
+	}
+	c.JSON(http.StatusOK, services.ReturnMessage("All reviews have been created!"))
 }
 
 // API for Product's Reviews
@@ -100,45 +138,4 @@ func GetProductReviews(c *gin.Context) {
 		Limit(5).Scan(&reviewsOutput)
 
 	c.JSON(http.StatusOK, reviewsOutput)
-}
-
-func CreateProductReview(c *gin.Context) {
-	review := models.Productreview{}
-	product := models.Product{}
-	//extract data from JWT
-	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
-	productID := c.Param("id")
-
-	if err := c.ShouldBindBodyWith(&review, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		println(err.Error())
-		return
-	}
-	review.UserId = userID
-	productIDInt, _ := strconv.Atoi(productID)
-	review.ProductId = productIDInt
-	
-	//find product
-	if err := database.DB.First(&product, productID).Error; err != nil {
-		c.JSON(http.StatusNotFound, services.ReturnMessage("product_id: "+string(productID)+" does not exist"))
-		println(err.Error())
-		return
-	}
-
-	// Save data into reviews
-	if err := database.DB.Save(&review).Error; err != nil {
-		c.Status(http.StatusInternalServerError)
-		println(err.Error())
-		return
-	}
-	
-	// Update the data
-	product.Rating = services.NewRating(product.Rating, product.ReviewCount, review.Rating)
-	product.ReviewCount = product.ReviewCount + 1
-	if err := database.DB.Model(&models.Product{}).Where("id = ?",productID).Updates(&product).Error; err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-		println(err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, &review)
 }

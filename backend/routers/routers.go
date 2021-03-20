@@ -36,7 +36,6 @@ func InitRouter() *gin.Engine {
 	r.GET("/api/shops", shop.GetAllShop)
 	r.GET("/api/shops/:id", shop.GetShop)
 	r.GET("/api/shops/:id/reviews", reviews.GetShopReviews)
-	r.POST("/api/shops/:id/reviews", reviews.CreateShopReview)
 	r.DELETE("/api/shops/:id", shop.DeleteShop)
 	r.PUT("/api/shops/:id", shop.UpdateShop)
 	r.GET("/api/products", products.GetAllProducts)
@@ -45,7 +44,7 @@ func InitRouter() *gin.Engine {
 	r.PUT("/api/products/:id", products.UpdateProduct)
 	r.DELETE("/api/products/:id", products.DeleteProduct)
 	r.GET("/api/products/:id/reviews", reviews.GetProductReviews)
-	r.POST("/api/products/:id/reviews", reviews.CreateProductReview)
+	r.POST("/api/reviews", reviews.CreateReview)
 	r.POST("/api/search", user.SearchProductOrShop)
 	return r
 }
