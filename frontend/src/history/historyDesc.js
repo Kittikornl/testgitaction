@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './historyDesc.scss'
 
@@ -15,18 +15,31 @@ const ProductItem = () => {
     )
 }
 
-const HistoryDesc = () => {
+const HistoryDesc = (props) => {
 
     const [data, setData] = useState([1,2,3]);
+    const [ID, setID] = useState(-1);
 
     const renderProductItem = (item, idx) => {
         return <ProductItem key={idx} />
     }
 
+    useEffect(() => {
+        const receiveProps = props.location.state
+
+        setID(receiveProps.ID)
+        fetchdata(receiveProps.ID)
+    }, []);
+
+    const fetchdata = async (id) => {
+        // const result = await getHistory(id)
+        // setData(result.data)
+    }
+
 
     return (
         <div className="history-desc-container flex-col">
-            <h1>Order id : 1</h1>
+            <h1>Order id : {ID}</h1>
             <div className="order-content flex-col">
                 <div className="content-warpper flex-row">
                     <div className="title flex-col">
