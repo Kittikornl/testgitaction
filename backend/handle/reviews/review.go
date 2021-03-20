@@ -135,7 +135,7 @@ func GetProductReviews(c *gin.Context) {
 		Select("*").
 		Joins("left JOIN userdata on userdata.id =  productreviews.user_id").
 		Order("productreviews.created_at desc").Where("productreviews.product_id = ? and length(productreviews.comment) != 0", productID).
-		Scan(&reviewsOutput)
+		Limit(5).Scan(&reviewsOutput)
 
 	c.JSON(http.StatusOK, reviewsOutput)
 }
