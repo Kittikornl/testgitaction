@@ -92,31 +92,27 @@ func CreateReview(c *gin.Context) {
 		println(err.Error())
 		return
 	}
-
-	
-	productReview := models.Productreview{}
 	
 	// product review
-	productReview.UserId = userID
-	productReview.Comment = reviewInput.ProductsComment
-	productReview.Rating = reviewInput.ProductsRating
-	//find product
 	for i := 0; i < len(reviewInput.ProductList); i++ {
 		product := models.Product{}
+		productReview := models.Productreview{}
+		productReview.UserId = userID
+		productReview.Comment = reviewInput.ProductsComment
+		productReview.Rating = reviewInput.ProductsRating
 		productReview.ProductId = reviewInput.ProductList[i]
+		//find product
 		if err := database.DB.Where("id = ?",  productReview.ProductId).First(&product).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage("product_id: "+string(reviewInput.ProductList[i])+" does not exist"))
 			println(err.Error())
 			return
 		}
-		
 		// Save data into reviews
 		if err := database.DB.Save(&productReview).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			println(err.Error())
 			return
 		}
-
 		// Update the data
 		product.Rating = services.NewRating(product.Rating, product.ReviewCount, productReview.Rating)
 		product.ReviewCount = product.ReviewCount + 1
@@ -139,7 +135,7 @@ func GetProductReviews(c *gin.Context) {
 		Select("*").
 		Joins("left JOIN userdata on userdata.id =  productreviews.user_id").
 		Order("productreviews.created_at desc").Where("productreviews.product_id = ? and length(productreviews.comment) != 0", productID).
-		Limit(5).Scan(&reviewsOutput)
+		Scan(&reviewsOutput)
 
 	c.JSON(http.StatusOK, reviewsOutput)
 }
