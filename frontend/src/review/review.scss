@@ -1,0 +1,42 @@
+@import "../index.scss";
+
+.review-container {
+  max-width: 1320px;
+  width: 100%;
+  margin: 0 auto;
+  h2 {
+    color: $green;
+  }
+  .review-stars {
+    display: flex;
+    align-items: center;
+    .star-group {
+      align-self: center;
+      font-size: 24px;
+      color: $yellow;
+      margin-bottom: 15px;
+    }
+  }
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    textarea {
+      background-color: #f1fbf7;
+      border: none;
+      outline: none;
+      color: $green;
+      font-size: 20px;
+    }
+    .ant-btn {
+      color: white;
+      background-color: $green;
+      width: 130px;
+      height: 40px;
+      border-radius: 8px;
+      &.red-btn {
+        background-color: $red;
+      }
+    }
+  }
+}
