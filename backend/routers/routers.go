@@ -8,6 +8,7 @@ import (
 	"github.com/sec33_Emparty/backend/handle/products"
 	"github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/user"
+	"github.com/sec33_Emparty/backend/handle/cart"
 	"github.com/sec33_Emparty/backend/handle/reviews"
 )
 
@@ -45,6 +46,8 @@ func InitRouter() *gin.Engine {
 	r.DELETE("/api/products/:id", products.DeleteProduct)
 	r.GET("/api/products/:id/reviews", reviews.GetProductReviews)
 	r.POST("/api/reviews", reviews.CreateReview)
-	r.POST("/api/search", user.SearchProductOrShop)
+	r.POST("/api/search", user.SearchProductOrShop)	
+	r.POST("/api/checkout", cart.CheckOutOrder)
+	r.GET("/api/history", cart.GetOrdersHistory)
 	return r
 }
