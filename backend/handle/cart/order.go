@@ -1,6 +1,7 @@
 package cart
 
 import (
+	"math/rand"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -65,6 +66,7 @@ func CheckOutOrder(c *gin.Context) {
 		e.UserId = userID
 		e.Status = 1
 		e.OrderID = orderID + 1
+		e.ShippingCharge = randInt(15,100)
 		if err := database.DB.Save(&e).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
@@ -72,4 +74,8 @@ func CheckOutOrder(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, items)
+}
+
+func randInt(min int, max int) int {
+    return min + rand.Intn(max-min)
 }
