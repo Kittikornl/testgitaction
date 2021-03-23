@@ -47,7 +47,7 @@ func GetOrdersHistory(c *gin.Context) {
 }
 
 func CheckOutOrder(c *gin.Context) {
-
+	total := float32(0)
 	var items Checkout
 	var orderID int
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
@@ -63,6 +63,10 @@ func CheckOutOrder(c *gin.Context) {
 	println(orderID)
 
 	for _, e := range items.Item {
+		total = total + e.Price
+	}
+	for _, e := range items.Item {
+		e.TotalPrice = total
 		e.UserId = userID
 		e.Status = 1
 		e.OrderID = orderID + 1
