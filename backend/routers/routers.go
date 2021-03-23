@@ -10,6 +10,7 @@ import (
 	"github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/user"
 	"github.com/sec33_Emparty/backend/handle/reviews"
+	"github.com/sec33_Emparty/backend/middleware"
 )
 
 func InitRouter() *gin.Engine {
@@ -23,31 +24,39 @@ func InitRouter() *gin.Engine {
 	})
 	r.Use(CORSHandler)
 	
-	r.GET("/api/homepage", user.GetHomePage)
-	r.GET("/api/users", user.GetAllUser)
-	r.GET("/api/accounts", user.GetAllAccount)
-	r.POST("/api/users", user.SaveUser)
+	// Don't need Authentication header
 	r.POST("/api/users/reset-pwd", user.ResetPassword)
 	r.POST("/api/users/login", user.LoginToUser)
-	r.POST("/api/users/logout", user.LogoutFromUser)
-	r.DELETE("/api/users/:id", user.DeleteUser)
-	r.GET("/api/users/:id", user.GetUser)
-	r.PUT("/api/users/:id", user.UpdateUser)
-	r.PATCH("/api/users/:id/change-pwd", user.ChangePassword)
-	r.POST("/api/shops", shop.CreateShop)
-	r.GET("/api/shops", shop.GetAllShop)
-	r.GET("/api/shops/:id", shop.GetShop)
-	r.GET("/api/shops/:id/reviews", reviews.GetShopReviews)
-	r.DELETE("/api/shops/:id", shop.DeleteShop)
-	r.PUT("/api/shops/:id", shop.UpdateShop)
-	r.GET("/api/products", products.GetAllProducts)
-	r.POST("/api/products", products.AddProduct)
-	r.GET("/api/products/:id", products.GetProduct)
-	r.PUT("/api/products/:id", products.UpdateProduct)
-	r.DELETE("/api/products/:id", products.DeleteProduct)
-	r.GET("/api/products/:id/reviews", reviews.GetProductReviews)
-	r.POST("/api/reviews", reviews.CreateReview)
-	r.POST("/api/search", user.SearchProductOrShop)
+
+	// Need Authentication header
+	sr := r.Group("/")
+	sr.Use(middleware.AuthorizeJWT())
+	{
+		sr.GET("/api/homepage", user.GetHomePage)
+		sr.GET("/api/users", user.GetAllUser)
+		sr.GET("/api/accounts", user.GetAllAccount)
+		sr.POST("/api/users", user.SaveUser)
+		sr.POST("/api/users/logout", user.LogoutFromUser)
+		sr.DELETE("/api/users/:id", user.DeleteUser)
+		sr.GET("/api/users/:id", user.GetUser)
+		sr.PUT("/api/users/:id", user.UpdateUser)
+		sr.PATCH("/api/users/:id/change-pwd", user.ChangePassword)
+		sr.POST("/api/shops", shop.CreateShop)
+		sr.GET("/api/shops", shop.GetAllShop)
+		sr.GET("/api/shops/:id", shop.GetShop)
+		sr.GET("/api/shops/:id/reviews", reviews.GetShopReviews)
+		sr.DELETE("/api/shops/:id", shop.DeleteShop)
+		sr.PUT("/api/shops/:id", shop.UpdateShop)
+		sr.GET("/api/products", products.GetAllProducts)
+		sr.POST("/api/products", products.AddProduct)
+		sr.GET("/api/products/:id", products.GetProduct)
+		sr.PUT("/api/products/:id", products.UpdateProduct)
+		sr.DELETE("/api/products/:id", products.DeleteProduct)
+		sr.GET("/api/products/:id/reviews", reviews.GetProductReviews)
+		sr.POST("/api/reviews", reviews.CreateReview)
+		sr.POST("/api/search", user.SearchProductOrShop)
+	}
+	
 	//static folder
 	r.StaticFile("/static/swagger.json", "./static/swagger.json")
 	//doc
