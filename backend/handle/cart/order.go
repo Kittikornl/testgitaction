@@ -3,6 +3,7 @@ package cart
 import (
 	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -51,6 +52,7 @@ func CheckOutOrder(c *gin.Context) {
 	var items Checkout
 	var orderID int
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	if err := c.ShouldBindBodyWith(&items, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)

@@ -3,7 +3,7 @@ package shipment
 import (
 	"math/rand"
 	"net/http"
-
+	"time"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/sec33_Emparty/backend/database"
@@ -18,10 +18,11 @@ type TrackInput struct {
 }
 
 func Shipment(c *gin.Context) { 
-	
+
 	var orders models.Order
 	var trackInput TrackInput
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	if err := c.ShouldBindBodyWith(&trackInput, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
