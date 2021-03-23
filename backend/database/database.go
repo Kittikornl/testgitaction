@@ -23,4 +23,5 @@ func Initdatabase() {
 	DB.AutoMigrate(&models.Soldproduct{})
 	DB.AutoMigrate(&models.Productreview{})
 	DB.AutoMigrate(&models.Shopreview{})
+	DB.AutoMigrate(&models.Order{})
 }

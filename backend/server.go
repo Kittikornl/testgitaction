@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	database.Initdatabase()
 
+	database.Initdatabase()
 	r := routers.InitRouter()
 	r.Run()
 }
