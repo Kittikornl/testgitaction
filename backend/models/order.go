@@ -13,10 +13,11 @@ type Order struct {
 	PictureURL     string  `json:"picture_url"`
 	ProductDetail  string  `json:"product_detail"`
 	Amount         float32 `json:"amount"`
-	TotalPrice     float32 `json:"total_price"`
+	Price          float32 `json:"price"`
+	TotalPrice     float32 `json:"total_price" gorm:"default:1"`
 	TrackingNumber string  `json:"tracking_number"`
 	CheckTracking  int     `json:"check_tracking" gorm:"default:0"`
-	ShippingCharge float32 `json:"shipping_charge"`
+	ShippingCharge int `json:"shipping_charge"`
 	Status         int     `json:"status" gorm:"default:0"`
 	TransactionID  int     `json:"transaction_id"`
 }
