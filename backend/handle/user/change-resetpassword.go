@@ -20,6 +20,14 @@ type ChangePasswordInput struct {
 	NewPassword string `json:"new-pwd"`
 }
 
+// swagger:route POST /users/reset-pwd users resetPassword
+// Reset password by email
+// then new password will be sent to user's email
+// parameters: resetPasswordBody
+// responses:
+//	200: returnMessage
+//  400: returnMessage
+//  404: returnMessage
 func ResetPassword(c *gin.Context) {
 	var userTable models.Usertable
 	var emailIn ResetPasswordInput
@@ -48,6 +56,15 @@ func ResetPassword(c *gin.Context) {
 	c.JSON(http.StatusOK, services.ReturnMessage("Your new password was sent to your Email"))
 }
 
+// swagger:route PATCH /users/{:id}/change-pwd users changePassword
+// Change password
+// Security:
+//       Bearer: write
+// parameters: changePasswordBody
+// responses:
+//	200: returnMessage
+//  400: returnMessage
+//  404: returnMessage
 func ChangePassword(c *gin.Context) {
 
 	id := c.Param("id")

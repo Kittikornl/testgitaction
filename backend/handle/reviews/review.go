@@ -37,8 +37,15 @@ type ProductReviewOutput struct {
 	Comment string `json:"comment"`
 }
 
+// swagger:route GET /shops/{:id}/reviews shops listShopReviews
+// Return 5 latest shop's reviews with comment
+// Security:
+//       Bearer: read
+// responses:
+//		200: shopReviewsResponse
+
 // API for Shop's Reviews
-// Get 5 latest review with comment by shopId
+// Get 5 latest reviews with comment by shopId
 func GetShopReviews(c *gin.Context) {
 	reviewsOutput := []ShopReviewOutput{}
 	shop_id := c.Param("id")
@@ -51,6 +58,17 @@ func GetShopReviews(c *gin.Context) {
 
 	c.JSON(http.StatusOK, reviewsOutput)
 }
+
+// swagger:route Post /reviews reviews createReviews
+// Add new shop & products reviews
+// Security:
+//       Bearer: write
+// parameters: createReviewsBody
+// responses:
+//		200: returnMessage
+//		400:
+//		404: returnMessage
+//		500:
 
 //Create new review
 func CreateReview(c *gin.Context) {
@@ -124,6 +142,13 @@ func CreateReview(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, services.ReturnMessage("All reviews have been created!"))
 }
+
+// swagger:route GET /products/{:id}/reviews products listProductReviews
+// Return 5 latest shop's reviews with comment
+// Security:
+//       Bearer: read
+// responses:
+//		200: productReviewsResponse
 
 // API for Product's Reviews
 // Get 5 latest review with comment by productID
