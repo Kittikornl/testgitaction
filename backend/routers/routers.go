@@ -11,6 +11,9 @@ import (
 	"github.com/sec33_Emparty/backend/handle/user"
 	"github.com/sec33_Emparty/backend/handle/reviews"
 	"github.com/sec33_Emparty/backend/middleware"
+	"github.com/sec33_Emparty/backend/handle/shipment"
+	"github.com/sec33_Emparty/backend/handle/cart"
+
 )
 
 func InitRouter() *gin.Engine {
@@ -54,7 +57,10 @@ func InitRouter() *gin.Engine {
 		sr.DELETE("/api/products/:id", products.DeleteProduct)
 		sr.GET("/api/products/:id/reviews", reviews.GetProductReviews)
 		sr.POST("/api/reviews", reviews.CreateReview)
-		sr.POST("/api/search", user.SearchProductOrShop)
+		sr.POST("/api/search", user.SearchProductOrShop)		
+		sr.POST("/api/checkout", cart.CheckOutOrder)
+		sr.GET("/api/history", cart.GetOrdersHistory)
+		sr.POST("/api/shipment",shipment.Shipment)
 	}
 	
 	//static folder
