@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sec33_Emparty/backend/handle/cart"
+	"github.com/sec33_Emparty/backend/handle/payment"
 	"github.com/sec33_Emparty/backend/handle/products"
 	"github.com/sec33_Emparty/backend/handle/reviews"
 	"github.com/sec33_Emparty/backend/handle/shipment"
@@ -60,7 +61,8 @@ func InitRouter() *gin.Engine {
 		sr.POST("/api/checkout", cart.CheckOutOrder)
 		sr.GET("/api/history", cart.GetOrdersHistory)
 		sr.POST("/api/shipment", shipment.Shipment)
-		sr.GET("/api/payment/qr", payment.getQR)
+		sr.GET("/api/payment/qr", payment.GetQR)
+		sr.POST("/api/payment/creditcard", payment.ValidateCard)
 	}
 
 	//static folder
