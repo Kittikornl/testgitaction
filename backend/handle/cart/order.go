@@ -63,16 +63,18 @@ func CheckOutOrder(c *gin.Context) {
 	row := database.DB.Table("orders").Select("max(order_id)").Row()
 	row.Scan(&orderID)
 	println(orderID)
-
+	shippingForAll := randInt(15,100)
 	for _, e := range items.Item {
 		total = total + e.Price
+		
 	}
 	for _, e := range items.Item {
 		e.TotalPrice = total
 		e.UserId = userID
 		e.Status = 1
 		e.OrderID = orderID + 1
-		e.ShippingCharge = randInt(15,100)
+		e.ShippingCharge = shippingForAll
+		
 		if err := database.DB.Save(&e).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
