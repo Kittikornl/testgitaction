@@ -28,7 +28,11 @@ func GetCartitems(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
-		shopOut = append(shopOut, shopInfo)
+
+		_, found := Find(shopOut, shopInfo)
+    	if !found {
+        	shopOut = append(shopOut, shopInfo)
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"shop_info": shopOut, "cart_items": cartitems})
@@ -92,4 +96,13 @@ func DeleteFromCart(c *gin.Context) {
 
 	database.DB.Delete(&cartitem)
 	c.JSON(http.StatusOK,"")
+}
+
+func Find(slice []models.Shoptable, val models.Shoptable) (int, bool) {
+    for i, item := range slice {
+        if item == val {
+            return i, true
+        }
+    }
+    return -1, false
 }

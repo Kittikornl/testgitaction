@@ -42,7 +42,10 @@ func GetOrdersHistory(c *gin.Context) {
 				c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 				return
 		}
-		shopOut = append(shopOut, shopInfo)
+		_, found := Find(shopOut, shopInfo)
+    	if !found {
+        	shopOut = append(shopOut, shopInfo)
+		}
 	}
 	c.JSON(http.StatusOK, gin.H{"user_info": userInfo, "order_info": items.Item, "shop_info": shopOut})
 }
