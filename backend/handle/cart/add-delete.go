@@ -11,7 +11,7 @@ import (
 )
 
 func GetCartitems(c *gin.Context) {
-	//check delete?
+	
 	cartitems := make([]models.Cartitem, 0)
 	var shopOut []models.Shoptable
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
@@ -74,17 +74,22 @@ func UpdateCart(c *gin.Context) {
 	c.JSON(http.StatusOK, &changeInput)
 }
 
-// func DeleteFromCart(c *gin.Context) {
-// 	//bug jaaa >> can't delete
-// 	//var cartitemsDelete cart
-// 	cartitems := make([]models.Cartitem, 0)
-// 	id := c.Param("id")
+func DeleteFromCart(c *gin.Context) {
 
-// 	if err := database.DB.Find(&cartitems, id).Error; err != nil {
-// 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
-// 		return
-// 	}
+	var cartitem models.Cartitem
+	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
 
-// 	database.DB.Delete(&cartitems)
-// 	c.Status(http.StatusNoContent)
-// }
+	if err := c.ShouldBindBodyWith(&cartitem, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+
+	if err := database.DB.Where("user_id = ? AND shop_id = ? AND product_title = ? AND amount = ?", userID, cartitem.ShopID, cartitem.ProductTitle, cartitem.Amount).Find(&cartitem).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	database.DB.Delete(&cartitem)
+	c.JSON(http.StatusOK,"")
+}

@@ -64,6 +64,7 @@ func InitRouter() *gin.Engine {
 		sr.GET("/api/carts", cart.GetCartitems)
 		sr.POST("/api/carts/add", cart.AddToCart)
 		sr.POST("/api/carts/update", cart.UpdateCart)
+		sr.DELETE("/api/carts/delete", cart.DeleteFromCart)
 	}
 	
 	//static folder
