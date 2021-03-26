@@ -11,15 +11,20 @@ import (
 )
 
 type Payment struct {
-	Item      []models.Order `json:"orders"`
+	Item      []models.Order `json:"order"`
 	promotion string         `json:"promotion"`
 }
 
 func GetQR(c *gin.Context) {
 	payment := Payment{}
 
+	if err := c.ShouldBindBodyWith(&payment, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+
 	if !ClearStock(c) {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage("Some order's amount is exceeding from the stock"))
 		return
 	}
 
@@ -46,7 +51,6 @@ func ValidateCard(c *gin.Context) {
 	}
 
 	if !ClearStock(c) {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage("Some order's amount is exceeding from the stock"))
 		return
 	}
 
@@ -64,7 +68,7 @@ func ValidateCard(c *gin.Context) {
 
 func ClearStock(c *gin.Context) bool {
 	payment := Payment{}
-	product := models.Product{}
+	products := []models.Product{}
 
 	if err := c.ShouldBindBodyWith(&payment, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
@@ -74,7 +78,7 @@ func ClearStock(c *gin.Context) bool {
 
 	// for-loop to check if any order is over in amount from stock.
 	for _, order := range payment.Item {
-
+		product := models.Product{}
 		if err := database.DB.Where("shop_id = ? AND product_title = ?", order.ShopID, order.ProductTitle).First(&product).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return false
@@ -84,24 +88,23 @@ func ClearStock(c *gin.Context) bool {
 			c.JSON(http.StatusBadRequest, services.ReturnMessage("The requested amount is exceeding the stock's amount."))
 			return false
 		}
+
+		product.Amount = LeftAmount(product.Amount, int(order.Amount))
+		products = append(products, product)
+
 	}
 
 	// for-loop to update the amount left for each stock
-	for _, order := range payment.Item {
-
-		if err := database.DB.Where("shop_id = ? AND product_title = ?", order.ShopID, order.ProductTitle).First(&product).Error; err != nil {
-			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
-			return false
-		}
-
-		left_amount := product.Amount - int(order.Amount)
-		product.Amount = left_amount
-
-		if err := database.DB.Model(&product).Updates(product).Error; err != nil {
+	for _, product := range products {
+		if err := database.DB.Save(&product).Error; err != nil {
 			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 			return false
 		}
 	}
 
 	return true
+}
+
+func LeftAmount(stock int, order int) int {
+	return stock - order
 }
