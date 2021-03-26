@@ -16,9 +16,9 @@
 //     - application/json
 //
 //     SecurityDefinitions:
-//     Bearer:    
-//      type: apiKey    
-//      name: Authorization    
+//     Bearer:
+//      type: apiKey
+//      name: Authorization
 //      in: header
 //
 // swagger:meta
@@ -26,13 +26,13 @@ package docs
 
 import (
 	_ "github.com/sec33_Emparty/backend/handle/products"
-	_ "github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/reviews"
+	"github.com/sec33_Emparty/backend/handle/shipment"
+	"github.com/sec33_Emparty/backend/handle/cart"
+	_ "github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/user"
+	"github.com/sec33_Emparty/backend/models"
 )
-
-
-
 
 // A list of reviews
 // swagger:response shopReviewsResponse
@@ -104,4 +104,72 @@ type homePageResponseWrapper struct {
 	// return some message to user 
 	// in: body
 	Body user.HomePageOutput
+}
+
+// swagger:parameters trackingNumberBody shipment
+type trackingNumberBodyWrapper struct {
+    // in: body
+    Body shipment.TrackInput
+}
+
+// swagger:response shipmentResponse
+type shipmentResponseWrapper struct { 
+	// in: body
+	Body models.Order
+}
+
+// swagger:response orderHistoryResponse
+type orderHistoryResponseWrapper struct { 
+	// return orders history
+	// in: body
+	Body cart.HistoryOutput
+}
+
+// swagger:parameters checkoutOrderBody cart
+type checkoutOrderBodyWrapper struct {
+    // in: body
+    Body cart.Checkout
+}
+
+// swagger:response checkoutOrderResponse
+type checkoutOrderResponseWrapper struct { 
+	// in: body
+	Body int
+}
+
+// swagger:response cartItemsResponse
+type cartItemsResponseWrapper struct { 
+	// return cart items
+	// in: body
+	Body cart.CartitemOutput
+}
+
+// swagger:parameters deleteCartitemBody cart
+type deleteCartitemBodyWrapper struct {
+    // in: body
+    Body models.Cartitem
+}
+
+// swagger:parameters addCartBody cart
+type addCartBodyWrapper struct {
+    // in: body
+    Body models.Cartitem
+}
+
+// swagger:response addCartResponse
+type addCartResponseWrapper struct { 
+	// in: body
+	Body models.Cartitem
+}
+
+// swagger:parameters updateCartBody cart
+type updateCartBodyWrapper struct {
+    // in: body
+    Body models.Cartitem
+}
+
+// swagger:response updateCartResponse
+type updateCartResponseWrapper struct { 
+	// in: body
+	Body int
 }

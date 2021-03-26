@@ -17,6 +17,15 @@ type TrackInput struct {
 	TrackInput string `json:"track_input"`
 }
 
+
+// swagger:route POST /shipment shipment shipment
+// Check validate tracking number & generate status for shipment
+// Security:
+//       Bearer: read
+// parameters: trackingNumberBody
+// responses:
+//		200: shipmentResponse
+
 func Shipment(c *gin.Context) { 
 
 	var orders models.Order
