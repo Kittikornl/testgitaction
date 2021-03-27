@@ -17,7 +17,14 @@ type Order struct {
 	TotalPrice     float32 `json:"total_price" gorm:"default:1"`
 	TrackingNumber string  `json:"tracking_number"`
 	CheckTracking  int     `json:"check_tracking" gorm:"default:0"`
-	ShippingCharge int `json:"shipping_charge"`
-	Status         int     `json:"status" gorm:"default:0"`
-	TransactionID  int     `json:"transaction_id"`
+	ShippingCharge int     `json:"shipping_charge"`
+	// Status's detail:
+	// 0 = Cart (DEFAULT)
+	// 1 = Wait for being paid
+	// 2 = paid, wait for being delivered
+	// 3 = delivered, wait for being received
+	// 4 = received
+	// 5 = Cancel order (SENT FROM FRONT)
+	Status        int `json:"status" gorm:"default:0"`
+	TransactionID int `json:"transaction_id"`
 }
