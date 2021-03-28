@@ -173,6 +173,18 @@ type updateCartResponseWrapper struct {
 	Body int
 }
 
+// swagger:parameters usePromotionBody usePromotion
+type usePromotionBodyWrapper struct {
+	// in: body
+	Body payment.PromotionIn
+}
+
+// swagger:response promotionResponse
+type promotionResponseWrapper struct {
+	// in: body
+	Body models.Promotion
+}
+
 // swagger:parameters getQRBody getQR
 type getQRBodyWrapper struct {
 	// in: body

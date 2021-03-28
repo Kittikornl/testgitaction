@@ -25,4 +25,9 @@ func Initdatabase() {
 	DB.AutoMigrate(&models.Shopreview{})
 	DB.AutoMigrate(&models.Order{})
 	DB.AutoMigrate(&models.Cartitem{})
+	DB.AutoMigrate(&models.Promotion{})
+	DB.AutoMigrate(&models.Promotion{})
+	DB.AutoMigrate(&models.Promotion{})
+	DB.AutoMigrate(&models.ShopPromotion{})
+	DB.AutoMigrate(&models.UserUsePromotion{})
 }

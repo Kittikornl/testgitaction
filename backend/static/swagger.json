@@ -175,18 +175,48 @@
           "payment"
         ],
         "operationId": "validateCard",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/validateCardResponse"
+          }
+        }
+      }
+    },
+    "/payment/promotion": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "write"
+            ]
+          }
+        ],
+        "description": "use promotion",
+        "tags": [
+          "promotion"
+        ],
+        "operationId": "usePromotion",
         "parameters": [
           {
             "name": "Body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/ValidateCardResponse"
+              "$ref": "#/definitions/PromotionIn"
             }
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/validateCardResponse"
+            "$ref": "#/responses/promotionResponse"
+          },
+          "400": {
+            "description": ""
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "500": {
+            "description": ""
           }
         }
       }
@@ -198,15 +228,6 @@
           "payment"
         ],
         "operationId": "getQR",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/GetQRResponse"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/responses/getQRResponse"
@@ -810,6 +831,95 @@
       },
       "x-go-package": "github.com/sec33_Emparty/backend/handle/reviews"
     },
+    "Promotion": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Amount"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "discount_amount": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DiscountAmount"
+        },
+        "exp_date": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "EXPDate"
+        },
+        "is_for_all_shop": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "IsForAllShop"
+        },
+        "min_spent": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "MinSpent"
+        },
+        "promotion_code": {
+          "type": "string",
+          "x-go-name": "PromotionCode"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "PromotionIn": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "OederID"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "promotion_code": {
+          "type": "string",
+          "x-go-name": "PromotionCode"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "used_date": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "UsedDate"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
+    },
     "ResetPasswordInput": {
       "type": "object",
       "properties": {
@@ -1169,6 +1279,12 @@
         "items": {
           "$ref": "#/definitions/ProductReviewOutput"
         }
+      }
+    },
+    "promotionResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Promotion"
       }
     },
     "returnMessage": {
