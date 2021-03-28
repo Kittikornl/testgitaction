@@ -15,8 +15,26 @@ type Payment struct {
 	promotion string         `json:"promotion"`
 }
 
+type ValidateCardResponse struct {
+	Acceptance bool           `json:"accept"`
+	Order      []models.Order `json:"orders"`
+	Promotion  string         `json:"promotion"`
+}
+
+type GetQRResponse struct {
+	QR        string         `json:"qr"`
+	Order     []models.Order `json:"orders"`
+	Promotion string         `json:"promotion"`
+}
+
+// swagger:route POST /payment/qr payment getQR
+// Get QR for the payment
+// responses:
+//		200: getQRResponse
+
 func GetQR(c *gin.Context) {
 	payment := Payment{}
+	response := GetQRResponse{}
 
 	if err := c.ShouldBindBodyWith(&payment, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
@@ -33,16 +51,22 @@ func GetQR(c *gin.Context) {
 		payment.Item[i].Status = 2
 	}
 
+	response.QR = "https://drive.google.com/file/d/1d9jKm7B71cleQNxgB6JawCKjQMv9jZzY/view?usp=sharing"
+	response.Order = payment.Item
+	response.Promotion = payment.promotion
+
 	// Fixed QR link, in the backend's GoogleDrive
-	c.JSON(http.StatusOK, gin.H{
-		"qr":        "https://drive.google.com/file/d/1d9jKm7B71cleQNxgB6JawCKjQMv9jZzY/view?usp=sharing",
-		"orders":    payment.Item,
-		"promotion": payment.promotion,
-	})
+	c.JSON(http.StatusOK, response)
 }
+
+// swagger:route POST /payment/creditcard payment validateCard
+// Validate the credit card for the payment
+// responses:
+//		200: validateCardResponse
 
 func ValidateCard(c *gin.Context) {
 	payment := Payment{}
+	response := ValidateCardResponse{}
 
 	if err := c.ShouldBindBodyWith(&payment, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
@@ -59,11 +83,11 @@ func ValidateCard(c *gin.Context) {
 		payment.Item[i].Status = 2
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"accept":    true,
-		"orders":    payment.Item,
-		"promotion": payment.promotion,
-	})
+	response.Acceptance = true
+	response.Order = payment.Item
+	response.Promotion = payment.promotion
+
+	c.JSON(http.StatusOK, response)
 }
 
 func ClearStock(c *gin.Context) bool {
