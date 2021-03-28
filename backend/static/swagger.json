@@ -175,6 +175,15 @@
           "payment"
         ],
         "operationId": "validateCard",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ValidateCardResponse"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/validateCardResponse"
@@ -189,6 +198,15 @@
           "payment"
         ],
         "operationId": "getQR",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GetQRResponse"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/getQRResponse"
