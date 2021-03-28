@@ -173,7 +173,7 @@ type updateCartResponseWrapper struct {
 	Body int
 }
 
-// swagger:parameters getQRBody payment
+// swagger:parameters getQRBody getQR
 type getQRBodyWrapper struct {
 	// in: body
 	Body payment.GetQRResponse
@@ -185,7 +185,7 @@ type getQRResponseWrapper struct {
 	Body int
 }
 
-// swagger:parameters validateCardBody payment
+// swagger:parameters validateCardBody validateCard
 type validateCreditcardBodyWrapper struct {
 	// in: body
 	Body payment.ValidateCardResponse
