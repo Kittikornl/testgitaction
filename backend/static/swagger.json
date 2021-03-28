@@ -191,10 +191,20 @@
             ]
           }
         ],
+        "description": "use promotion",
         "tags": [
           "promotion"
         ],
-        "operationId": "usepromotion",
+        "operationId": "usePromotion",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PromotionIn"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/promotionResponse"

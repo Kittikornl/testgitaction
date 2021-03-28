@@ -21,7 +21,8 @@ type PromotionIn struct {
 	UsedDate      time.Time `json:"used_date"`
 }
 
-// swagger:route Post /payment/promotion promotion usepromotion
+// swagger:route Post /payment/promotion promotion usePromotion
+// use promotion
 // Security:
 //       Bearer: write
 // parameters: usePromotionBody
