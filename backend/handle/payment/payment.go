@@ -29,6 +29,7 @@ type GetQRResponse struct {
 
 // swagger:route POST /payment/qr payment getQR
 // Get QR for the payment
+// parameters: getQRBody
 // responses:
 //		200: getQRResponse
 
@@ -61,6 +62,7 @@ func GetQR(c *gin.Context) {
 
 // swagger:route POST /payment/creditcard payment validateCard
 // Validate the credit card for the payment
+// parameters: validateCardBody
 // responses:
 //		200: validateCardResponse
 
