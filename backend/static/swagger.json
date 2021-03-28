@@ -168,6 +168,20 @@
         }
       }
     },
+    "/payment/creditcard": {
+      "post": {
+        "description": "Validate the credit card for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "validateCard",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/validateCardResponse"
+          }
+        }
+      }
+    },
     "/payment/promotion": {
       "post": {
         "security": [
@@ -193,6 +207,20 @@
           },
           "500": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/payment/qr": {
+      "post": {
+        "description": "Get QR for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "getQR",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getQRResponse"
           }
         }
       }
@@ -533,6 +561,27 @@
     },
     "DeletedAt": {
       "$ref": "#/definitions/NullTime"
+    },
+    "GetQRResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        },
+        "qr": {
+          "type": "string",
+          "x-go-name": "QR"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
     },
     "HistoryOutput": {
       "type": "object",
@@ -1159,6 +1208,27 @@
         }
       },
       "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "ValidateCardResponse": {
+      "type": "object",
+      "properties": {
+        "accept": {
+          "type": "boolean",
+          "x-go-name": "Acceptance"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
     }
   },
   "responses": {
@@ -1175,6 +1245,9 @@
       }
     },
     "checkoutOrderResponse": {
+      "description": ""
+    },
+    "getQRResponse": {
       "description": ""
     },
     "homePageResponse": {
@@ -1205,7 +1278,7 @@
       }
     },
     "returnMessage": {
-      "description": "The return message "
+      "description": "The return message"
     },
     "shipmentResponse": {
       "description": "",
@@ -1223,6 +1296,9 @@
       }
     },
     "updateCartResponse": {
+      "description": ""
+    },
+    "validateCardResponse": {
       "description": ""
     }
   },
