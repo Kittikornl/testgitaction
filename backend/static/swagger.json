@@ -55,7 +55,16 @@
         "tags": [
           "cart"
         ],
-        "operationId": "addCart",
+        "operationId": "addToCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/addCartResponse"
@@ -77,6 +86,15 @@
           "cart"
         ],
         "operationId": "deleteFromCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/returnMessage"
@@ -98,6 +116,15 @@
           "cart"
         ],
         "operationId": "updateCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/updateCartResponse"
@@ -118,10 +145,19 @@
         "tags": [
           "cart"
         ],
-        "operationId": "checkoutOrder",
+        "operationId": "checkOutOrder",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Checkout"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "$ref": "#/responses/checkoutOrderResponse"
+            "$ref": "#/responses/checkOutOrderResponse"
           }
         }
       }
@@ -175,6 +211,15 @@
           "payment"
         ],
         "operationId": "validateCard",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ValidateCardResponse"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/validateCardResponse"
@@ -228,6 +273,15 @@
           "payment"
         ],
         "operationId": "getQR",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GetQRResponse"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/getQRResponse"
@@ -1254,7 +1308,7 @@
         "$ref": "#/definitions/CartitemOutput"
       }
     },
-    "checkoutOrderResponse": {
+    "checkOutOrderResponse": {
       "description": ""
     },
     "getQRResponse": {

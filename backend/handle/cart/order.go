@@ -61,13 +61,13 @@ func GetOrdersHistory(c *gin.Context) {
 	c.JSON(http.StatusOK, historyOut)
 }
 
-// swagger:route POST /checkout cart checkoutOrder
+// swagger:route POST /checkout cart checkOutOrder
 // Checkout order (save order into database)
 // Security:
 //       Bearer: read
-// parameters: checkoutOrderBody
+// parameters: checkOutOrderBody
 // responses:
-//		200: checkoutOrderResponse
+//		200: checkOutOrderResponse
 
 func CheckOutOrder(c *gin.Context) {
 	total := float32(0)
