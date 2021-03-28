@@ -21,6 +21,132 @@
   "host": "localhost",
   "basePath": "/api/",
   "paths": {
+    "/carts": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return cart items",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "getCartitems",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/cartItemsResponse"
+          }
+        }
+      }
+    },
+    "/carts/add": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Add items into cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "addCart",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/addCartResponse"
+          }
+        }
+      }
+    },
+    "/carts/delete": {
+      "delete": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Delete item from cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "deleteFromCart",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    },
+    "/carts/update": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Change amount of item in cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "updateCart",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/updateCartResponse"
+          }
+        }
+      }
+    },
+    "/checkout": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Checkout order (save order into database)",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "checkoutOrder",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/checkoutOrderResponse"
+          }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return orders history",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "getOrderHistory",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/orderHistoryResponse"
+          }
+        }
+      }
+    },
     "/homepage": {
       "get": {
         "security": [
@@ -42,8 +168,61 @@
         }
       }
     },
+    "/payment/creditcard": {
+      "post": {
+        "description": "Validate the credit card for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "validateCard",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ValidateCardResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/validateCardResponse"
+          }
+        }
+      }
+    },
+    "/payment/qr": {
+      "post": {
+        "description": "Get QR for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "getQR",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GetQRResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getQRResponse"
+          }
+        }
+      }
+    },
     "/products/{:id}/reviews": {
       "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
         "description": "Return 5 latest shop's reviews with comment",
         "tags": [
           "products"
@@ -95,8 +274,45 @@
         }
       }
     },
+    "/shipment": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Check validate tracking number \u0026 generate status for shipment",
+        "tags": [
+          "shipment"
+        ],
+        "operationId": "shipment",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/TrackInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/shipmentResponse"
+          }
+        }
+      }
+    },
     "/shops/{:id}/reviews": {
       "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
         "description": "Return 5 latest shop's reviews with comment",
         "tags": [
           "shops"
@@ -209,497 +425,76 @@
           }
         }
       }
-    },
-    "/shipment": {
-      "post": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Check status shipment by tracking number",
-        "tags": [
-          "shipment"
-        ],
-        "operationId": "shipment",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/TrackingInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/shipmentResponse"
-          }
-        }
-      }
-    },
-    "/history": {
-      "get": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Return orders history",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "getOrderHistory",
-        "responses": {
-          "200": {
-            "$ref": "#/responses/orderHistoryResponse"
-          }
-        }
-      }
-    },
-    "/checkout": {
-      "post": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Save order to database",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "checkoutOrder",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/CheckoutInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/checkoutOrderResponse"
-          }
-        }
-      }
-    },
-    "/carts": {
-      "get": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Return cart items",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "getCartitems",
-        "responses": {
-          "200": {
-            "$ref": "#/responses/cartItemsResponse"
-          }
-        }
-      }
-    },
-    "/carts/add": {
-      "post": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Add items into your cart",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "addCart",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/AddCartInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/addCartResponse"
-          }
-        }
-      }
-    },
-    "/carts/update": {
-      "post": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Change amount of item in cart",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "updateCart",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/UpdateCartInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/updateCartResponse"
-          }
-        }
-      }
-    },
-    "/carts/delete": {
-      "delete": {
-        "security": [
-          {
-            "Bearer": [
-              "Read"
-            ]
-          }
-        ],
-        "description": "Delete item from cart",
-        "tags": [
-          "cart"
-        ],
-        "operationId": "deleteFromCart",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/DeleteCartitemInput"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/returnMessage"
-          }
-        }
-      }
     }
   },
   "definitions": {
-    "DeleteCartitemInput": {
+    "Cartitem": {
       "type": "object",
       "properties": {
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        }
-      }
-    },
-    "AddCartInput": {
-      "type": "object",
-      "properties": {
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        }
-      }
-    },
-    "AddCartOutput": {
-      "type": "object",
-      "properties": {
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
-    },
-    "UpdateCartInput": {
-      "type": "object",
-      "properties": {
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        }
-      }
-    },
-    "UpdateCartOutput": {
-      "type": "object",
-      "properties": {
-        "new_amount": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
-    },
-    "CartItemOutput": {
-      "type": "object",
-      "properties": {
-        "cart_items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Cart"
-          },
-          "x-go-name": "Cartitems"
-        },
-        "shop_info": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Shoptable"
-          },
-          "x-go-name": "ShopOut"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
-    },
-    "CheckoutInput": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Order"
-          },
-          "x-go-name": "Item"
-        }
-      }
-    },
-    "CheckoutOutput": {
-      "type": "object",
-      "properties": {
-        "order_id": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
-    },
-    "TrackingInput": {
-      "type": "object",
-      "properties": {
-        "track_input": {
-          "type": "string",
-          "x-go-name": "TrackInput"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/handle/shipment"
-    },
-    "ShipmentOutput": {
-      "type": "object",
-      "properties": {
-        "ID": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ID"
-        },
         "CreatedAt": {
-          "type": "timestamp",
-          "x-go-name": "CreatedAt"
-        },
-        "UpdatedAt": {
-          "type": "timestamp",
-          "x-go-name": "UpdatedAt"
+          "type": "string",
+          "format": "date-time"
         },
         "DeletedAt": {
-          "type": "timestamp",
-          "x-go-name": "DeletedAt"
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Amount"
+        },
+        "change_amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "ChangeAmount"
+        },
+        "picture_url": {
+          "type": "string",
+          "x-go-name": "PictureURL"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "product_detail": {
+          "type": "string",
+          "x-go-name": "ProductDetail"
+        },
+        "product_title": {
+          "type": "string",
+          "x-go-name": "ProductTitle"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
         },
         "user_id": {
           "type": "integer",
           "format": "int64",
           "x-go-name": "UserId"
-        },
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "order_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "OrderID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        },
-        "total_price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "TotalPrice"
-        },
-        "tracking_number": {
-          "type": "string",
-          "x-go-name": "TrackingNumber"
-        },
-        "check_tracking": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "CheckTracking"
-        },
-        "shipping_charge": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShippingCharge"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Status"
-        },
-        "transaction_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "TransactionID"
         }
       },
       "x-go-package": "github.com/sec33_Emparty/backend/models"
     },
-    "OrderHistoryOutput": {
+    "CartitemOutput": {
       "type": "object",
       "properties": {
-        "order_info": {
+        "cart_items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Order"
+            "$ref": "#/definitions/Cartitem"
           },
-          "x-go-name": "Items"
-        },
-        "user_info": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserBody"
-          },
-          "x-go-name": "UserInfo"
+          "x-go-name": "Cartitems"
         },
         "shop_info": {
           "type": "array",
@@ -725,8 +520,80 @@
       },
       "x-go-package": "github.com/sec33_Emparty/backend/handle/user"
     },
+    "Checkout": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Item"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
     "DeletedAt": {
       "$ref": "#/definitions/NullTime"
+    },
+    "GetQRResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        },
+        "qr": {
+          "type": "string",
+          "x-go-name": "QR"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
+    },
+    "HistoryOutput": {
+      "type": "object",
+      "properties": {
+        "order_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Items"
+        },
+        "shop_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Shoptable"
+          },
+          "x-go-name": "ShopOut"
+        },
+        "user_info": {
+          "$ref": "#/definitions/Userdata"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
     },
     "HomePageOutput": {
       "type": "object",
@@ -762,6 +629,94 @@
         }
       },
       "x-go-package": "database/sql"
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Amount"
+        },
+        "check_tracking": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CheckTracking"
+        },
+        "order_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "OrderID"
+        },
+        "picture_url": {
+          "type": "string",
+          "x-go-name": "PictureURL"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "product_detail": {
+          "type": "string",
+          "x-go-name": "ProductDetail"
+        },
+        "product_title": {
+          "type": "string",
+          "x-go-name": "ProductTitle"
+        },
+        "shipping_charge": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShippingCharge"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "status": {
+          "description": "Status's detail:\n0 = Cart (DEFAULT)\n1 = Wait for being paid\n2 = paid, wait for being delivered\n3 = delivered, wait for being received\n4 = received\n5 = Cancel order (SENT FROM FRONT)",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Status"
+        },
+        "total_price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "TotalPrice"
+        },
+        "tracking_number": {
+          "type": "string",
+          "x-go-name": "TrackingNumber"
+        },
+        "transaction_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "TransactionID"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserId"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
     },
     "Product": {
       "type": "object",
@@ -939,6 +894,96 @@
       },
       "x-go-package": "github.com/sec33_Emparty/backend/handle/reviews"
     },
+    "Shoptable": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "facebook": {
+          "type": "string",
+          "x-go-name": "Facebook"
+        },
+        "ig": {
+          "type": "string",
+          "x-go-name": "IG"
+        },
+        "line": {
+          "type": "string",
+          "x-go-name": "Line"
+        },
+        "phone_number": {
+          "type": "string",
+          "x-go-name": "PhoneNo"
+        },
+        "rating": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Rating"
+        },
+        "review_count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ReviewCount"
+        },
+        "shopname": {
+          "type": "string",
+          "x-go-name": "ShopName"
+        },
+        "twitter": {
+          "type": "string",
+          "x-go-name": "Twitter"
+        },
+        "user_id": {
+          "description": "Auto-generated Shop id",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "TrackInput": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "track_input": {
+          "type": "string",
+          "x-go-name": "TrackInput"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/shipment"
+    },
     "UserBody": {
       "type": "object",
       "properties": {
@@ -994,227 +1039,127 @@
       },
       "x-go-package": "github.com/sec33_Emparty/backend/docs"
     },
-    "Cart": {
+    "Userdata": {
       "type": "object",
       "properties": {
-        "ID": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ID"
-        },
         "CreatedAt": {
-          "type": "timestamp",
-          "x-go-name": "CreatedAt"
-        },
-        "UpdatedAt": {
-          "type": "timestamp",
-          "x-go-name": "UpdatedAt"
+          "type": "string",
+          "format": "date-time"
         },
         "DeletedAt": {
-          "type": "timestamp",
-          "x-go-name": "DeletedAt"
+          "$ref": "#/definitions/DeletedAt"
         },
-        "user_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UserId"
-        },
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "product_title": {
-          "type": "string",
-          "x-go-name": "ProductTitle"
-        },
-        "picture_url": {
-          "type": "string",
-          "x-go-name": "PictureURL"
-        },
-        "product_detail": {
-          "type": "string",
-          "x-go-name": "ProductDetail"
-        },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        },
-        "change_amount": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ChangeAmount"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/models"
-    },
-    "Order": {
-      "type": "object",
-      "properties": {
         "ID": {
           "type": "integer",
-          "format": "int64",
-          "x-go-name": "ID"
-        },
-        "CreatedAt": {
-          "type": "timestamp",
-          "x-go-name": "CreatedAt"
+          "format": "uint64"
         },
         "UpdatedAt": {
-          "type": "timestamp",
-          "x-go-name": "UpdatedAt"
-        },
-        "DeletedAt": {
-          "type": "timestamp",
-          "x-go-name": "DeletedAt"
-        },
-        "user_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UserId"
-        },
-        "shop_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShopID"
-        },
-        "order_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "OrderID"
-        },
-        "product_title": {
           "type": "string",
-          "x-go-name": "ProductTitle"
+          "format": "date-time"
         },
-        "picture_url": {
+        "birthdate": {
           "type": "string",
-          "x-go-name": "PictureURL"
+          "x-go-name": "Birthdate"
         },
-        "product_detail": {
+        "city": {
           "type": "string",
-          "x-go-name": "ProductDetail"
+          "x-go-name": "City"
         },
-        "amount": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Amount"
-        },
-        "price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "price"
-        },
-        "total_price": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "TotalPrice"
-        },
-        "tracking_number": {
+        "district": {
           "type": "string",
-          "x-go-name": "TrackingNumber"
+          "x-go-name": "District"
         },
-        "check_tracking": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "CheckTracking"
-        },
-        "shipping_charge": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ShippingCharge"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "Status"
-        },
-        "transaction_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "TransactionID"
-        }
-      },
-      "x-go-package": "github.com/sec33_Emparty/backend/models"
-    },
-    "Shoptable": {
-      "type": "object",
-      "properties": {
-        "ID": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "ID"
-        },
-        "CreatedAt": {
-          "type": "timestamp",
-          "x-go-name": "CreatedAt"
-        },
-        "UpdatedAt": {
-          "type": "timestamp",
-          "x-go-name": "UpdatedAt"
-        },
-        "DeletedAt": {
-          "type": "timestamp",
-          "x-go-name": "DeletedAt"
-        },
-        "user_id": {
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UserID"
-        },
-        "shopname": {
+        "firstname": {
           "type": "string",
-          "x-go-name": "ShopName"
+          "x-go-name": "FirstName"
         },
-        "description": {
+        "houseNo": {
           "type": "string",
-          "x-go-name": "Description"
+          "x-go-name": "Adress"
         },
-        "phone_number": {
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "phoneNo": {
           "type": "string",
           "x-go-name": "PhoneNo"
         },
-        "rating": {
-          "type": "float",
-          "format": "float32",
-          "x-go-name": "Rating"
-        },
-        "ig": {
-          "type": "string",
-          "x-go-name": "IG"
-        },
-        "facebook": {
-          "type": "string",
-          "x-go-name": "Facebook"
-        },
-        "twitter": {
-          "type": "string",
-          "x-go-name": "Twitter"
-        },
-        "line": {
-          "type": "string",
-          "x-go-name": "Line"
-        },
-        "review_count": {
+        "role": {
           "type": "integer",
           "format": "int64",
-          "x-go-name": "ReviewCount"
+          "x-go-name": "Role"
+        },
+        "street": {
+          "type": "string",
+          "x-go-name": "Street"
+        },
+        "subDistrict": {
+          "type": "string",
+          "x-go-name": "SubDistrict"
+        },
+        "url_profile_pic": {
+          "type": "string",
+          "x-go-name": "ProfilePicURL"
+        },
+        "zipcode": {
+          "type": "string",
+          "x-go-name": "Zipcode"
         }
       },
       "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "ValidateCardResponse": {
+      "type": "object",
+      "properties": {
+        "accept": {
+          "type": "boolean",
+          "x-go-name": "Acceptance"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
     }
   },
   "responses": {
+    "addCartResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Cartitem"
+      }
+    },
+    "cartItemsResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CartitemOutput"
+      }
+    },
+    "checkoutOrderResponse": {
+      "description": ""
+    },
+    "getQRResponse": {
+      "description": ""
+    },
     "homePageResponse": {
       "description": "List of top selling products and List of new products",
       "schema": {
         "$ref": "#/definitions/HomePageOutput"
+      }
+    },
+    "orderHistoryResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/HistoryOutput"
       }
     },
     "productReviewsResponse": {
@@ -1227,7 +1172,13 @@
       }
     },
     "returnMessage": {
-      "description": "The return message "
+      "description": "The return message"
+    },
+    "shipmentResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Order"
+      }
     },
     "shopReviewsResponse": {
       "description": "A list of reviews",
@@ -1238,59 +1189,11 @@
         }
       }
     },
-    "shipmentResponse": {
-      "description": "A first item in order",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/ShipmentOutput"
-        }
-      }
-    },
-    "orderHistoryResponse": {
-      "description": "A list of user info & shop info & order info",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/OrderHistoryOutput"
-        }
-      }
-    },
-    "checkoutOrderResponse": {
-      "descrption": "An order id",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/CheckoutOutput"
-        }
-      }
-    },
-    "addCartResponse": {
-      "descrption": "Item that you added",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/AddCartOutput"
-        }
-      }
-    },
     "updateCartResponse": {
-      "descrption": "A new amount",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/UpdateCartOutput"
-        }
-      }
+      "description": ""
     },
-    "cartItemsResponse": {
-      "description": "All items in cart",
-      "schema": {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/CartItemOutput"
-        }
-      }
+    "validateCardResponse": {
+      "description": ""
     }
   },
   "securityDefinitions": {
@@ -1301,4 +1204,3 @@
     }
   }
 }
-
