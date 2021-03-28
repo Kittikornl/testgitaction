@@ -53,7 +53,7 @@ func GetCartitems(c *gin.Context) {
 	c.JSON(http.StatusOK, cartitem)
 }
 
-// swagger:route POST /carts/add cart addCart
+// swagger:route POST /carts/add cart addToCart
 // Add items into cart
 // Security:
 //       Bearer: read
