@@ -62,6 +62,7 @@ func InitRouter() *gin.Engine {
 		sr.GET("/api/history", cart.GetOrdersHistory)
 		sr.POST("/api/payment/qr", payment.GetQR)
 		sr.POST("/api/payment/creditcard", payment.ValidateCard)
+		sr.POST("/api/payment/promotion", payment.UsePromotion)
 		sr.POST("/api/shipment", shipment.Shipment)
 		sr.GET("/api/carts", cart.GetCartitems)
 		sr.POST("/api/carts/add", cart.AddToCart)

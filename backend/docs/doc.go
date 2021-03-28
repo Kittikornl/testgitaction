@@ -31,6 +31,7 @@ import (
 	"github.com/sec33_Emparty/backend/handle/cart"
 	_ "github.com/sec33_Emparty/backend/handle/shop"
 	"github.com/sec33_Emparty/backend/handle/user"
+	"github.com/sec33_Emparty/backend/handle/payment"
 	"github.com/sec33_Emparty/backend/models"
 )
 
@@ -172,4 +173,16 @@ type updateCartBodyWrapper struct {
 type updateCartResponseWrapper struct { 
 	// in: body
 	Body int
+}
+
+// swagger:parameters usePromotionBody promotion
+type  usePromotionBodyWrapper struct {
+    // in: body
+    Body payment.PromotionIn
+}
+
+// swagger:response promotionResponse
+type promotionResponseWrapper struct { 
+	// in: body
+	Body models.Promotion
 }
