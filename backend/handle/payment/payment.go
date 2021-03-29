@@ -60,8 +60,6 @@ func GetQR(c *gin.Context) {
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
-		println("$$$$$ TEST $$$$$")
-		println(order.Status)
 	}
 
 	for _, order := range lst {
@@ -110,8 +108,6 @@ func ValidateCard(c *gin.Context) {
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
-		println("$$$$$ TEST $$$$$")
-		println(order.Status)
 	}
 
 	for _, order := range lst {
