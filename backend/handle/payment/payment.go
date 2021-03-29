@@ -48,8 +48,12 @@ func GetQR(c *gin.Context) {
 	}
 
 	// Change each order's status to 2 (paid, wait for being delivered)
-	for i, _ := range payment.Item {
-		payment.Item[i].Status = 2
+	for _, order := range payment.Item {
+		order.Status = 2
+		if err := database.DB.Model(&models.Order{}).Updates(&order).Error; err != nil {
+			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			return
+		}
 	}
 
 	response.QR = "https://drive.google.com/file/d/1d9jKm7B71cleQNxgB6JawCKjQMv9jZzY/view?usp=sharing"
@@ -81,8 +85,12 @@ func ValidateCard(c *gin.Context) {
 	}
 
 	// Change each order's status to 2 (paid, wait for being delivered)
-	for i, _ := range payment.Item {
-		payment.Item[i].Status = 2
+	for _, order := range payment.Item {
+		order.Status = 2
+		if err := database.DB.Model(&models.Order{}).Updates(&order).Error; err != nil {
+			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			return
+		}
 	}
 
 	response.Acceptance = true
