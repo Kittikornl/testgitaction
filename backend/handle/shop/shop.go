@@ -30,7 +30,7 @@ func GetShop(c *gin.Context) {
 	database.DB.Model(models.Soldproduct{}).
 		Joins("left JOIN products on products.id =  soldproducts.product_id").
 		Select("products.id, products.created_at, products.updated_at, products.deleted_at, products.shop_id, products.picture_url, products.product_title, products.price, products.amount, products.product_type, products.product_detail, products.rating, sum(soldproducts.amount) as total").
-		Where("shop_id = ? AND products.amount > ?", id, 0).
+		Where("products.shop_id = ? AND products.amount > ?", id, 0).
 		Group("products.id").Order("total desc").Limit(8).Scan(&top_selling)
 
 	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? AND product_type = ? AND amount > ?", id, 1, 0).Find(&all_products_1).Error; err != nil {
@@ -63,14 +63,11 @@ func GetShop(c *gin.Context) {
 // Create a new shop
 func CreateShop(c *gin.Context) {
 	var shoptable models.Shoptable
-	const BEARER_SCHEMA = "Bearer "
 
 	// Get current user's token then call the Extractfunction to get the return of userID
 	// to add into the shoptable model before saving into the database.
 
-	auth := c.GetHeader("Authorization")
-	tokenString := auth[len(BEARER_SCHEMA):]
-	userID, _ := services.ExtractToken(tokenString)
+	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
 	if err := c.ShouldBindBodyWith(&shoptable, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
@@ -116,6 +113,7 @@ func UpdateShop(c *gin.Context) {
 func DeleteShop(c *gin.Context) {
 	id := c.Param("id")
 	shoptable := models.Shoptable{}
+	product := models.Product{}
 
 	// Check if in the database
 	if err := database.DB.Find(&shoptable, id).Error; err != nil {
@@ -124,5 +122,6 @@ func DeleteShop(c *gin.Context) {
 	}
 
 	database.DB.Delete(&shoptable)
+	database.DB.Where("shop_id = ?", id).Delete(&product)
 	c.Status(http.StatusNoContent)
 }

@@ -1,0 +1,1376 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "the purpose of this application is to provide Pugsod Backend\nthat is for frontend developer to understand more about API",
+    "title": "Pugsod API.",
+    "contact": {
+      "name": "Pugsod Team",
+      "email": "empartyteam@gmail.com"
+    },
+    "version": "1.0.3"
+  },
+  "host": "localhost",
+  "basePath": "/api/",
+  "paths": {
+    "/carts": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return cart items",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "getCartitems",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/cartItemsResponse"
+          }
+        }
+      }
+    },
+    "/carts/add": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Add items into cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "addToCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/addCartResponse"
+          }
+        }
+      }
+    },
+    "/carts/delete": {
+      "delete": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Delete item from cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "deleteFromCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    },
+    "/carts/update": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Change amount of item in cart",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "updateCart",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Cartitem"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/updateCartResponse"
+          }
+        }
+      }
+    },
+    "/checkout": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Checkout order (save order into database)",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "checkOutOrder",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Checkout"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/checkOutOrderResponse"
+          }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return orders history",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "getOrderHistory",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/orderHistoryResponse"
+          }
+        }
+      }
+    },
+    "/homepage": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return 5 latest shop's reviews with comment",
+        "tags": [
+          "users"
+        ],
+        "operationId": "getHomePage",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/homePageResponse"
+          }
+        }
+      }
+    },
+    "/payment/creditcard": {
+      "post": {
+        "description": "Validate the credit card for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "validateCard",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ValidateCardResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/validateCardResponse"
+          }
+        }
+      }
+    },
+    "/payment/promotion": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "write"
+            ]
+          }
+        ],
+        "description": "use promotion",
+        "tags": [
+          "promotion"
+        ],
+        "operationId": "usePromotion",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PromotionIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/promotionResponse"
+          },
+          "400": {
+            "description": ""
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/payment/qr": {
+      "post": {
+        "description": "Get QR for the payment",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "getQR",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GetQRResponse"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getQRResponse"
+          }
+        }
+      }
+    },
+    "/products/{:id}/reviews": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return 5 latest shop's reviews with comment",
+        "tags": [
+          "products"
+        ],
+        "operationId": "listProductReviews",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/productReviewsResponse"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "write"
+            ]
+          }
+        ],
+        "description": "Add new shop \u0026 products reviews",
+        "tags": [
+          "reviews"
+        ],
+        "operationId": "createReviews",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ReviewInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "400": {
+            "description": ""
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/shipment": {
+      "post": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Check validate tracking number \u0026 generate status for shipment",
+        "tags": [
+          "shipment"
+        ],
+        "operationId": "shipment",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/TrackInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/shipmentResponse"
+          }
+        }
+      }
+    },
+    "/shops/{:id}/reviews": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return 5 latest shop's reviews with comment",
+        "tags": [
+          "shops"
+        ],
+        "operationId": "listShopReviews",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/shopReviewsResponse"
+          }
+        }
+      }
+    },
+    "/users/reset-pwd": {
+      "post": {
+        "description": "Reset password by email\nthen new password will be sent to user's email",
+        "tags": [
+          "users"
+        ],
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "400": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    },
+    "/users/{:id}": {
+      "put": {
+        "security": [
+          {
+            "Bearer": [
+              "write"
+            ]
+          }
+        ],
+        "description": "Update a user details",
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "400": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    },
+    "/users/{:id}/change-pwd": {
+      "patch": {
+        "security": [
+          {
+            "Bearer": [
+              "write"
+            ]
+          }
+        ],
+        "description": "Change password",
+        "tags": [
+          "users"
+        ],
+        "operationId": "changePassword",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ChangePasswordInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "400": {
+            "$ref": "#/responses/returnMessage"
+          },
+          "404": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Cartitem": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Amount"
+        },
+        "change_amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "ChangeAmount"
+        },
+        "picture_url": {
+          "type": "string",
+          "x-go-name": "PictureURL"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "product_detail": {
+          "type": "string",
+          "x-go-name": "ProductDetail"
+        },
+        "product_title": {
+          "type": "string",
+          "x-go-name": "ProductTitle"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserId"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "CartitemOutput": {
+      "type": "object",
+      "properties": {
+        "cart_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cartitem"
+          },
+          "x-go-name": "Cartitems"
+        },
+        "shop_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Shoptable"
+          },
+          "x-go-name": "ShopOut"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
+    "ChangePasswordInput": {
+      "type": "object",
+      "properties": {
+        "new-pwd": {
+          "type": "string",
+          "x-go-name": "NewPassword"
+        },
+        "old-pwd": {
+          "type": "string",
+          "x-go-name": "OldPassword"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/user"
+    },
+    "Checkout": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Item"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
+    "DeletedAt": {
+      "$ref": "#/definitions/NullTime"
+    },
+    "GetQRResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        },
+        "qr": {
+          "type": "string",
+          "x-go-name": "QR"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
+    },
+    "HistoryOutput": {
+      "type": "object",
+      "properties": {
+        "order_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Items"
+        },
+        "shop_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Shoptable"
+          },
+          "x-go-name": "ShopOut"
+        },
+        "user_info": {
+          "$ref": "#/definitions/Userdata"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
+    "HomePageOutput": {
+      "type": "object",
+      "properties": {
+        "new_products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          },
+          "x-go-name": "NewProducts"
+        },
+        "top_selling_products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Product"
+          },
+          "x-go-name": "TopSellingProducts"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/user"
+    },
+    "NullTime": {
+      "description": "NullTime implements the Scanner interface so\nit can be used as a scan destination, similar to NullString.",
+      "type": "object",
+      "title": "NullTime represents a time.Time that may be null.",
+      "properties": {
+        "Time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Valid": {
+          "type": "boolean"
+        }
+      },
+      "x-go-package": "database/sql"
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Amount"
+        },
+        "check_tracking": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "CheckTracking"
+        },
+        "order_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "OrderID"
+        },
+        "picture_url": {
+          "type": "string",
+          "x-go-name": "PictureURL"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "product_detail": {
+          "type": "string",
+          "x-go-name": "ProductDetail"
+        },
+        "product_title": {
+          "type": "string",
+          "x-go-name": "ProductTitle"
+        },
+        "shipping_charge": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShippingCharge"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "status": {
+          "description": "Status's detail:\n0 = Cart (DEFAULT)\n1 = Wait for being paid\n2 = paid, wait for being delivered\n3 = delivered, wait for being received\n4 = received\n5 = Cancel order (SENT FROM FRONT)",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Status"
+        },
+        "total_price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "TotalPrice"
+        },
+        "tracking_number": {
+          "type": "string",
+          "x-go-name": "TrackingNumber"
+        },
+        "transaction_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "TransactionID"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserId"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "Amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "PictureURL": {
+          "type": "string"
+        },
+        "Price": {
+          "type": "number",
+          "format": "float"
+        },
+        "ProductDetail": {
+          "type": "string"
+        },
+        "ProductTitle": {
+          "type": "string"
+        },
+        "ProductType": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Rating": {
+          "type": "number",
+          "format": "double"
+        },
+        "ShopID": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "review_count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ReviewCount"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "ProductReviewOutput": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "x-go-name": "Comment"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "product_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProductID"
+        },
+        "rating": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Rating"
+        },
+        "url_profile_pic": {
+          "type": "string",
+          "x-go-name": "ProfilePicURL"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/reviews"
+    },
+    "Promotion": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Amount"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "discount_amount": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DiscountAmount"
+        },
+        "exp_date": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "EXPDate"
+        },
+        "is_for_all_shop": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "IsForAllShop"
+        },
+        "min_spent": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "MinSpent"
+        },
+        "promotion_code": {
+          "type": "string",
+          "x-go-name": "PromotionCode"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "PromotionIn": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "OederID"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Price"
+        },
+        "promotion_code": {
+          "type": "string",
+          "x-go-name": "PromotionCode"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "used_date": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "UsedDate"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
+    },
+    "ResetPasswordInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "x-go-name": "Email"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/user"
+    },
+    "ReviewInput": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "x-go-name": "ProductList"
+        },
+        "products_comment": {
+          "type": "string",
+          "x-go-name": "ProductsComment"
+        },
+        "products_rating": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProductsRating"
+        },
+        "shop_comment": {
+          "type": "string",
+          "x-go-name": "ShopComment"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "shop_rating": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopRating"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/reviews"
+    },
+    "ShopReviewOutput": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "x-go-name": "Comment"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "rating": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Rating"
+        },
+        "shop_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ShopID"
+        },
+        "url_profile_pic": {
+          "type": "string",
+          "x-go-name": "ProfilePicURL"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/reviews"
+    },
+    "Shoptable": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "facebook": {
+          "type": "string",
+          "x-go-name": "Facebook"
+        },
+        "ig": {
+          "type": "string",
+          "x-go-name": "IG"
+        },
+        "line": {
+          "type": "string",
+          "x-go-name": "Line"
+        },
+        "phone_number": {
+          "type": "string",
+          "x-go-name": "PhoneNo"
+        },
+        "rating": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "Rating"
+        },
+        "review_count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ReviewCount"
+        },
+        "shopname": {
+          "type": "string",
+          "x-go-name": "ShopName"
+        },
+        "twitter": {
+          "type": "string",
+          "x-go-name": "Twitter"
+        },
+        "user_id": {
+          "description": "Auto-generated Shop id",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserID"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "TrackInput": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "track_input": {
+          "type": "string",
+          "x-go-name": "TrackInput"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/shipment"
+    },
+    "UserBody": {
+      "type": "object",
+      "properties": {
+        "birthdate": {
+          "type": "string",
+          "x-go-name": "Birthdate"
+        },
+        "city": {
+          "type": "string",
+          "x-go-name": "City"
+        },
+        "district": {
+          "type": "string",
+          "x-go-name": "District"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "houseNo": {
+          "type": "string",
+          "x-go-name": "Adress"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "phoneNo": {
+          "type": "string",
+          "x-go-name": "PhoneNo"
+        },
+        "role": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Role"
+        },
+        "street": {
+          "type": "string",
+          "x-go-name": "Street"
+        },
+        "subDistrict": {
+          "type": "string",
+          "x-go-name": "SubDistrict"
+        },
+        "url_profile_pic": {
+          "type": "string",
+          "x-go-name": "ProfilePicURL"
+        },
+        "zipcode": {
+          "type": "string",
+          "x-go-name": "Zipcode"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/docs"
+    },
+    "Userdata": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "$ref": "#/definitions/DeletedAt"
+        },
+        "ID": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "birthdate": {
+          "type": "string",
+          "x-go-name": "Birthdate"
+        },
+        "city": {
+          "type": "string",
+          "x-go-name": "City"
+        },
+        "district": {
+          "type": "string",
+          "x-go-name": "District"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "houseNo": {
+          "type": "string",
+          "x-go-name": "Adress"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "phoneNo": {
+          "type": "string",
+          "x-go-name": "PhoneNo"
+        },
+        "role": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Role"
+        },
+        "street": {
+          "type": "string",
+          "x-go-name": "Street"
+        },
+        "subDistrict": {
+          "type": "string",
+          "x-go-name": "SubDistrict"
+        },
+        "url_profile_pic": {
+          "type": "string",
+          "x-go-name": "ProfilePicURL"
+        },
+        "zipcode": {
+          "type": "string",
+          "x-go-name": "Zipcode"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "ValidateCardResponse": {
+      "type": "object",
+      "properties": {
+        "accept": {
+          "type": "boolean",
+          "x-go-name": "Acceptance"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Order"
+        },
+        "promotion": {
+          "type": "string",
+          "x-go-name": "Promotion"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
+    }
+  },
+  "responses": {
+    "addCartResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Cartitem"
+      }
+    },
+    "cartItemsResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CartitemOutput"
+      }
+    },
+    "checkOutOrderResponse": {
+      "description": ""
+    },
+    "getQRResponse": {
+      "description": ""
+    },
+    "homePageResponse": {
+      "description": "List of top selling products and List of new products",
+      "schema": {
+        "$ref": "#/definitions/HomePageOutput"
+      }
+    },
+    "orderHistoryResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/HistoryOutput"
+      }
+    },
+    "productReviewsResponse": {
+      "description": "A list of reviews",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/ProductReviewOutput"
+        }
+      }
+    },
+    "promotionResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Promotion"
+      }
+    },
+    "returnMessage": {
+      "description": "The return message"
+    },
+    "shipmentResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Order"
+      }
+    },
+    "shopReviewsResponse": {
+      "description": "A list of reviews",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/ShopReviewOutput"
+        }
+      }
+    },
+    "updateCartResponse": {
+      "description": ""
+    },
+    "validateCardResponse": {
+      "description": ""
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

@@ -13,7 +13,7 @@ import (
 // AuthorizeJWT validates the token from the http request
 func AuthorizeJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		const BEARER_SCHEMA = "Bearer"
+		const BEARER_SCHEMA = "Bearer "
 		authHeader := c.GetHeader("Authorization")
 		tokenString := authHeader[len(BEARER_SCHEMA):]
 		token, err := services.JWTAuthService().ValidateToken(tokenString)

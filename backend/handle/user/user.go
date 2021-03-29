@@ -51,6 +51,16 @@ func GetUser(c *gin.Context) {
 	})
 }
 
+
+// swagger:route PUT /users/{:id} users updateUser
+// Update a user details
+// Security:
+//       Bearer: write
+// parameters: updateUserBody
+// responses:
+//	200: returnMessage
+//  400: returnMessage
+//  404: returnMessage
 func UpdateUser(c *gin.Context) {
 	id := c.Param("id")
 	var userDataIN models.Userdata
