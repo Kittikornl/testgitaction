@@ -21,7 +21,7 @@ func InitRouter() *gin.Engine {
 	CORSHandler := cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	})
@@ -30,15 +30,16 @@ func InitRouter() *gin.Engine {
 	// Don't need Authentication header
 	r.POST("/api/users/reset-pwd", user.ResetPassword)
 	r.POST("/api/users/login", user.LoginToUser)
+	r.POST("/api/users", user.SaveUser)
 
 	// Need Authentication header
 	sr := r.Group("/")
+	sr.Use(CORSHandler)
 	sr.Use(middleware.AuthorizeJWT())
 	{
 		sr.GET("/api/homepage", user.GetHomePage)
 		sr.GET("/api/users", user.GetAllUser)
 		sr.GET("/api/accounts", user.GetAllAccount)
-		sr.POST("/api/users", user.SaveUser)
 		sr.POST("/api/users/logout", user.LogoutFromUser)
 		sr.DELETE("/api/users/:id", user.DeleteUser)
 		sr.GET("/api/users/:id", user.GetUser)

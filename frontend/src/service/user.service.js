@@ -4,13 +4,17 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost:8080/api";
 
 const header = {
-  'Content-Type': 'application/json',
-  'Authorization': authHeader()
-}
+  "Content-Type": "application/json",
+  Authorization: authHeader(),
+};
 
 export const getUserData = async (id) => {
   try {
-    return await axios.get(API_URL + `/users/${id}`);
+    return await axios.get(API_URL + `/users/${id}`, {
+      headers: {
+        Authorization: authHeader(),
+      },
+    });
   } catch (error) {
     console.log("error get userdata");
     throw error;
@@ -27,7 +31,6 @@ export const postRegister = async (values) => {
 };
 
 export const postResetPassword = async (values) => {
-
   try {
     return await axios.post(API_URL + "/users/reset-pwd", values);
   } catch (error) {
@@ -74,8 +77,8 @@ export const getShopByUserID = async (userId) => {
     const result = await axios.get(API_URL + `/users/${userId}`, {
       headers: header,
     });
-    const userData = result.data
-    return userData.shop_information
+    const userData = result.data;
+    return userData.shop_information;
   } catch (error) {
     console.log("error delete profile");
     throw error;

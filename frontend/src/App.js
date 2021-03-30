@@ -13,13 +13,14 @@ import Shop from "./shop/shop";
 import ManageProduct from "./product/manageProduct";
 import Product from "./product/product";
 import ManageShop from "./shop/manageShop";
-import EditShop from './shop/editShop'
-import CreateShop from './shop/createShop'
+import EditShop from "./shop/editShop";
+import CreateShop from "./shop/createShop";
 import History from "./history/history";
 import HistoryDesc from "./history/historyDesc";
-import Review from './review/review'
-import Shipment from './shipment/shipment'
-import Cart from './cart/cart'
+import Review from "./review/review";
+import Shipment from "./shipment/shipment";
+import Cart from "./cart/cart";
+import Checkout from "./checkout/checkout";
 
 function App() {
   const history = useHistory();
@@ -45,17 +46,52 @@ function App() {
         <PrivateRoute exact key="home" path="/home" component={Home} />
         <PrivateRoute exact key="shop" path="/shop/:id" component={Shop} />
         <PrivateRoute exact key="profile" path="/profile" component={Profile} />
-        <PrivateRoute exact key="edit shop" path="/edit/shop" component={EditShop}/>
-        <PrivateRoute exact key="create shop" path="/create/shop" component={CreateShop} />
-        <PrivateRoute exact key="manage-product" path="/manage/product" component={ManageProduct} />
-        <PrivateRoute exact key="product" path="/product/:id" component={Product} />
-        <PrivateRoute exact key="manage-shop" path="/manage/shop" component={ManageShop} />
+        <PrivateRoute
+          exact
+          key="edit shop"
+          path="/edit/shop"
+          component={EditShop}
+        />
+        <PrivateRoute
+          exact
+          key="create shop"
+          path="/create/shop"
+          component={CreateShop}
+        />
+        <PrivateRoute
+          exact
+          key="manage-product"
+          path="/manage/product"
+          component={ManageProduct}
+        />
+        <PrivateRoute
+          exact
+          key="product"
+          path="/product/:id"
+          component={Product}
+        />
+        <PrivateRoute
+          exact
+          key="manage-shop"
+          path="/manage/shop"
+          component={ManageShop}
+        />
         <PrivateRoute exact key="history" path="/history" component={History} />
-        <PrivateRoute exact key="history-desc" path="/history/description" component={HistoryDesc} />
-        <Route exact key="review" path="/review" component={Review}/>
-        <Route exact key="cart" path="/cart" component={Cart}/>
-        <Route exact key="shipment" path="/shipment" component={Shipment}/>
-
+        <PrivateRoute
+          exact
+          key="history-desc"
+          path="/history/description"
+          component={HistoryDesc}
+        />
+        <PrivateRoute
+          exact
+          key="checkout"
+          path="/checkout"
+          component={Checkout}
+        />
+        <Route exact key="review" path="/review" component={Review} />
+        <Route exact key="cart" path="/cart" component={Cart} />
+        <Route exact key="shipment" path="/shipment" component={Shipment} />
       </Switch>
     </Router>
   );
