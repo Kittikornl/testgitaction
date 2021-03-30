@@ -18,34 +18,56 @@ type Checkout struct {
 	Item []models.Order `json:"items"`
 }
 
+type HistoryOutput struct {
+	Items    []models.Order     `json:"order_info"`
+	UserInfo models.Userdata    `json:"user_info"`
+	ShopOut  []models.Shoptable `json:"shop_info"`
+}
+
+// swagger:route GET /history cart getOrderHistory
+// Return orders history
+// Security:
+//       Bearer: read
+// responses:
+//		200: orderHistoryResponse
+
 func GetOrdersHistory(c *gin.Context) {
 
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
-	var items Checkout
-	var userInfo models.Userdata
-	var shopOut []models.Shoptable
-	
-	if err := database.DB.Where("id = ?", userID).Find(&userInfo).Error; err != nil {
+	var historyOut HistoryOutput
+
+	if err := database.DB.Where("id = ?", userID).Find(&historyOut.UserInfo).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
 
-	if err := database.DB.Where("user_id = ? AND status > ?", userID, 0).Find(&items.Item).Error; err != nil {
+	if err := database.DB.Where("user_id = ? AND status > ?", userID, 0).Find(&historyOut.Items).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
 
-	for _ , e := range items.Item {
+	for _, e := range historyOut.Items {
 
 		var shopInfo models.Shoptable
 		if err := database.DB.Where("id = ?", e.ShopID).Find(&shopInfo).Error; err != nil {
-				c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
-				return
+			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+			return
 		}
-		shopOut = append(shopOut, shopInfo)
+		_, found := Find(historyOut.ShopOut, shopInfo)
+		if !found {
+			historyOut.ShopOut = append(historyOut.ShopOut, shopInfo)
+		}
 	}
-	c.JSON(http.StatusOK, gin.H{"user_info": userInfo, "order_info": items.Item, "shop_info": shopOut})
+	c.JSON(http.StatusOK, historyOut)
 }
+
+// swagger:route POST /checkout cart checkOutOrder
+// Checkout order (save order into database)
+// Security:
+//       Bearer: read
+// parameters: checkOutOrderBody
+// responses:
+//		200: checkOutOrderResponse
 
 func CheckOutOrder(c *gin.Context) {
 	total := float32(0)
@@ -63,25 +85,27 @@ func CheckOutOrder(c *gin.Context) {
 	row := database.DB.Table("orders").Select("max(order_id)").Row()
 	row.Scan(&orderID)
 	println(orderID)
-
+	shippingForAll := randInt(15, 100)
 	for _, e := range items.Item {
-		total = total + e.Price
+		total = total + (e.Price*e.Amount)
+
 	}
 	for _, e := range items.Item {
 		e.TotalPrice = total
 		e.UserId = userID
 		e.Status = 1
 		e.OrderID = orderID + 1
-		e.ShippingCharge = randInt(15,100)
+		e.ShippingCharge = shippingForAll
+
 		if err := database.DB.Save(&e).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
 		}
 	}
 
-	c.JSON(http.StatusOK, items)
+	c.JSON(http.StatusOK, gin.H{"order_id": orderID + 1})
 }
 
 func randInt(min int, max int) int {
-    return min + rand.Intn(max-min)
+	return min + rand.Intn(max-min)
 }
