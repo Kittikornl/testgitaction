@@ -87,7 +87,7 @@ func CheckOutOrder(c *gin.Context) {
 	println(orderID)
 	shippingForAll := randInt(15, 100)
 	for _, e := range items.Item {
-		total = total + e.Price
+		total = total + (e.Price*e.Amount)
 
 	}
 	for _, e := range items.Item {
