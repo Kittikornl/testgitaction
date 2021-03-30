@@ -12,6 +12,8 @@ import { getProduct } from '../service/product.service'
 import { getShopData } from '../service/shop.service'
 import { getUserData } from '../service/user.service'
 import { Link } from 'react-router-dom'
+import { addCart } from '../service/cart.service'
+import Notification from '../components/notification'
 
 const Product = () => {
     let { id } = useParams();
@@ -45,6 +47,27 @@ const Product = () => {
     const handleUpDownAmount = (value) => {
         if (amount+value >= 1 && amount+value < 100)
             setAmount(amount+value)
+    }
+
+    const handleAddCart = async () => {
+        const req = {
+            'shop_id': data.ShopID,
+            'product_title': data.ProductTitle,
+            'amount': amount,
+            'price': data.Price,
+            'picture_url': data.PictureURL,
+            'product_detail': data.ProductDetail 
+        }
+        console.log('product', data)
+        console.log('shop', shop)
+        try {
+            const res = await addCart(req)
+            Notification({type: 'success', message: 'Add to cart success', desc: "Let's checkout"})
+        } catch (error) {
+            Notification({type: 'error', message: 'Add to cart fail', desc: 'Please add to cart again'})
+        }
+       
+
     }
 
     if (data.length !== 0 && shop.length !== 0)
@@ -96,9 +119,9 @@ const Product = () => {
                             <Button className="button-right" onClick={()=>handleUpDownAmount(1)}>+</Button>
                         </div>
                         <div className="add-cart">
-                            <Button className="fs-20">
+                            <Button className="fs-20" onClick={handleAddCart}>
                                 <FontAwesomeIcon icon={faShoppingCart} />
-                                &nbsp;&nbsp;Add to card
+                                &nbsp;&nbsp;Add to my cart
                             </Button>
                         </div>
                     </div>     

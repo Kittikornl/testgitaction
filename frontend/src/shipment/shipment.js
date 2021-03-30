@@ -13,6 +13,7 @@ const Shipment = () => {
     const [trackId, setTrackId] = useState("")
     const [valid, setValid] = useState(false)
     const [input, setInput] = useState(false)
+    const [status, setStatus] = useState(0)
 
     const getShipmentStatus = async () => {
         const data = {
@@ -21,9 +22,11 @@ const Shipment = () => {
         const res = await postShipment(data)
         setInput(true)
         console.log(res.data.shop_id);
-        res.data.shop_id === 0 ? setValid(false):setValid(true)
+        res.data.user_id === 0 ? setValid(false):setValid(true)
         console.log('trackId',trackId);
         console.log('valid', valid);
+        console.log('status', res.data.status);
+        setStatus(res.data.status)
     }
     
     return (
@@ -40,10 +43,12 @@ const Shipment = () => {
                         <Button onClick={getShipmentStatus}>Enter</Button>
                     </div>
                 </div>
+                {/* status 2, 3, 4 */}
                 {input & valid ? 
-                    <Steps progressDot current={1}>
+                    <Steps progressDot current={status-2}>
                         <Step title="Receive order" description="Your order is prepared" />
-                        <Step title="In Progress" description="Delivery in progress"/>
+                        {/* <Step title="In Progress" description="Delivery in progress"/> */}
+                        <Step title="Shipped" description="Your order is shipped" />
                         <Step title="Success" description="Your order derivered" />
                     </Steps>
                  : 

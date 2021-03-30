@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./cart.scss";
 import Navbar from "../components/navbar";
 import Searchbar from "../components/searchbar";
-import { Checkbox, Button, Form } from "antd";
+import { Checkbox, Button, Form, Modal } from "antd";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getCart, addCart, updateCart } from '../service/cart.service'
@@ -25,6 +25,8 @@ const Cart = () => {
   // const [addedItems, setAddItems] = useState('a')
   const [checkedProduct, setCheckedProduct] = useState([])
   const [cart, setCart] = useState([])
+  const [visibleDelete, setVisibleDelete] = useState(false)
+  const [productDeleted, setProductDeleted] = useState({})
 
   useEffect(() => {
     getCartData()
@@ -33,8 +35,8 @@ const Cart = () => {
   const getCartData = async () => {
     try {
       const res = await getCart()
-      console.log(res);
-      // setCart(res)
+      console.log('res',res.data.cart_items);
+      setCart(res.data.cart_items)
     } catch (error) {
       throw error
     }
@@ -57,8 +59,8 @@ const Cart = () => {
       throw error
     }
   }
-  const handleRemove = () => {
-
+  const handleRemove = (productDeleted) => {
+    console.log('delete', productDeleted);
   }
   const handleAddQuantity = (product) => {
     //if that product is in checkedProduct -> add quantity in checkedProduct & initData -> 
@@ -80,7 +82,17 @@ const Cart = () => {
   const handleCheckoutFailed = (e) => {
     console.log('checkout failed', e)
   }
-  console.log(checkedProduct);
+
+  const openModelDelete = (e, product) => {
+    setVisibleDelete(true)
+    setProductDeleted(product)
+    console.log('openmode', product);
+  }
+
+  const handleCancelDelete = () => {
+    setVisibleDelete(false)
+  }
+
   return (
     <div>
       <Navbar />
@@ -89,27 +101,27 @@ const Cart = () => {
         <h2>My order</h2>
         <div className="item-list">
           <Form onFinish={handleCheckout} onFinishFailed={handleCheckoutFailed}>
-            {initData.map(product => (
-              <Form.Item name={product.productName}>
+            {cart.map(product => (
+              <Form.Item name={product.productName} key={product.ID}>
               <div className="item">
                 <div className="icon">
                   <Checkbox onChange={(e) => handleCheckbox(e, product)}/>
                 </div>
                 <div className="product-detail">
                   <div className="img">
-                    <img src={vegThumbnail} />
+                    <img src={product.picture_url} />
                   </div>
                   <div className="desc">
-                    <h3>Product {product.productName}</h3>
+                    <h3>{product.product_title}</h3>
                     <h4>amount: 
-                      <Button onClick={handleAddQuantity(product)}><MinusOutlined /></Button>
+                      <Button onClick={() => handleAddQuantity(product)}><MinusOutlined /></Button>
                       {product.amount} kg
-                      <Button onClick={handleSubtractQuantity(product)}><PlusOutlined /></Button>
+                      <Button onClick={() => handleSubtractQuantity(product)}><PlusOutlined /></Button>
                     </h4>
                     <h4>price: {product.price} THB</h4>
                   </div>
                 </div>
-                <Button onClick={handleRemove(product)}>
+                <Button onClick={(e) => openModelDelete(e, product)}>
                   <DeleteOutlined/>
                 </Button>
               </div>
@@ -127,6 +139,21 @@ const Cart = () => {
           <Button htmlType="submit" className="submit">Checkout</Button>
         </div>
       </div>
+      <Modal 
+        visible={visibleDelete}
+        centered
+        onCancel={handleCancelDelete}
+        footer={false}>
+          <div className="text-center">
+              <div className="text-alert">
+                    Confirm remove {productDeleted?.product_title}
+                </div>
+                <div className="flex-row flex-center m-t-20">
+                    <Button className="red-text m-r-10" onClick={(e) => handleRemove(e, productDeleted)}>remove</Button>
+                    <Button className="gray-btn" onClick={handleCancelDelete}>Cancel</Button>
+                </div>
+            </div>
+      </Modal>
     </div>
   );
 };
