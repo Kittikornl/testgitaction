@@ -124,14 +124,14 @@ type orderHistoryResponseWrapper struct {
 	Body cart.HistoryOutput
 }
 
-// swagger:parameters checkoutOrderBody cart
-type checkoutOrderBodyWrapper struct {
+// swagger:parameters checkOutOrderBody checkOutOrder
+type checkOutOrderBodyWrapper struct {
 	// in: body
 	Body cart.Checkout
 }
 
-// swagger:response checkoutOrderResponse
-type checkoutOrderResponseWrapper struct {
+// swagger:response checkOutOrderResponse
+type checkOutOrderResponseWrapper struct {
 	// in: body
 	Body int
 }
@@ -143,14 +143,14 @@ type cartItemsResponseWrapper struct {
 	Body cart.CartitemOutput
 }
 
-// swagger:parameters deleteCartitemBody cart
+// swagger:parameters deleteCartitemBody deleteFromCart
 type deleteCartitemBodyWrapper struct {
 	// in: body
 	Body models.Cartitem
 }
 
-// swagger:parameters addCartBody cart
-type addCartBodyWrapper struct {
+// swagger:parameters addToCartBody addToCart
+type addToCartBodyWrapper struct {
 	// in: body
 	Body models.Cartitem
 }
@@ -161,7 +161,7 @@ type addCartResponseWrapper struct {
 	Body models.Cartitem
 }
 
-// swagger:parameters updateCartBody cart
+// swagger:parameters updateCartBody updateCart
 type updateCartBodyWrapper struct {
 	// in: body
 	Body models.Cartitem
