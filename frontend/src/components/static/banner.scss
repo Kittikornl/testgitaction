@@ -1,32 +1,32 @@
 @import "../../index.scss";
 
 .banner-container {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  @media screen and(min-width: 375px) {
-    height: 200px;
-  }
-  @media screen and(min-width: 768px) {
-    height: 300px;
-  }
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media screen and(min-width: 375px) {
+        height: 200px;
+    }
+    @media screen and(min-width: 768px) {
+        height: 300px;
+    }
 
-  h1 {
-    color: #ffffff;
-    font-weight: 800;
-  }
-  &.bg-one {
-    background-image: url("../../img/main-veg.jpg");
-  }
-  &.bg-two {
-    background-image: url("../../img/bg-two.png");
-  }
-  &.bg-three {
-    background-image: url("../../img/main-veg.jpg");
-  }
-  
+    h1 {
+        color: #ffffff;
+        font-weight: 800;
+    }
+    &.bg-one {
+        background-image: url("../../img/main-veg.jpg");
+    }
+    &.bg-two {
+        background-image: url("../../img/bg-two.png");
+    }
+    &.bg-three {
+        background-image: url("../../img/bg-three.jpg");
+    }
+
 }

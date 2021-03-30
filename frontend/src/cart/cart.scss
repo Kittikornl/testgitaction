@@ -1,81 +1,94 @@
 @import "../index.scss";
 
 .cart-container {
-  width: 100%;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 20px;
-  h2 {
-    color: $dark-green;
-  }
-  .item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    .icon {
-      flex: 0 0 0;
-    }
-    .delete-icon {
-      padding: 10px;
-      background-color: #f1fbf7;
-      border-radius: 5px;
-      color: #4d7951;
-      font-size: 30px;
-    }
-    .product-detail {
-      display: flex;
-      width: 100%;
-      flex-direction: row;
-      align-items: center;
-      .img {
-        padding: 5px;
-        width: 30%;
-        img {
-          max-width: 100%;
-          height: auto;
-        }
-      }
-      .desc {
-        width: 70%;
-      }
-      @media screen and(max-width: 425px) {
-        .img {
-          width: 50%;
-        }
-        .desc {
-          width: 50%;
-          font-size: 80%;
-        }
-      }
-    }
-    > div {
-      padding: 4px;
-    }
-  }
-  .summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0;
-    h1,
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 20px;
     h2 {
-      color: $dark-green;
+        color: $dark-green;
     }
-  }
-
-  .ant-btn {
-    color: white;
-    background-color: $green;
-    width: 130px;
-    height: 40px;
-    border-radius: 8px;
-    &.red-btn {
-      background-color: $red;
+    .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .icon {
+            flex: 0 0 0;
+        }
+        .ant-btn {
+            height: auto;
+            width: auto;
+            border: none;
+            background-color: #f1fbf7;
+            border-radius: 5px;
+            color: #4d7951;
+            font-size: 30px;
+        }
+        .product-detail {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+            .img {
+                padding: 5px;
+                width: 30%;
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
+            }
+            .desc {
+                width: 70%;
+                .ant-btn {
+                    height: 35px;
+                    width: 35px;
+                    border: none;
+                    background-color: #f1fbf7;
+                    border-radius: 5px;
+                    color: #4d7951;
+                    font-size: 16px;
+                    padding: 0;
+                    margin: 0 10px;
+                }
+            }
+            @media screen and(max-width: 425px) {
+                .img {
+                    width: 50%;
+                }
+                .desc {
+                    width: 50%;
+                    font-size: 80%;
+                }
+            }
+        }
+        > div {
+            padding: 4px;
+        }
     }
-  }
+    .summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+        h1,
+        h2 {
+            color: $dark-green;
+        }
+    }
 
-  .ant-checkbox-checked .ant-checkbox-inner {
-    border-color: #52c41a;
-    background-color: #52c41a;
-  }
+    .ant-btn {
+        color: white;
+        background-color: $green;
+        width: 130px;
+        height: 40px;
+        border-radius: 8px;
+        &.red-btn {
+            background-color: $red;
+        }
+    }
+
+    .ant-checkbox-checked .ant-checkbox-inner {
+        border-color: #52c41a;
+        background-color: #52c41a;
+    }
 }

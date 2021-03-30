@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         try {
-            const res = await  login(e.email, e.password)
+            await  login(e.email, e.password)
             Notification({type: 'success', message: 'Login success', desc: 'enjoy your shopping!'})
             history.push('/home')
         } catch (error) {
