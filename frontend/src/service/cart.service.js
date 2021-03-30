@@ -35,3 +35,14 @@ export const updateCart = async (data) => {
         throw error 
     }
 }
+
+export const deleteProduct = async () => {
+  try {
+    return await axios.post(API_URL + `/carts/delete`, data,{
+        headers: {
+            'Authorization': authHeader()
+        }});
+  } catch (error) {
+      throw error 
+  }
+}

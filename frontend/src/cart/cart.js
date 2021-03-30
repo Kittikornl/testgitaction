@@ -5,21 +5,10 @@ import Searchbar from "../components/searchbar";
 import { Checkbox, Button, Form, Modal } from "antd";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
 import { DeleteOutlined } from "@ant-design/icons";
-import { getCart, addCart, updateCart } from '../service/cart.service'
+import { getCart, addCart, updateCart, deleteProduct } from '../service/cart.service'
+import Notification from '../components/notification'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
-
-const initData = [
-  {
-    'productName': "mangooooooooooo",
-    "amount": 2,
-    "price": 200
-  },
-  {
-    'productName': "orangeyyyyyyy",
-    "amount": 5,
-    "price": 500
-  },
-]
+import ColumnGroup from "antd/lib/table/ColumnGroup";
 
 const Cart = () => {
   // const [addedItems, setAddItems] = useState('a')
@@ -36,19 +25,14 @@ const Cart = () => {
     try {
       const res = await getCart()
       console.log('res',res.data.cart_items);
+      // add key = change_amount in this object
       setCart(res.data.cart_items)
     } catch (error) {
       throw error
     }
   }
   const addCartData = async () => {
-    try {
-      const res = await getCart()
-      console.log(res);
-      // setCart(res)
-    } catch (error) {
-      throw error
-    }
+    
   }
   const updateCartData = async () => {
     try {
@@ -59,15 +43,44 @@ const Cart = () => {
       throw error
     }
   }
-  const handleRemove = (productDeleted) => {
-    console.log('delete', productDeleted);
+  const handleRemove = async (productDeleted) => {
+    const req = {
+      "shop_id" : productDeleted.shop_id,
+      "product_title": productDeleted.product_title,
+      "amount": productDeleted.amount,
+      "price": productDeleted.price,
+      "picture_url": productDeleted.picture_url,
+      "product_detail": productDeleted.product_detail 
+    }
+    try {
+      const res_remove = await deleteProduct(req)
+      console.log(res_remove)
+      Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
+    } catch (error) {
+      Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
+      throw error
+    }
   }
-  const handleAddQuantity = (product) => {
-    //if that product is in checkedProduct -> add quantity in checkedProduct & initData -> 
-    console.log(product);
+  const handleAddQuantity = async (product) => {
+    //add quantity in checkedProduct
+    cart['change_amount'] += 1
+    try {
+      const res = await updateCart()
+      console.log(res);
+      // setCart(res)
+    } catch (error) {
+      throw error
+    }
   }
   const handleSubtractQuantity = (product) => {
-    console.log(product);
+    cart['change_amount'] += 1
+    try {
+      const res = await updateCart()
+      console.log(res);
+      // setCart(res)
+    } catch (error) {
+      throw error
+    }
   }
   const handleCheckbox = (e, product) => {
     if (e.target.checked) {
