@@ -59,3 +59,16 @@ export const checkout = async (data) => {
         throw error
     }
 }
+
+export const getHistory = async () => {
+    try {
+        return await axios.get(API_URL + '/history', {
+            headers: {
+                'Authorization': authHeader()
+            }
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
