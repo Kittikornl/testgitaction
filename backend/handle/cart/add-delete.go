@@ -102,7 +102,7 @@ func UpdateCart(c *gin.Context) {
 
 	newAmount := changeInput.Amount + changeInput.ChangeAmount
 	println(newAmount, changeInput.Amount, changeInput.ChangeAmount)
-	if err := database.DB.Table("cartitems").Where("user_id = ? AND shop_id = ? AND product_title = ? AND amount = ?", userID, changeInput.ShopID, changeInput.ProductTitle, changeInput.Amount).Updates(map[string]interface{}{"amount": newAmount}).Error; err != nil {
+	if err := database.DB.Table("cartitems").Where("user_id = ? AND shop_id = ? AND product_title = ? AND product_id = ?", userID, changeInput.ShopID, changeInput.ProductTitle, changeInput.ProductID).Updates(map[string]interface{}{"amount": newAmount}).Error; err != nil {
 		c.Status(http.StatusInternalServerError)
 		return
 	}
@@ -121,14 +121,11 @@ func DeleteFromCart(c *gin.Context) {
 
 	var cartitem models.Cartitem
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
+	id := c.Param("id")
+	print(id)
 
-	if err := c.ShouldBindBodyWith(&cartitem, binding.JSON); err != nil {
-		c.Status(http.StatusBadRequest)
-		println(err.Error())
-		return
-	}
 
-	if err := database.DB.Where("user_id = ? AND shop_id = ? AND product_title = ? AND amount = ?", userID, cartitem.ShopID, cartitem.ProductTitle, cartitem.Amount).Find(&cartitem).Error; err != nil {
+	if err := database.DB.Where("user_id = ? AND product_id = ?", userID, id).Find(&cartitem).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
