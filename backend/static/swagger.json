@@ -957,8 +957,11 @@
           "x-go-name": "PromotionCode"
         },
         "shop_id": {
-          "type": "integer",
-          "format": "int64",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
           "x-go-name": "ShopID"
         },
         "used_date": {
