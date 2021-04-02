@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"net/http"
 	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/sec33_Emparty/backend/database"
@@ -73,6 +72,7 @@ func CheckOutOrder(c *gin.Context) {
 	total := float32(0)
 	var items Checkout
 	var orderID int
+	var cartitem []models.Cartitem
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
 	rand.Seed(time.Now().UTC().UnixNano())
 
@@ -87,7 +87,7 @@ func CheckOutOrder(c *gin.Context) {
 	println(orderID)
 	shippingForAll := randInt(15, 100)
 	for _, e := range items.Item {
-		total = total + e.Price
+		total = total + (e.Price*e.Amount)
 
 	}
 	for _, e := range items.Item {
@@ -97,11 +97,19 @@ func CheckOutOrder(c *gin.Context) {
 		e.OrderID = orderID + 1
 		e.ShippingCharge = shippingForAll
 
+		
 		if err := database.DB.Save(&e).Error; err != nil {
 			c.Status(http.StatusInternalServerError)
 			return
 		}
+		if err := database.DB.Where("user_id = ? AND shop_id = ? AND product_title = ? AND amount = ?", userID, e.ShopID, e.ProductTitle, e.Amount).Find(&cartitem).Error; err != nil {
+			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+			return
+		}
+		println("con")
+		database.DB.Delete(&cartitem)
 	}
+	
 
 	c.JSON(http.StatusOK, gin.H{"order_id": orderID + 1})
 }
