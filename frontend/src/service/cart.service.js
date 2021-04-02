@@ -16,7 +16,7 @@ export const getCart = async () => {
 
 export const addCart = async (data) => {
     try {
-    return await axios.post(API_URL + `/carts/add`, data,{
+    return await axios.post(API_URL + `/carts/add`, data, {
         headers: {
             'Authorization': authHeader()
         }});
@@ -27,7 +27,7 @@ export const addCart = async (data) => {
 
 export const updateCart = async (data) => {
     try {
-    return await axios.post(API_URL + `/carts/update`, data,{
+    return await axios.post(API_URL + `/carts/update`, data, { 
         headers: {
             'Authorization': authHeader()
         }});
@@ -36,13 +36,26 @@ export const updateCart = async (data) => {
     }
 }
 
-export const deleteProduct = async () => {
+export const deleteProduct = async (data) => {
   try {
-    return await axios.post(API_URL + `/carts/delete`, data,{
+      console.log(data);
+    return await axios.delete(API_URL + '/carts/delete', data, {
         headers: {
             'Authorization': authHeader()
         }});
   } catch (error) {
       throw error 
   }
+}
+
+export const checkout = async (data) => {
+    try {
+        return await axios.post(API_URL + '/checkout', {'items':data}, {
+            headers: {
+                'Authorization': authHeader()
+            }
+        })
+    } catch (error) {
+        throw error
+    }
 }

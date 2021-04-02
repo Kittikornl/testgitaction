@@ -8,6 +8,9 @@
     h2 {
         color: $dark-green;
     }
+    .item-list {
+        padding: 0 20px;
+    }
     .item {
         display: flex;
         flex-direction: row;
@@ -70,6 +73,7 @@
         justify-content: space-between;
         align-items: center;
         margin: 20px 0;
+        padding: 0 20px;
         h1,
         h2 {
             color: $dark-green;

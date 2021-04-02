@@ -1,5 +1,5 @@
 import "./banner.scss";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Banner = (prop) => {
   return (

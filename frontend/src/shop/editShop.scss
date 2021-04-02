@@ -80,28 +80,32 @@
         }
     }
 
-    &.red-text {
-        color: $red;
-        background-color: white;
-        text-shadow: none;
-        box-shadow: none;
-        border: none;
+    &.red-btn {
+        color: white;
+        background-color: $red;
         width: 130px;
         height: 40px;
-        & > span {
-            text-decoration: underline;
+        border-radius: 8px;
+        border: none;
+        &:hover {
+            color: white;
+            background-color: #ff0000;
+            width: 130px;
+            height: 40px;
         }
     }
-    &.green-text {
-        color: $green;
-        background-color: white;
-        text-shadow: none;
-        box-shadow: none;
-        border: none;
+    &.green-btn {
+        color: white;
+        background-color: $green;
         width: 130px;
         height: 40px;
-        & > span {
-            text-decoration: underline;
+        border-radius: 8px;
+        border: none;
+        &:hover {
+            color: white;
+            background-color: rgb(127, 236, 127);
+            width: 130px;
+            height: 40px;
         }
     }
 

@@ -12,7 +12,7 @@ import { getProduct } from '../service/product.service'
 import { getShopData } from '../service/shop.service'
 import { getUserData } from '../service/user.service'
 import { Link } from 'react-router-dom'
-import { addCart } from '../service/cart.service'
+import { addCart, getCart, updateCart } from '../service/cart.service'
 import Notification from '../components/notification'
 
 const Product = () => {
@@ -22,9 +22,11 @@ const Product = () => {
     const [data, setData] = useState({});
     const [shop, setShop] = useState({});
     const [owner, setOwner] = useState({});
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         fetchdata(id)
+        getCartData()
     }, []);
 
     const fetchdata = async (id) => {
@@ -49,6 +51,16 @@ const Product = () => {
             setAmount(amount+value)
     }
 
+    const getCartData = async () => {
+        try {
+          const res = await getCart()
+          console.log('res',res.data.cart_items);
+          setCart(res.data.cart_items)
+        } catch (error) {
+          throw error
+        }
+    }
+
     const handleAddCart = async () => {
         const req = {
             'shop_id': data.ShopID,
@@ -58,17 +70,37 @@ const Product = () => {
             'picture_url': data.PictureURL,
             'product_detail': data.ProductDetail 
         }
-        console.log('product', data)
-        console.log('shop', shop)
         try {
-            const res = await addCart(req)
+            await addCart(req)
             Notification({type: 'success', message: 'Add to cart success', desc: "Let's checkout"})
+            setAmount(1)
         } catch (error) {
             Notification({type: 'error', message: 'Add to cart fail', desc: 'Please add to cart again'})
         }
-       
-
     }
+
+    const handleAddToShop = () => {
+        const c = cart.filter(item => {
+            return item['shop_id'] === data['ShopID'] && 
+            item['product_title'] === data['ProductTitle'] && 
+            item['product_detail'] === data['ProductDetail']
+        })
+        c.length == 0 ? handleAddCart() : handleUpdateCart(c[0]) 
+    }
+
+    const handleUpdateCart = async (c) => {
+        c['change_amount'] = amount
+        try {
+            const res = await updateCart(c)
+            console.log(res);
+            Notification({type: 'success', message: 'Add to cart success', desc: "Let's checkout"})
+            setAmount(1)
+        } catch (error) {
+            console.log(error);
+            Notification({type: 'error', message: 'Add to cart fail', desc: 'Please add to cart again'})
+        }
+    }
+
 
     if (data.length !== 0 && shop.length !== 0)
     return (
@@ -119,7 +151,7 @@ const Product = () => {
                             <Button className="button-right" onClick={()=>handleUpDownAmount(1)}>+</Button>
                         </div>
                         <div className="add-cart">
-                            <Button className="fs-20" onClick={handleAddCart}>
+                            <Button className="fs-20" onClick={handleAddToShop}>
                                 <FontAwesomeIcon icon={faShoppingCart} />
                                 &nbsp;&nbsp;Add to my cart
                             </Button>

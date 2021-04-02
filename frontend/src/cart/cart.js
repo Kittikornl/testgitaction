@@ -3,12 +3,11 @@ import "./cart.scss";
 import Navbar from "../components/navbar";
 import Searchbar from "../components/searchbar";
 import { Checkbox, Button, Form, Modal } from "antd";
-import vegThumbnail from "../img/veg-thumbnail.jpg";
 import { DeleteOutlined } from "@ant-design/icons";
-import { getCart, addCart, updateCart, deleteProduct } from '../service/cart.service'
+import { getCart, updateCart, deleteProduct, checkout } from '../service/cart.service'
 import Notification from '../components/notification'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
-import ColumnGroup from "antd/lib/table/ColumnGroup";
+import { useHistory } from "react-router";
 
 const Cart = () => {
   // const [addedItems, setAddItems] = useState('a')
@@ -16,6 +15,8 @@ const Cart = () => {
   const [cart, setCart] = useState([])
   const [visibleDelete, setVisibleDelete] = useState(false)
   const [productDeleted, setProductDeleted] = useState({})
+  const [priceTotal, setPriceTotal] = useState(0)
+  const history = useHistory()
 
   useEffect(() => {
     getCartData()
@@ -25,35 +26,31 @@ const Cart = () => {
     try {
       const res = await getCart()
       console.log('res',res.data.cart_items);
-      // add key = change_amount in this object
+      let eachPrice = 0
+      res.data.cart_items.map(c => {
+        eachPrice += c['amount']*c['price']
+      })
+      setPriceTotal(eachPrice)
       setCart(res.data.cart_items)
     } catch (error) {
       throw error
     }
   }
-  const addCartData = async () => {
-    
-  }
-  const updateCartData = async () => {
+  // const updateCartData = async () => {
+  //   try {
+  //     const res = await getCart()
+  //     console.log(res);
+  //     // setCart(res)
+  //   } catch (error) {
+  //     throw error
+  //   }
+  // }
+  const handleRemove = async (e, productDeleted) => {
+    const {CreatedAt, DeletedAt, ID, UpdatedAt, user_id, change_amount, ...keepAttrs} = productDeleted 
+
+    console.log('productDeleted', keepAttrs);
     try {
-      const res = await getCart()
-      console.log(res);
-      // setCart(res)
-    } catch (error) {
-      throw error
-    }
-  }
-  const handleRemove = async (productDeleted) => {
-    const req = {
-      "shop_id" : productDeleted.shop_id,
-      "product_title": productDeleted.product_title,
-      "amount": productDeleted.amount,
-      "price": productDeleted.price,
-      "picture_url": productDeleted.picture_url,
-      "product_detail": productDeleted.product_detail 
-    }
-    try {
-      const res_remove = await deleteProduct(req)
+      const res_remove = await deleteProduct(keepAttrs)
       console.log(res_remove)
       Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
     } catch (error) {
@@ -63,21 +60,22 @@ const Cart = () => {
   }
   const handleAddQuantity = async (product) => {
     //add quantity in checkedProduct
-    cart['change_amount'] += 1
+    product['change_amount'] += 1
+    console.log(product);
     try {
-      const res = await updateCart()
-      console.log(res);
-      // setCart(res)
+      const res = await updateCart(product)
+      console.log(res)
+      window.location.reload()
     } catch (error) {
       throw error
     }
   }
-  const handleSubtractQuantity = (product) => {
-    cart['change_amount'] += 1
+  const handleSubtractQuantity = async (product) => {
+    product['change_amount'] -= 1
     try {
-      const res = await updateCart()
-      console.log(res);
-      // setCart(res)
+      const res = await updateCart(product)
+      console.log(res)
+      window.location.reload()
     } catch (error) {
       throw error
     }
@@ -89,11 +87,21 @@ const Cart = () => {
       
     }
   }
-  const handleCheckout = (e) => {
-    console.log('checkout', e)
+  const handleCheckout = async () => {
+    const cart_checkout = cart.map(({CreatedAt, DeletedAt, ID, UpdatedAt, user_id, change_amount, ...keepAttrs}) => keepAttrs)
+    console.log(cart_checkout);
+    try {
+      const res = await checkout(cart_checkout)
+      console.log(res);
+      Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
+      history.push('/home')
+    } catch (error) {
+      Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
+      throw error
+    }
   }
   const handleCheckoutFailed = (e) => {
-    console.log('checkout failed', e)
+    Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
   }
 
   const openModelDelete = (e, product) => {
@@ -113,10 +121,8 @@ const Cart = () => {
       <div className="cart-container">
         <h2>My order</h2>
         <div className="item-list">
-          <Form onFinish={handleCheckout} onFinishFailed={handleCheckoutFailed}>
             {cart.map(product => (
-              <Form.Item name={product.productName} key={product.ID}>
-              <div className="item">
+              <div key={product.ID} className="item">
                 <div className="icon">
                   <Checkbox onChange={(e) => handleCheckbox(e, product)}/>
                 </div>
@@ -127,29 +133,27 @@ const Cart = () => {
                   <div className="desc">
                     <h3>{product.product_title}</h3>
                     <h4>amount: 
-                      <Button onClick={() => handleAddQuantity(product)}><MinusOutlined /></Button>
+                      <Button onClick={() => handleSubtractQuantity(product)}><MinusOutlined /></Button>
                       {product.amount} kg
-                      <Button onClick={() => handleSubtractQuantity(product)}><PlusOutlined /></Button>
+                      <Button onClick={() => handleAddQuantity(product)}><PlusOutlined /></Button>
                     </h4>
                     <h4>price: {product.price} THB</h4>
+                    <h4>total: {product.price*product.amount} THB</h4>
                   </div>
                 </div>
                 <Button onClick={(e) => openModelDelete(e, product)}>
                   <DeleteOutlined/>
                 </Button>
               </div>
-            </Form.Item>
             ))}
-            
-          </Form>
         </div>
         <hr />
         <div className="summary">
           <h2>Total</h2>
-          <h1>500</h1>
+          <h1>{priceTotal}</h1>
         </div>
         <div className="text-center">
-          <Button htmlType="submit" className="submit">Checkout</Button>
+          <Button htmlType="submit" className="submit" onClick={handleCheckout}>Checkout</Button>
         </div>
       </div>
       <Modal 
@@ -162,7 +166,7 @@ const Cart = () => {
                     Confirm remove {productDeleted?.product_title}
                 </div>
                 <div className="flex-row flex-center m-t-20">
-                    <Button className="red-text m-r-10" onClick={(e) => handleRemove(e, productDeleted)}>remove</Button>
+                    <Button className="red-btn m-r-10" onClick={(e) => handleRemove(e, productDeleted)}>remove</Button>
                     <Button className="gray-btn" onClick={handleCancelDelete}>Cancel</Button>
                 </div>
             </div>

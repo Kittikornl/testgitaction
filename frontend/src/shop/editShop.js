@@ -136,7 +136,7 @@ const EditShop = (props) => {
                             Confirm delete shop
                         </div>
                         <div className="flex-row flex-center m-t-20">
-                            <Button className="red-text m-r-10" onClick={handleDeleteShop}>Delete shop</Button>
+                            <Button className="red-btn m-r-10" onClick={handleDeleteShop}>Delete shop</Button>
                             <Button className="gray-btn" onClick={handleCancelDelete}>Cancel</Button>
                         </div>
                    </div>
@@ -151,7 +151,7 @@ const EditShop = (props) => {
                             Confirm edit shop
                         </div>
                         <div className="flex-row flex-center m-t-20">
-                            <Button className="green-text m-r-10" onClick={handleEditShop}>Edit shop</Button>
+                            <Button className="green-btn m-r-10" onClick={handleEditShop}>Edit shop</Button>
                             <Button className="gray-btn" onClick={handleCancelEdit}>Cancel</Button>
                         </div>
                    </div>
