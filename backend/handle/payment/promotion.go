@@ -3,6 +3,8 @@ package payment
 import (
 	"net/http"
 	"time"
+	"strconv"
+
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -13,7 +15,7 @@ import (
 )
 
 type PromotionIn struct {
-	ShopID        int       `json:"shop_id"`
+	ShopID        []int       `json:"shop_id"`
 	UserID        int       `json:"user_id"`
 	OederID       int       `json:"order_id"`
 	PromotionCode string    `json:"promotion_code"`
@@ -35,7 +37,6 @@ type PromotionIn struct {
 func UsePromotion(c *gin.Context) {
 	var promotionIn PromotionIn
 	var promotion models.Promotion
-	var shoppromotion models.ShopPromotion
 	var userusepromotion models.UserUsePromotion
 	var userusepromotionIn models.UserUsePromotion
 
@@ -93,11 +94,15 @@ func UsePromotion(c *gin.Context) {
 					c.JSON(http.StatusOK, &promotion)
 					return
 				}
-
-				//check promotion can use with this shop
-				if err := database.DB.Where("promotion_id = ? AND shop_id = ?", promotion.ID, promotionIn.ShopID).First(&shoppromotion).Error; err != nil {
-					c.JSON(http.StatusBadRequest, services.ReturnMessage("promotion code: "+promotionIn.PromotionCode+" can not used with this shop"))
-					return
+				
+				//check promotion can use with each shop
+				for _, e := range promotionIn.ShopID {
+					var shoppromotion models.ShopPromotion
+					if err := database.DB.Where("promotion_id = ? AND shop_id = ?", promotion.ID,e).First(&shoppromotion).Error; err != nil {
+						println(err.Error())
+						c.JSON(http.StatusBadRequest, services.ReturnMessage("promotion code: "+promotionIn.PromotionCode+" can not used with shop ID : "+ strconv.Itoa(e)))
+						return
+					}
 				}
 
 				//save consumed promotion
