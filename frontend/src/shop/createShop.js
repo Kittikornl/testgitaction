@@ -37,7 +37,6 @@ const CreateShop = () => {
         
     }
 
-    console.log(getUserInfo())
     
     return (
         <>

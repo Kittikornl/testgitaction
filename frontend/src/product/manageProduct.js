@@ -25,19 +25,22 @@ const ManageProduct = (props) => {
 
     const [refresh, setRefresh] = useState(0);
 
-    useEffect(async () => {
-        const prop = props.location.state
-        const result = await getShopByUserID(getUserInfo().userId)
-        setShop(result)
+    useEffect(() => {
+        const fetch = async () => {
+            const prop = props.location.state
+            const result = await getShopByUserID(getUserInfo().userId)
+            setShop(result)
 
-        if (prop === undefined)
-            history.goBack()
-        setMode(prop.mode)
-        
-        if (prop.mode==1) {
-            const product_id = prop.product_id
-            fetchdata(product_id)
+            if (prop === undefined)
+                history.goBack()
+            setMode(prop.mode)
+            
+            if (prop.mode === 1) {
+                const product_id = prop.product_id
+                fetchdata(product_id)
+            }
         }
+        fetch()
 
     }, []);
 

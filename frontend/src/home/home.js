@@ -14,7 +14,7 @@ const Home = () => {
   const [showBest, setShowBest] = useState(true);
   const [showNew, setShowNew] = useState(true);
 
-  useEffect(async () => {
+  useEffect(() => {
     fetchHomeData();
     fetchAllProduct();
   }, []);
