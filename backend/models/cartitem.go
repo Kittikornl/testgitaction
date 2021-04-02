@@ -8,6 +8,7 @@ type Cartitem struct {
 	gorm.Model
 	UserId        int     `json:"user_id"`
 	ShopID        int     `json:"shop_id"`
+	ProductID     int     `json:"product_id"`
 	ProductTitle  string  `json:"product_title"`
 	Amount        float32 `json:"amount"`
 	Price         float32 `json:"price"`
