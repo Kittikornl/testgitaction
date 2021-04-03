@@ -23,6 +23,11 @@ img {
       padding-left: 10px;
       padding-bottom: 10px;
       border-bottom: 1px solid #dedede;
+      column-gap: 100px;
+
+      .test {
+        margin-top: 5px;
+      }
 
       .name {
         margin-top: 5px;
@@ -72,12 +77,34 @@ img {
       .pay-method {
       }
 
+      .add-card {
+        margin-top: 10px;
+
+        .button-add {
+          background-color: #f1fbf7;
+          width: 140px;
+          color: $dark-green;
+          border-radius: 10px;
+          height: 30px;
+          border: none;
+          font-weight: 600;
+          font-size: 12px;
+          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+        }
+      }
+
       .ship-method {
         margin-top: 10px;
       }
 
       .credit {
         margin-top: 10px;
+
+        .inputEdit {
+          width: 200px;
+          border: none;
+          border-bottom: solid 1px #dedede;
+        }
       }
 
       .payment {
@@ -91,6 +118,19 @@ img {
           width: 200px;
           border: none;
           border-bottom: solid 1px #dedede;
+        }
+
+        .use-promo-button {
+          margin-left: 20px;
+          background-color: #f1fbf7;
+          width: 100px;
+          color: $dark-green;
+          border-radius: 10px;
+          height: 30px;
+          border: none;
+          font-weight: 600;
+          font-size: 12px;
+          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -145,6 +185,48 @@ img {
   }
 }
 
+.add-creditcard-modal {
+  .creditcard-header {
+    margin-bottom: 10px;
+    p {
+      font-size: 20px;
+      font-weight: 600;
+      // color: $dark-green;
+    }
+  }
+  img {
+    margin-top: 2px;
+    max-width: 120px;
+    max-height: 25px;
+    width: auto;
+    height: auto;
+    margin-left: 10px;
+  }
+
+  .card-button {
+    justify-content: center;
+    column-gap: 20px;
+
+    .button-green {
+      width: 100px;
+      background-color: #008c5b;
+      color: white;
+      border-radius: 10px;
+      height: 35px;
+      border: none;
+    }
+
+    .button-red {
+      width: 100px;
+      background-color: #d66969;
+      color: white;
+      border-radius: 10px;
+      height: 35px;
+      border: none;
+    }
+  }
+}
+
 .cancel-checkout-modal {
   .header {
     margin-bottom: 10px;
@@ -174,6 +256,41 @@ img {
 
   .button-no {
     width: 80px;
+    background-color: $button-red;
+    color: white;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+  }
+}
+
+.QR-payment-modal {
+  .header {
+    margin-bottom: 20px;
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  img {
+    align-self: center;
+  }
+  .button-group {
+    justify-content: center;
+    column-gap: 20px;
+    margin-top: 30px;
+  }
+
+  .button-green {
+    width: 100px;
+    background-color: #008c5b;
+    color: white;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+  }
+
+  .button-red {
+    width: 100px;
     background-color: $button-red;
     color: white;
     border-radius: 10px;
