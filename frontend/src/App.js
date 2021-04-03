@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import Profile from "./profile/profile";
 import Editprofile from "./profile/Editprofile";
 import PrivateRoute from "./components/privateroute";
-import Notification from "./components/notification";
 import Home from "./home/home";
 import Shop from "./shop/shop";
 import ManageProduct from "./product/manageProduct";
