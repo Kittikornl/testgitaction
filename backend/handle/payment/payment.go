@@ -13,20 +13,18 @@ import (
 )
 
 type Payment struct {
-	Item      []models.Order `json:"order"`
-	promotion string         `json:"promotion"`
+	Item           []models.Order `json:"order"`
+	ShippingMethod string         `json:"shipping_method"`
 }
 
 type ValidateCardResponse struct {
 	Acceptance bool           `json:"accept"`
 	Order      []models.Order `json:"order"`
-	Promotion  string         `json:"promotion"`
 }
 
 type GetQRResponse struct {
-	QR        string         `json:"qr"`
-	Order     []models.Order `json:"order"`
-	Promotion string         `json:"promotion"`
+	QR    string         `json:"qr"`
+	Order []models.Order `json:"order"`
 }
 
 // swagger:route POST /payment/qr payment getQR
@@ -57,6 +55,7 @@ func GetQR(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
@@ -71,7 +70,6 @@ func GetQR(c *gin.Context) {
 
 	response.QR = "https://drive.google.com/file/d/1d9jKm7B71cleQNxgB6JawCKjQMv9jZzY/view?usp=sharing"
 	response.Order = lst
-	response.Promotion = payment.promotion
 
 	// Fixed QR link, in the backend's GoogleDrive
 	c.JSON(http.StatusOK, response)
@@ -105,6 +103,7 @@ func ValidateCard(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
@@ -119,7 +118,6 @@ func ValidateCard(c *gin.Context) {
 
 	response.Acceptance = true
 	response.Order = lst
-	response.Promotion = payment.promotion
 
 	c.JSON(http.StatusOK, response)
 }
