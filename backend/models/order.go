@@ -18,7 +18,7 @@ type Order struct {
 	TrackingNumber string  `json:"tracking_number"`
 	CheckTracking  int     `json:"check_tracking" gorm:"default:0"`
 	ShippingCharge int     `json:"shipping_charge"`
-	ShippingMethod string  `json:"shiiping_method"`
+	ShippingMethod string  `json:"shipping_method"`
 	// Status's detail:
 	// 0 = Cart (DEFAULT)
 	// 1 = Wait for being paid
