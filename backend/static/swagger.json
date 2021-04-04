@@ -204,6 +204,29 @@
         }
       }
     },
+    "/payment/cancel": {
+      "post": {
+        "description": "Cancle the order",
+        "tags": [
+          "payment"
+        ],
+        "operationId": "cancelOrder",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Payment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnMessage"
+          }
+        }
+      }
+    },
     "/payment/creditcard": {
       "post": {
         "description": "Validate the credit card for the payment",
@@ -216,7 +239,7 @@
             "name": "Body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/ValidateCardResponse"
+              "$ref": "#/definitions/Payment"
             }
           }
         ],
@@ -278,7 +301,7 @@
             "name": "Body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/GetQRResponse"
+              "$ref": "#/definitions/Payment"
             }
           }
         ],
@@ -752,18 +775,23 @@
           "type": "string",
           "x-go-name": "ProductDetail"
         },
+        "product_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProductID"
+        },
         "product_title": {
           "type": "string",
           "x-go-name": "ProductTitle"
-        },
-        "shiiping_method": {
-          "type": "string",
-          "x-go-name": "ShippingMethod"
         },
         "shipping_charge": {
           "type": "integer",
           "format": "int64",
           "x-go-name": "ShippingCharge"
+        },
+        "shipping_method": {
+          "type": "string",
+          "x-go-name": "ShippingMethod"
         },
         "shop_id": {
           "type": "integer",
@@ -797,6 +825,23 @@
         }
       },
       "x-go-package": "github.com/sec33_Emparty/backend/models"
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Item"
+        },
+        "shipping_method": {
+          "type": "string",
+          "x-go-name": "ShippingMethod"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
     },
     "Product": {
       "type": "object",
@@ -1306,6 +1351,9 @@
         "$ref": "#/definitions/Cartitem"
       }
     },
+    "cancelOrderResponse": {
+      "description": ""
+    },
     "cartItemsResponse": {
       "description": "",
       "schema": {
@@ -1316,7 +1364,10 @@
       "description": ""
     },
     "getQRResponse": {
-      "description": ""
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetQRResponse"
+      }
     },
     "homePageResponse": {
       "description": "List of top selling products and List of new products",
@@ -1367,7 +1418,10 @@
       "description": ""
     },
     "validateCardResponse": {
-      "description": ""
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/ValidateCardResponse"
+      }
     }
   },
   "securityDefinitions": {
