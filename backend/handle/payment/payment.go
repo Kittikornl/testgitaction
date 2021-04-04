@@ -53,7 +53,7 @@ func GetQR(c *gin.Context) {
 	// Change each order's status to 2 (paid, wait for being delivered)
 	for _, order := range payment.Item {
 		orders := models.Order{}
-		if err := database.DB.Where("order_id = ?", order.OrderID).First(&orders).Error; err != nil {
+		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
@@ -101,7 +101,7 @@ func ValidateCard(c *gin.Context) {
 	// Change each order's status to 2 (paid, wait for being delivered)
 	for _, order := range payment.Item {
 		orders := models.Order{}
-		if err := database.DB.Where("order_id = ?", order.OrderID).First(&orders).Error; err != nil {
+		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
