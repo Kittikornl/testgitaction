@@ -544,6 +544,11 @@
           "type": "string",
           "x-go-name": "ProductDetail"
         },
+        "product_id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ProductID"
+        },
         "product_title": {
           "type": "string",
           "x-go-name": "ProductTitle"
@@ -629,16 +634,12 @@
     "GetQRResponse": {
       "type": "object",
       "properties": {
-        "orders": {
+        "order": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Order"
           },
           "x-go-name": "Order"
-        },
-        "promotion": {
-          "type": "string",
-          "x-go-name": "Promotion"
         },
         "qr": {
           "type": "string",
@@ -754,6 +755,10 @@
         "product_title": {
           "type": "string",
           "x-go-name": "ProductTitle"
+        },
+        "shiiping_method": {
+          "type": "string",
+          "x-go-name": "ShippingMethod"
         },
         "shipping_charge": {
           "type": "integer",
@@ -1283,16 +1288,12 @@
           "type": "boolean",
           "x-go-name": "Acceptance"
         },
-        "orders": {
+        "order": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Order"
           },
           "x-go-name": "Order"
-        },
-        "promotion": {
-          "type": "string",
-          "x-go-name": "Promotion"
         }
       },
       "x-go-package": "github.com/sec33_Emparty/backend/handle/payment"
