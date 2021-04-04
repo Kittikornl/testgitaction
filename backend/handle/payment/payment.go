@@ -57,7 +57,6 @@ func GetQR(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
-		orders.ShippingMethod = "QR Code"
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
@@ -106,7 +105,6 @@ func ValidateCard(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
-		orders.ShippingMethod = "Creditcard"
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
