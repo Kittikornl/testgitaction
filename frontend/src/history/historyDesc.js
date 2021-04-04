@@ -1,40 +1,53 @@
-import React, { useState } from 'react'
+import { Button } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 
 import './historyDesc.scss'
 
-const ProductItem = () => {
-    return (
-        <div className="product-item flex-row">
-            <img src="https://www.jessicagavin.com/wp-content/uploads/2019/02/carrots-7-1200.jpg" />
-            <div className="product-content flex-col">
-                <div>Mango</div>
-                <div>Amount : 3 kg</div>
-                <div>Price : 100 TH</div>
-            </div>
-        </div>
-    )
-}
+const HistoryDesc = (props) => {
 
-const HistoryDesc = () => {
+    const history = useHistory()
+    const [orderData, setOrderData] = useState();
+    const [shopdata, setShopData] = useState();
 
-    const [data, setData] = useState([1,2,3]);
+    useEffect(() => {
+        const receiveProps = props.location.state
+        console.log(receiveProps)
+        setOrderData(receiveProps.orderData)
+        setShopData(receiveProps.shopData)
+    }, []);
 
-    const renderProductItem = (item, idx) => {
-        return <ProductItem key={idx} />
+    const handleMakePayment = () => {
+        history.push("/checkout", {
+            orderData : orderData,
+            shopData : shopdata
+        })
     }
 
-
+    if(!orderData)
+    return <div></div>
     return (
         <div className="history-desc-container flex-col">
-            <h1>Order id : 1</h1>
+            <div className="order-title flex-row">
+                <h1>Order Id : {orderData.ID}</h1>
+                {1===0? 
+                    <div className="success-paid flex-row">
+                        <Button>Track your order</Button>
+                        <Button>Review</Button>
+                    </div> :
+                    <div className="unsuccess-paid">
+                        <Button onClick={()=>handleMakePayment()}>Make a payment</Button>
+                    </div>
+                }
+            </div>
             <div className="order-content flex-col">
                 <div className="content-warpper flex-row">
                     <div className="title flex-col">
-                        <div>Seller : </div>
+                        <div>Shop : </div>
                         <div>Tel : </div>
                     </div>
                     <div className="content  flex-col">
-                        <div>Tnnapop Pratheep</div>
+                        <div>{shopdata.shopname}</div>
                         <div>0614807734</div>
                     </div>
                 </div>
@@ -45,7 +58,7 @@ const HistoryDesc = () => {
                         <div>Tel : </div>
                     </div>
                     <div className="content flex-col">
-                        <div>Tnnapop Pratheep</div>
+                        <div>Tinnapop Pratheep</div>
                         <div>Chulalongkorn University</div>
                         <div>0614807734</div>
                     </div>
@@ -56,24 +69,35 @@ const HistoryDesc = () => {
                         <div>Shipping : </div>
                     </div>
                     <div className="content flex-col">
-                        <div>123456789</div>
+                        <div>{orderData.tracking_number === "" ? "-" : orderData.tracking_number}</div>
                         <div>Kerry</div>
                     </div>
                 </div>
                 <div className="content-warpper flex-col">
                     <div className="title-product">Product</div>
-                    {data.map(renderProductItem)}
+                    <div className="product-item flex-row">
+                        <img src={orderData.picture_url} />
+                        <div className="product-content flex-col">
+                            <div>{orderData.product_title}</div>
+                            <div>Amount : {orderData.amount} kg</div>
+                            <div>Price : {orderData.total_price} TH</div>
+                        </div>
+                    </div>
                 </div>
                 <div className="content-warpper flex-row">
                     <div className="title flex-col">
                         <div>Subtotal : </div>
                         <div>Discount : </div>
                         <div>Total : </div>
+                        {1===1 && <div>Payment method : </div>}
+                        {1===1 && <div>Payment status : </div>}
                     </div>
                     <div className="content flex-col">
-                        <div>400 TH</div>
+                        <div>{orderData.total_price} TH</div>
                         <div>40 TH</div>
-                        <div>360 TH</div>
+                        <div>50 TH</div>
+                        {1===1 && <div>Credit card</div>}
+                        {1===1 && <div>Already</div>}
                     </div>
                 </div>
             </div>

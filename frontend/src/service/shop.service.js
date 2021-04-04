@@ -3,13 +3,8 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8080/api";
 
-const header = {
-    'Content-Type': 'application/json',
-    'Authorization': authHeader()
-}
 export const getShopData = async (id) => {
   try {
-    console.log("data",header);
     return await axios.get(API_URL + `/shops/${id}`, {
       headers: {
         'Authorization': authHeader()
@@ -22,7 +17,6 @@ export const getShopData = async (id) => {
 
 export const postShop = async (values) => {
   try {
-    console.log(header)
     return await axios.post(API_URL + "/shops", values, {
       headers: {
         'Authorization': authHeader()

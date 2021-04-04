@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "antd/dist/antd.css";
-import bg from "../img/main-veg.jpg";
-import { Form, Input, Button, DatePicker, Modal, Upload, Image } from "antd";
+import { Form, Input, Button, DatePicker, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import "./Editprofile.scss";
 import visa from "../img/visa.png";
@@ -31,9 +30,8 @@ const Editprofile = (props) => {
   const [userId, setUserID] = useState(getUserInfo()["userId"]);
   const dateFormat = "DD-MM-YYYY";
   const monthFormat = "MM/YYYY";
-  console.log(userId);
 
-  useEffect(async () => {
+  useEffect(() => {
     fetchdata(userId);
   }, []);
 

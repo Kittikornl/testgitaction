@@ -1,18 +1,33 @@
 @import '../index.scss';
 
 .history-desc-container {
+    align-content: center;
+    .order-title {
+        justify-content: space-between;
+        width: 80vw;
+        align-items: center;
+        h1 {
+            margin-bottom: 0px;
+            color: $dark-green;
+        }
+        .success-paid {
+            column-gap: 30px;
+        }
 
-    h1 {
-        margin-left: 8vw;
+        .ant-btn {
+            background-color: $green;
+            color: #FFF;
+            border-radius: 8px;
+        }
     }
 
     .order-content {
         width: 80vw;
         row-gap: 10px;
-        align-self: center;
         .content-warpper {
-            border-bottom: 1px $gray solid;
-            padding-bottom: 10px;
+            border-bottom: 2px #DEDEDE solid;
+            padding: 20px 0px 20px 0px;
+            font-size: 18px;
 
             .title {
                 width: 300px;
