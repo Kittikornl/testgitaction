@@ -12,8 +12,8 @@ import (
 
 type search struct {
 	gorm.Model
-	Search      string `json:"Search" gorm:"default:' '"`
-	ProductType int    `json:"ProductType" gorm:"default: 0"`
+	Search      string `json:"Search"`
+	ProductType int    `json:"ProductType"`
 }
 
 func SearchProductOrShop(c *gin.Context) {
@@ -23,14 +23,17 @@ func SearchProductOrShop(c *gin.Context) {
 	types := make([]models.Product, 0)
 	productsSpec := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
-
+	
+	search.Search = " "
+	search.ProductType = 0
+	
 	if err := c.ShouldBindBodyWith(&search, binding.JSON); err != nil {
 		c.Status(http.StatusBadRequest)
 		println(err.Error())
 		return
 	}
-
-	if search.Search != " " && search.ProductType != 0 { //2 params
+	
+	if (search.Search != " " && search.ProductType != 0) { //2 params
 		//query products
 		if err := database.DB.Where("product_type = ? AND product_title ILIKE ? AND amount > ?", search.ProductType, "%"+search.Search+"%", 0).Find(&products).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &products)
