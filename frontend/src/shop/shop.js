@@ -103,7 +103,6 @@ const Shop = () => {
   };
 
   const ProductHidden = (props) => {
-    console.log(props);
     return (
       <div className="product flex-col">
         <a href={`/product/${props.ID}`}>
@@ -238,7 +237,6 @@ const Shop = () => {
 
       <div className="contact-container flex-col">
         <div className="contact flex-row">
-          {console.log(shopDescription)}
           <div>Shop Contact: {shopDescription.phone_number}</div>
           <div>
             Address: {userData.houseNo} {userData.street} {userData.subDistrict}{" "}
