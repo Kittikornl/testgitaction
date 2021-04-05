@@ -77,6 +77,7 @@ const Home = () => {
                 ? `${vegThumbnail}`
                 : props.product.PictureURL
             }
+            alt={props.product.ProductTitle}
           />
         </a>
         <div className="name">
@@ -104,6 +105,7 @@ const Home = () => {
                 ? `${vegThumbnail}`
                 : props.product.PictureURL
             }
+            alt={props.product.ProductTitle}
           />
         </a>
         <div className="name">{props.product.ProductTitle}</div>
@@ -122,7 +124,6 @@ const Home = () => {
     };
 
     const result = await postSearchProduct(payload);
-    console.log(result.data);
     var showMoreN = document.getElementById("showMoreN");
     var showMoreB = document.getElementById("showMoreB");
     var bestSellText = document.getElementById("bestSellText");
@@ -183,13 +184,13 @@ const Home = () => {
         <div className="best-seller-grid">
           <div className="header flex-row">
             <div id="bestSellText">Best seller</div>
-            <a
+            <button
               className="see-more"
               id="showMoreB"
               onClick={handleSeeMoreBestSell}
             >
               See more{" >"}
-            </a>
+            </button>
           </div>
           <div class="grid-container m-t-16">
             {showBest
@@ -207,13 +208,13 @@ const Home = () => {
         <div className="new-arrivals-grid m-t-20">
           <div className="header flex-row">
             <div id="newArriveText">New arrivals</div>
-            <a
+            <button
               className="see-more"
               id="showMoreN"
               onClick={handleSeeMoreNewArrive}
             >
               See more{" >"}
-            </a>
+            </button>
           </div>
           <div class="grid-container m-t-16">
             {showNew

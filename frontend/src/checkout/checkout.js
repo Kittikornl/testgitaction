@@ -23,7 +23,6 @@ import Notification from "../components/notification";
 const Checkout = (props) => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [showCard, setShowCard] = useState(false);
-  const [showQr, setShowQr] = useState(false);
   const [visibleQR, setVisibleQR] = useState(false);
   const [visibleCancel, setVisibleCancel] = useState(false);
   const [visibleCredit, setVisibleCredit] = useState(false);
@@ -140,11 +139,9 @@ const Checkout = (props) => {
   const handleChangePayment = (value) => {
     if (value === "card") {
       setShowAddCard(true);
-      setShowQr(false);
       setPayMethod("card");
     } else if (value === "qr") {
       setShowAddCard(false);
-      setShowQr(true);
       setPayMethod("qr");
     }
   };
@@ -219,7 +216,12 @@ const Checkout = (props) => {
     payload["shipping_method"] = shippingMethod;
     console.log(payload);
     try {
-      const res = await postPaymentByCredit(payload);
+      await postPaymentByCredit(payload);
+      Notification({
+        type: "success",
+        message: "Success",
+        desc: "Your order has been proceeded",
+      });
     } catch {
       Notification({
         type: "error",
@@ -248,7 +250,12 @@ const Checkout = (props) => {
     payload["shipping_method"] = shippingMethod;
     console.log(payload);
     try {
-      const res = await postPaymentByQR(payload);
+      await postPaymentByQR(payload);
+      Notification({
+        type: "success",
+        message: "Success",
+        desc: "Your order has been proceeded",
+      });
     } catch {
       Notification({
         type: "error",
