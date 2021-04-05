@@ -3,12 +3,8 @@ import "antd/dist/antd.css";
 import { Form, Input, Button, DatePicker, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import "./Editprofile.scss";
-import visa from "../img/visa.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationCircle,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { uploadUserPic } from "../service/firebase.service";
@@ -29,7 +25,6 @@ const Editprofile = (props) => {
   const [form] = Form.useForm();
   const [userId, setUserID] = useState(getUserInfo()["userId"]);
   const dateFormat = "DD-MM-YYYY";
-  const monthFormat = "MM/YYYY";
 
   useEffect(() => {
     fetchdata(userId);
@@ -52,24 +47,6 @@ const Editprofile = (props) => {
       zipcode: `${userData.zipcode}`,
       birthdate: moment(userData.birthdate, dateFormat),
     });
-    console.log(userData);
-  };
-
-  const CardInfo = (props) => {
-    const deleteCard = () => {
-      data.credit = data.credit.filter((card) => {
-        return card !== props.card;
-      });
-      props.pageRefresh();
-    };
-    return (
-      <div className="credit-card flex-row">
-        {`xxxx xxxx xxxx ${props.card.slice(15, 19)}`}
-        <a onClick={() => deleteCard()}>
-          <FontAwesomeIcon className="trash-icon" icon={faTrash} />
-        </a>
-      </div>
-    );
   };
 
   const configBirthdate = {
@@ -87,10 +64,10 @@ const Editprofile = (props) => {
   };
 
   const onFinishInfo = (fieldsValue) => {
-    const values = {
-      ...fieldsValue,
-      "date-picker": fieldsValue["birthdate"].format(dateFormat),
-    };
+    // const values = {
+    //   ...fieldsValue,
+    //   "date-picker": fieldsValue["birthdate"].format(dateFormat),
+    // };
     console.log("Received values of form: ", fieldsValue);
     let paylaod = {};
 
@@ -107,7 +84,6 @@ const Editprofile = (props) => {
     paylaod.zipcode = fieldsValue.zipcode;
 
     putEditProfile(userId, paylaod);
-    console.log(paylaod);
 
     Notification({
       type: "success",
@@ -132,18 +108,8 @@ const Editprofile = (props) => {
     showUploadList: false,
   };
 
-  const renderCreditCard = (card, index) => {
-    return <CardInfo card={card} pageRefresh={pageRefresh} />;
-  };
-
-  const [visibleCredit, setVisibleCredit] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleChange, setVisibleChange] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const showModalCredit = () => {
-    setVisibleCredit(true);
-  };
 
   const showModalDelete = () => {
     setVisibleDelete(true);
@@ -153,26 +119,9 @@ const Editprofile = (props) => {
     setVisibleChange(true);
   };
 
-  const modalCreditLayout = {
-    labelCol: { span: 6 },
-    wrapperCol: { offset: 1, span: 12 },
-  };
-
   const modalChangePasswordLayout = {
     labelCol: { span: 9 },
     wrapperCol: { offset: 1, span: 12 },
-  };
-
-  const handleSubmitCard = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisibleCredit(false);
-      setConfirmLoading(false);
-    }, 200);
-  };
-
-  const handleCancelCredit = () => {
-    setVisibleCredit(false);
   };
 
   const handleCancelDelete = () => {
@@ -195,7 +144,7 @@ const Editprofile = (props) => {
       try {
         payload["old-pwd"] = e.currentPassword;
         payload["new-pwd"] = e.newPassword;
-        const res = await patchChangePassword(userId, payload);
+        await patchChangePassword(userId, payload);
         setVisibleChange(false);
         Notification({
           type: "success",
@@ -228,8 +177,10 @@ const Editprofile = (props) => {
         <div className="edit-info">
           <div className="profile flex-row">
             <div className="img-col flex-col">
-              {console.log(url)};
-              <img src={url === "" ? `${profileThumb}` : `${url}`} />
+              <img
+                src={url === "" ? `${profileThumb}` : `${url}`}
+                alt="profile-pic"
+              />
               <div className="uploadButton">
                 <Upload {...propsUpload}>
                   <Button icon={<UploadOutlined />}>Upload photo</Button>
@@ -340,71 +291,6 @@ const Editprofile = (props) => {
                 </div>
               </Form>
             </div>
-          </div>
-        </div>
-
-        <div className="payment-management-container">
-          <div className="header">Payment card management</div>
-          <div className="warning">* We will kept this part secret</div>
-          {/* <div className="credit-card">{data.credit.map(renderCreditCard)}</div> */}
-          <div className="add-card flex-row">
-            <Button
-              htmlType="submit"
-              className="button-green"
-              onClick={showModalCredit}
-            >
-              Add payment card
-            </Button>
-            <Modal
-              visible={visibleCredit}
-              centered
-              confirmLoading={confirmLoading}
-              onCancel={handleCancelCredit}
-              footer={false}
-            >
-              <div className="add-creditcard-modal">
-                <Form
-                  {...modalCreditLayout}
-                  name="basic"
-                  initialValues={{ remember: true }}
-                  onFinish={onFinishChangePassword}
-                >
-                  <div className="creditcard-header flex-row">
-                    <p>Credit card</p>
-                    <img src={visa} />
-                  </div>
-                  <Form.Item label="Card Number" name="Card Number">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item label="Card Name" name="Card Name">
-                    <Input />
-                  </Form.Item>
-                  <Form.Item label="Expiry Date" name="Expiry Date">
-                    <DatePicker format={monthFormat} picker="month" />
-                  </Form.Item>
-                  <Form.Item label="CVV" name="CVV">
-                    <Input />
-                  </Form.Item>
-                  <div className="card-button flex-row">
-                    <Button
-                      htmlType="submit"
-                      className="button-green"
-                      onClick={handleSubmitCard}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      htmlType="cancle"
-                      className="button-red"
-                      onClick={handleCancelCredit}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </Form>
-              </div>
-            </Modal>
-            <img src={visa} />
           </div>
         </div>
         <div className="account-management flex-col">
