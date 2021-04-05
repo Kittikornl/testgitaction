@@ -119,7 +119,7 @@ const Home = () => {
 
   const getSearchData = async (data) => {
     const payload = {
-      Search: data.keyword,
+      Search: data.keyword === "" ? null : data.keyword,
       ProductType: data.type === "" ? null : data.type,
     };
 
@@ -128,8 +128,9 @@ const Home = () => {
     var showMoreB = document.getElementById("showMoreB");
     var bestSellText = document.getElementById("bestSellText");
     var newArriveText = document.getElementById("newArriveText");
+    console.log(result);
 
-    if (payload.Search === "" && payload.ProductType === null) {
+    if (payload.Search === null && payload.ProductType === null) {
       fetchAllProduct();
       setShowBest(true);
       setShowNew(true);
@@ -138,7 +139,7 @@ const Home = () => {
         : (showMoreN.innerHTML = "");
       bestSellText.innerHTML = "Best seller";
       newArriveText.innerHTML = "New arrivals";
-    } else if (payload.Search === "" && payload.ProductType !== null) {
+    } else if (payload.Search === null && payload.ProductType !== null) {
       if (result.data.q_by_type !== undefined) {
         setAllProduct(result.data.q_by_type);
         setShowNew(false);
@@ -148,7 +149,7 @@ const Home = () => {
         bestSellText.innerHTML = "";
         newArriveText.innerHTML = "";
       }
-    } else if (payload.Search !== "" && payload.ProductType === null) {
+    } else if (payload.Search !== null && payload.ProductType === null) {
       if (result.data.q_by_productname !== undefined) {
         setAllProduct(result.data.q_by_productname);
         setShowNew(false);
@@ -158,7 +159,7 @@ const Home = () => {
         bestSellText.innerHTML = "";
         newArriveText.innerHTML = "";
       }
-    } else if (payload.Search !== "" && payload.ProductType !== null) {
+    } else if (payload.Search !== null && payload.ProductType !== null) {
       if (result.data.products_information) {
         setAllProduct(result.data.products_information);
         setShowNew(false);
