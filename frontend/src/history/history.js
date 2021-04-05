@@ -6,16 +6,18 @@ import { getHistory } from "../service/cart.service";
 
 import "./history.scss";
 
-const HistoryItem = ({ orderData, shopData }) => {
+const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
   const history = useHistory();
-  const [shop] = useState(
-    shopData.find((item) => item.ID === orderData.shop_id)
-  );
+
+  const [shopIDs] = useState(new Set())
 
   const handleClick = () => {
     history.push("history/description", {
-      orderData: orderData,
-      shopData: shop,
+      orderList: orderList,
+      shopList: shopList,
+      orderId: orderId,
+      userData: userData,
+      shopIDs: shopIDs
     });
   };
 
@@ -36,32 +38,50 @@ const HistoryItem = ({ orderData, shopData }) => {
     }
   };
 
+  const renderItem = (item, idx) => {
+    shopIDs.add(item.shop_id)
+    return <div key={idx} className="history-content-wrapper flex-row">
+      <img src={item.picture_url} />
+      <div className="history-content flex-col">
+        <div className="seller">Name : {item.product_title}</div>
+        <div className="seller">Shop : {getShopName(item.shop_id)}</div>
+        <div className="discount">Price : {item.price} TH</div>
+        <div className="discount">Amount : {item.amount} </div>
+        <div className="total">Total : {item.total_price} TH</div>
+      </div>
+    </div>
+  }
+
+  const getShopName = (shop_id) => {
+    const shopdata = shopList.find((item) => item.ID === shop_id)
+    return (shopdata? shopdata.shopname : "")
+  }
+
   return (
-    <div className="history-item flex-row">
-      <div className="history-content-wrapper flex-row">
-        <img src={orderData.picture_url} />
-        <div className="history-content flex-col">
-          <div className="order-id">Order Id : {orderData.order_id}</div>
-          <div className="seller">Shop : {shop.shopname}</div>
-          <div className="discount">Price : {orderData.price} TH</div>
-          <div className="discount">Amount : {orderData.amount}</div>
-          <div className="total">Total : {orderData.total_price} TH</div>
+    <div className="history-item flex-col">
+      <div className="order-id">{`Order Id : ${orderId}`}</div>
+      <div className="history-item-wrapper flex-row">
+        <div className="order-wrapper flex-col">
+          {orderList.map(renderItem)}
         </div>
-      </div>
-      <div className="button-wrapper flex-col">
-        <div className="status">{renderStatus(orderData.status)}</div>
-        <Button onClick={() => handleClick()}>{"Click >"}</Button>
-      </div>
-      <div className="button-wrapper-mobile flex-col">
-        <div className="status">{renderStatus(orderData.status)}</div>
-        <Button onClick={() => handleClick()}>{">"}</Button>
+        <div className="button-wrapper flex-col">
+          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <Button onClick={() => handleClick()}>{"Click >"}</Button>
+        </div>
+        <div className="button-wrapper-mobile flex-col">
+          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <Button onClick={() => handleClick()}>{">"}</Button>
+        </div>
       </div>
     </div>
   );
 };
 
 const History = () => {
-  const [data, setData] = useState([]);
+  const [orderData] = useState({});
+  const [shopList, setShopList] = useState([]);
+  const [userData, setUserData] = useState({});
+  const [sortComplete, setSortComplete] = useState(false);
 
   useEffect(() => {
     fetchdata();
@@ -70,21 +90,33 @@ const History = () => {
   const fetchdata = async () => {
     const result = await getHistory();
     console.log(result.data);
-    setData(result.data);
+    sortOrderID(result.data.order_info)
+    setShopList(result.data.shop_info)
+    setUserData(result.data.user_info)
   };
+
+  const sortOrderID = (order_data) => {
+    order_data.forEach(item => {
+      orderData[item.order_id] = []
+    });
+    order_data.forEach(item => {
+      orderData[item.order_id].push(item)
+    });
+    setSortComplete(true)
+  }
 
   const renderHistoryItem = (item, idx) => {
-    return <HistoryItem key={idx} orderData={item} shopData={data.shop_info} />;
+    return <HistoryItem key={idx} orderList={orderData[item]} orderId={item} shopList={shopList} userData={userData}/>;
   };
 
-  if (!data.order_info) return <div></div>;
+  if (!sortComplete) return <div></div>;
   return (
     <div className="history-page-container flex-col">
       <Searchbar />
       <div className="history-container">
         <h1>My history</h1>
         <div className="history-item-container flex-col">
-          {data.order_info.map(renderHistoryItem)}
+          {Object.keys(orderData).map(renderHistoryItem)}
         </div>
       </div>
     </div>
