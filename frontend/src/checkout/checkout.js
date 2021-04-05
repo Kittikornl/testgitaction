@@ -280,10 +280,11 @@ const Checkout = (props) => {
     const res = await postUsePromotion(payload);
     console.log(res);
 
-    setDiscount(res.data.discount_amount);
-    setTHB(" THB");
-    setTotalPrice(totalPrice - discount);
-    console.log(res.data.discount_amount);
+    if (totalPrice > res.data.min_spent) {
+      setDiscount(res.data.discount_amount);
+      setTHB(" THB");
+      setTotalPrice(totalPrice - discount);
+    }
   };
 
   return (
