@@ -35,6 +35,8 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
         return "received";
       case 5:
         return "cancel";
+      case 6:
+        return "sold out";
     }
   };
 
