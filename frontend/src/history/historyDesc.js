@@ -12,25 +12,35 @@ const HistoryDesc = (props) => {
   const [shopList, setShopList] = useState([]);
   const [orderId, setOrderId] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
   const [userData, setUserData] = useState();
 
   const [orderMap] = useState({});
 
   useEffect(() => {
     const receiveProps = props.location.state
-    console.log(receiveProps)
-    setOrderList(receiveProps.orderList)
-    setShopList(receiveProps.shopList)
-    setOrderId(receiveProps.orderId)
-    setUserData(receiveProps.userData)
-    let totalPrice = 0
-    receiveProps.orderList.forEach(order => {
-      totalPrice += order.total_price
-    })
-    setTotalPrice(totalPrice)
-    renderShopMap(receiveProps.orderList, receiveProps.shopIDs)
+    if (hasPermission(receiveProps)) {
+      console.log(receiveProps)
+      setOrderList(receiveProps.orderList)
+      setShopList(receiveProps.shopList)
+      setOrderId(receiveProps.orderId)
+      setUserData(receiveProps.userData)
+      let totalPrice = 0
+      receiveProps.orderList.forEach(order => {
+        totalPrice += order.total_price
+      })
+      setTotalPrice(totalPrice)
+      renderShopMap(receiveProps.orderList, receiveProps.shopIDs)
+    }
+
   }, []);
+
+  const hasPermission = (receiveProps) => {
+    if (receiveProps === undefined) {
+      history.push("/history")
+      return false
+    }
+    return true
+  } 
 
   const handleMakePayment = () => {
     history.push("/checkout", {
