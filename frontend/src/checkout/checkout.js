@@ -57,10 +57,10 @@ const Checkout = (props) => {
 
   const fetchHistory = async () => {
     const history = await getOrderHistory();
-    const receiveProps = props.location.state.orderData;
+    const receiveProps = props.location.state;
 
     console.log(history);
-    setOrderID(receiveProps.order_id);
+    setOrderID(parseInt(receiveProps.order_id));
     for (let i = 0; i < history.data.shop_info.length; i++) {
       let temp = [];
       for (let j = 0; j < history.data.order_info.length; j++) {
