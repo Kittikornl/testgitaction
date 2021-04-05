@@ -20,7 +20,15 @@
     }
 
     .history-item {
-        justify-content: space-between;
+        .order-id {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .history-item-wrapper {
+            justify-content: space-between;
+        }
+        
         .history-content-wrapper {
             column-gap: 20px;
             .history-content {
@@ -35,6 +43,9 @@
                 height: 200px;
                 border-radius: 20px;
             }
+        }
+        .order-wrapper {
+            row-gap: 20px;
         }
 
         .button-wrapper, .button-wrapper-mobile {

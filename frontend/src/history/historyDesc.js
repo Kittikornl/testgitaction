@@ -1,3 +1,5 @@
+import { faStore } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
@@ -6,32 +8,92 @@ import "./historyDesc.scss";
 
 const HistoryDesc = (props) => {
   const history = useHistory();
-  const [orderData, setOrderData] = useState();
-  const [shopdata, setShopData] = useState();
+  const [orderList, setOrderList] = useState(undefined);
+  const [shopList, setShopList] = useState([]);
+  const [orderId, setOrderId] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [userData, setUserData] = useState();
+
+  const [orderMap] = useState({});
 
   useEffect(() => {
-    const receiveProps = props.location.state;
-    console.log(receiveProps);
-    setOrderData(receiveProps.orderData);
-    setShopData(receiveProps.shopData);
+    const receiveProps = props.location.state
+    console.log(receiveProps)
+    setOrderList(receiveProps.orderList)
+    setShopList(receiveProps.shopList)
+    setOrderId(receiveProps.orderId)
+    setUserData(receiveProps.userData)
+    let totalPrice = 0
+    receiveProps.orderList.forEach(order => {
+      totalPrice += order.total_price
+    })
+    setTotalPrice(totalPrice)
+    renderShopMap(receiveProps.orderList, receiveProps.shopIDs)
   }, []);
 
   const handleMakePayment = () => {
     history.push("/checkout", {
-      orderData: orderData,
-      shopData: shopdata,
+      order_id : orderId
     });
   };
 
-  if (!orderData) return <div></div>;
+  const handleTrack= () => {
+    history.push("/shipment", {
+      order_id : orderId
+    });
+  };
+
+  const handleReview= () => {
+    history.push("/review", {
+      order_id : orderId
+    });
+  };
+
+  const getShopName = (shop_id) => {
+    const shopdata = shopList.find((item) => item.ID === shop_id)
+    return (shopdata? shopdata.shopname : "")
+  }
+  const renderShopMap = (oList, shopSet) => {
+    shopSet.forEach((id)=> {
+      orderMap[id] = []
+      oList.forEach((order)=> {
+        if(order.shop_id === id) {
+          orderMap[id].push(order)
+        }
+      })
+    })
+    console.log(orderMap)
+  }
+
+  const renderProduct = (item, idx) => {
+    return <div key={idx}>
+      <div className="product-item flex-row">
+        <img src={item.picture_url} />
+        <div className="product-content flex-col">
+          <div>{item.product_title}</div>
+          <div>Amount : {item.amount} kg</div>
+          <div>Price : {item.total_price} TH</div>
+        </div>
+      </div>
+    </div>
+  }
+  const renderShop = (item, idx) => {
+    return <div className="shop-wrapper">
+      <div><FontAwesomeIcon className="store-icon m-t-16" icon={faStore} /> {getShopName(orderMap[item][0].shop_id)}</div>
+      {orderMap[item].map(renderProduct)}
+    </div>
+  }
+
+  if (orderList === undefined) return <div></div>;
   return (
     <div className="history-desc-container flex-col">
       <div className="order-title flex-row">
-        <h1>Order Id : {orderData.order_id}</h1>
-        {1 === 0 ? (
+        <h1>Order Id : {orderId}</h1>
+        {orderList[0].status !== 1 ? (
           <div className="success-paid flex-row">
-            <Button>Track your order</Button>
-            <Button>Review</Button>
+            <Button onClick={() => handleTrack()}>Track your order</Button>
+            <Button onClick={() => handleReview()}>Review</Button>
           </div>
         ) : (
           <div className="unsuccess-paid">
@@ -42,24 +104,17 @@ const HistoryDesc = (props) => {
       <div className="order-content flex-col">
         <div className="content-warpper flex-row">
           <div className="title flex-col">
-            <div>Shop : </div>
-            <div>Tel : </div>
-          </div>
-          <div className="content  flex-col">
-            <div>{shopdata.shopname}</div>
-            <div>0614807734</div>
-          </div>
-        </div>
-        <div className="content-warpper flex-row">
-          <div className="title flex-col">
             <div>Name : </div>
             <div>Address : </div>
             <div>Tel : </div>
           </div>
           <div className="content flex-col">
-            <div>Tinnapop Pratheep</div>
-            <div>Chulalongkorn University</div>
-            <div>0614807734</div>
+            <div>{`${userData.firstname} ${userData.lastname}`}</div>
+            <div>{
+              `${userData.houseNo} ${userData.street} ${userData.subDistrict} ${userData.district} ${userData.city} ${userData.zipcode}`.trim() === "" ? "No address data"
+                : `${userData.houseNo} ${userData.street} ${userData.subDistrict} ${userData.district} ${userData.city} ${userData.zipcode}`.replace("-", "")
+            }</div>
+            <div>{`${userData.phoneNo}`}</div>
           </div>
         </div>
         <div className="content-warpper flex-row">
@@ -69,38 +124,31 @@ const HistoryDesc = (props) => {
           </div>
           <div className="content flex-col">
             <div>
-              {orderData.tracking_number === ""
+              {orderList[0].tracking_number === ""
                 ? "-"
-                : orderData.tracking_number}
+                : orderList[0].tracking_number}
             </div>
             <div>Kerry</div>
           </div>
         </div>
         <div className="content-warpper flex-col">
           <div className="title-product">Product</div>
-          <div className="product-item flex-row">
-            <img src={orderData.picture_url} />
-            <div className="product-content flex-col">
-              <div>{orderData.product_title}</div>
-              <div>Amount : {orderData.amount} kg</div>
-              <div>Price : {orderData.total_price} TH</div>
-            </div>
-          </div>
+            {Object.keys(orderMap).map(renderShop)}
         </div>
         <div className="content-warpper flex-row">
           <div className="title flex-col">
             <div>Subtotal : </div>
             <div>Discount : </div>
             <div>Total : </div>
-            {1 === 1 && <div>Payment method : </div>}
-            {1 === 1 && <div>Payment status : </div>}
+            {orderList[0].status === 2 && <div>Payment method : </div>}
+            {orderList[0].status === 2 && <div>Payment status : </div>}
           </div>
           <div className="content flex-col">
-            <div>{orderData.total_price} TH</div>
-            <div>40 TH</div>
-            <div>50 TH</div>
-            {1 === 1 && <div>Credit card</div>}
-            {1 === 1 && <div>Already</div>}
+            <div>{totalPrice} TH</div>
+            <div>{discount} TH</div>
+            <div>{totalPrice-discount} TH</div>
+            {orderList[0].status === 2 && <div>Credit card</div>}
+            {orderList[0].status === 2 && <div>Already</div>}
           </div>
         </div>
       </div>
