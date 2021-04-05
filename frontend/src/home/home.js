@@ -87,7 +87,7 @@ const Home = () => {
   };
 
   const renderProduct = (product, index) => {
-    return <Product product={product} />;
+    return product.Amount === 0 ? null : <Product product={product} />;
   };
 
   const ProductHidden = (props) => {
@@ -112,7 +112,7 @@ const Home = () => {
   };
 
   const renderHidden = (product, index) => {
-    return <ProductHidden product={product} />;
+    return product.Amount === 0 ? null : <ProductHidden product={product} />;
   };
 
   const getSearchData = async (data) => {

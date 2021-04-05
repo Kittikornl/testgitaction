@@ -60,3 +60,16 @@ export const postPaymentByQR = async (values) => {
     throw error;
   }
 };
+
+export const postCancelOrder = async (values) => {
+  try {
+    return await axios.post(API_URL + "/payment/cancel", values, {
+      headers: {
+        Authorization: authHeader(),
+      },
+    });
+  } catch (error) {
+    console.log("error cancel order");
+    throw error;
+  }
+};

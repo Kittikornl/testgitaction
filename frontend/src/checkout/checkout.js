@@ -12,11 +12,13 @@ import {
   postUsePromotion,
   postPaymentByCredit,
   postPaymentByQR,
+  postCancelOrder,
 } from "../service/checkout.service";
 import visa from "../img/visa.png";
 import qr from "../img/QR for payment.jpg";
 import "./checkout.scss";
 import { Link } from "react-router-dom";
+import Notification from "../components/notification";
 
 const Checkout = (props) => {
   const [showAddCard, setShowAddCard] = useState(false);
@@ -39,13 +41,11 @@ const Checkout = (props) => {
   const [discount, setDiscount] = useState("");
   const [THB, setTHB] = useState("");
   const [orders, setOrders] = useState(new Set());
+  const [shippingMethod, setShippingMethod] = useState("");
   const initdata = [];
   const monthFormat = "MM/YYYY";
 
   useEffect(async () => {
-    // const receiveProps = props.location.state
-
-    // setOrderID(receiveProps.ID)
     fetchUserData(userID);
     fetchHistory();
   }, []);
@@ -57,9 +57,10 @@ const Checkout = (props) => {
 
   const fetchHistory = async () => {
     const history = await getOrderHistory();
+    const receiveProps = props.location.state.orderData;
+
     console.log(history);
-    // setorderID
-    setOrderID(1);
+    setOrderID(receiveProps.order_id);
     for (let i = 0; i < history.data.shop_info.length; i++) {
       let temp = [];
       for (let j = 0; j < history.data.order_info.length; j++) {
@@ -132,6 +133,10 @@ const Checkout = (props) => {
     return <Shop shop={shops} />;
   };
 
+  const handleShippingMethod = (value) => {
+    setShippingMethod(value);
+  };
+
   const handleChangePayment = (value) => {
     if (value === "card") {
       setShowAddCard(true);
@@ -183,8 +188,21 @@ const Checkout = (props) => {
     setVisibleCancel(false);
   };
 
-  const handleYesCancel = () => {
+  const handleYesCancel = async () => {
     setVisibleCancel(false);
+    Notification({
+      type: "success",
+      message: "Cancel successful",
+      desc: "Your order have been canceled",
+    });
+    let payload = {};
+    let tmp = [];
+    orders.forEach((e) => {
+      tmp.push(e);
+    });
+    payload["order"] = tmp;
+    console.log(payload);
+    const res = await postCancelOrder(payload);
   };
 
   const handleNoCancel = () => {
@@ -198,8 +216,17 @@ const Checkout = (props) => {
       tmp.push(e);
     });
     payload["order"] = tmp;
+    payload["shipping_method"] = shippingMethod;
     console.log(payload);
-    const res = await postPaymentByCredit(payload);
+    try {
+      const res = await postPaymentByCredit(payload);
+    } catch {
+      Notification({
+        type: "error",
+        message: "Unable to proceed the order",
+        desc: "The product's amount is exceeding the stock's",
+      });
+    }
   };
 
   const handleMakePaymentQr = () => {
@@ -218,8 +245,17 @@ const Checkout = (props) => {
       tmp.push(e);
     });
     payload["order"] = tmp;
+    payload["shipping_method"] = shippingMethod;
     console.log(payload);
-    const res = await postPaymentByQR(payload);
+    try {
+      const res = await postPaymentByQR(payload);
+    } catch {
+      Notification({
+        type: "error",
+        message: "Unable to proceed the order",
+        desc: "The product's amount is exceeding the stock's",
+      });
+    }
   };
 
   const onChangePromoCode = async () => {
@@ -395,6 +431,7 @@ const Checkout = (props) => {
               showSearch
               style={{ width: 200 }}
               placeholder="Choose shipment"
+              onChange={handleShippingMethod}
             >
               <Select value="kerry">Kerry</Select>
               <Select value="EMS">EMS</Select>
@@ -513,14 +550,15 @@ const Checkout = (props) => {
                 <p>Are you sure you want to cancel this order ?</p>
               </div>
               <div className="button-group flex-row">
-                <Button
-                  htmlType="submit"
-                  className="button-yes"
-                  onClick={handleYesCancel}
-                >
-                  Yes
-                </Button>
-
+                <Link to="/history">
+                  <Button
+                    htmlType="submit"
+                    className="button-yes"
+                    onClick={handleYesCancel}
+                  >
+                    Yes
+                  </Button>
+                </Link>
                 <Button
                   htmlType="cancle"
                   className="button-no"
