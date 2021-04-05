@@ -75,7 +75,6 @@ const Profile = () => {
             </div>
         );
     };
-
     const renderUserButton = () => {
         return (
             <div className="button-container flex-row">
