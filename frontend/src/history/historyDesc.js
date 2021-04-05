@@ -90,16 +90,15 @@ const HistoryDesc = (props) => {
     <div className="history-desc-container flex-col">
       <div className="order-title flex-row">
         <h1>Order Id : {orderId}</h1>
-        {orderList[0].status !== 1 ? (
-          <div className="success-paid flex-row">
-            <Button onClick={() => handleTrack()}>Track your order</Button>
-            <Button onClick={() => handleReview()}>Review</Button>
-          </div>
-        ) : (
-          <div className="unsuccess-paid">
-            <Button onClick={() => handleMakePayment()}>Make a payment</Button>
-          </div>
-        )}
+        {orderList[0].status !== 1 && orderList[0].status !== 6 && <div className="success-paid flex-row">
+          <Button onClick={() => handleTrack()}>Track your order</Button>
+          <Button onClick={() => handleReview()}>Review</Button>
+        </div>}
+        
+        {orderList[0].status === 1 && <div className="unsuccess-paid">
+          <Button onClick={() => handleMakePayment()}>Make a payment</Button>
+        </div>}
+        
       </div>
       <div className="order-content flex-col">
         <div className="content-warpper flex-row">
@@ -137,16 +136,12 @@ const HistoryDesc = (props) => {
         </div>
         <div className="content-warpper flex-row">
           <div className="title flex-col">
-            <div>Subtotal : </div>
-            <div>Discount : </div>
             <div>Total : </div>
             {orderList[0].status === 2 && <div>Payment method : </div>}
             {orderList[0].status === 2 && <div>Payment status : </div>}
           </div>
           <div className="content flex-col">
             <div>{totalPrice} TH</div>
-            <div>{discount} TH</div>
-            <div>{totalPrice-discount} TH</div>
             {orderList[0].status === 2 && <div>Credit card</div>}
             {orderList[0].status === 2 && <div>Already</div>}
           </div>
