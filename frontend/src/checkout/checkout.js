@@ -19,8 +19,10 @@ import qr from "../img/QR for payment.jpg";
 import "./checkout.scss";
 import { Link } from "react-router-dom";
 import Notification from "../components/notification";
+import { useHistory } from "react-router";
 
 const Checkout = (props) => {
+  const history = useHistory();
   const [showAddCard, setShowAddCard] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [visibleQR, setVisibleQR] = useState(false);
@@ -44,9 +46,21 @@ const Checkout = (props) => {
   const initdata = [];
   const monthFormat = "MM/YYYY";
 
+  const checkpermission = (props) => {
+    console.log(props);
+    if (props.location.state === undefined) {
+      history.push("/history");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   useEffect(async () => {
-    fetchUserData(userID);
-    fetchHistory();
+    if (checkpermission(props)) {
+      fetchUserData(userID);
+      fetchHistory();
+    }
   }, []);
 
   const fetchUserData = async () => {

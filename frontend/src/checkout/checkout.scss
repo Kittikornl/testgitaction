@@ -23,7 +23,6 @@ img {
       padding-left: 10px;
       padding-bottom: 10px;
       border-bottom: 1px solid #dedede;
-      column-gap: 100px;
 
       .test {
         margin-top: 5px;
@@ -73,9 +72,6 @@ img {
       padding-bottom: 10px;
       border-bottom: 1px solid #dedede;
       font-size: 20px;
-
-      .pay-method {
-      }
 
       .add-card {
         margin-top: 10px;
@@ -191,7 +187,6 @@ img {
     p {
       font-size: 20px;
       font-weight: 600;
-      // color: $dark-green;
     }
   }
   img {
@@ -303,4 +298,316 @@ img {
   .ant-select-selector {
   border: none;
   border-bottom: 1px solid #dedede;
+}
+
+@media screen and (max-width: 1070px) {
+  .checkout-container {
+    margin-left: 100px;
+    margin-right: 100px;
+    .header {
+      margin-left: 30px;
+    }
+    .order-container {
+      margin-left: 50px;
+      .order {
+        .test {
+          margin-top: 5px;
+        }
+
+        .name {
+          margin-top: 5px;
+          column-gap: 80px;
+        }
+        .address {
+          margin-top: 5px;
+          column-gap: 80px;
+        }
+        .tel {
+          margin-top: 5px;
+          column-gap: 80px;
+        }
+        .left {
+          width: 80px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 984px) {
+  .checkout-container {
+    margin-left: 80px;
+    margin-right: 80px;
+    .header {
+      margin-left: 20px;
+    }
+    .order-container {
+      margin-left: 40px;
+    }
+  }
+}
+
+@media screen and (max-width: 920px) {
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+  }
+  .checkout-container {
+    .header {
+      font-size: 18px;
+    }
+    .order-container {
+      font-size: 16px;
+      .order {
+        .test {
+          margin-top: 5px;
+        }
+
+        .name {
+          margin-top: 5px;
+          column-gap: 50px;
+        }
+        .address {
+          margin-top: 5px;
+          column-gap: 50px;
+        }
+        .tel {
+          margin-top: 5px;
+          column-gap: 50px;
+        }
+        .left {
+          width: 80px;
+        }
+      }
+      .product-container {
+        font-size: 16px;
+      }
+      .payment-container {
+        font-size: 16px;
+
+        .add-card {
+          .button-add {
+            width: 110px;
+            font-size: 10px;
+          }
+        }
+
+        .payment {
+          width: 200px;
+        }
+
+        .promocode {
+          .use-promo-button {
+            width: 80px;
+            font-size: 10px;
+            height: 30px;
+          }
+        }
+      }
+      .conclude-container {
+        font-size: 16px;
+        .conclude {
+          width: 200px;
+        }
+      }
+
+      .button-group {
+        column-gap: 30px;
+
+        .button-green {
+          width: 180px;
+          height: 35px;
+          font-size: 14px;
+        }
+
+        .button-red {
+          width: 140px;
+          height: 35px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 710px) {
+  .checkout-container {
+    .order-container {
+      .payment-container {
+        .promocode {
+          .use-promo-button {
+            margin-top: 5px;
+            margin-left: 200px;
+            width: 80px;
+            font-size: 10px;
+            height: 30px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 609px) {
+  .checkout-container {
+    margin-left: 50px;
+    margin-right: 50px;
+    .order-container {
+      .product-container {
+        font-size: 16px;
+        .product {
+          .info {
+            margin-top: 25px;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 575px) {
+  .add-creditcard-modal {
+    .creditcard-header {
+      p {
+        font-size: 15px;
+      }
+    }
+    img {
+      margin-top: 1px;
+      max-width: 100px;
+      max-height: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 549px) {
+  .checkout-container {
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 90vw;
+  }
+}
+
+@media screen and (max-width: 499px) {
+  img {
+    width: 130px;
+    height: 130px;
+    border-radius: 20px;
+  }
+  .checkout-container {
+    .order-container {
+      .payment-container {
+        .add-card {
+          .button-add {
+            margin-left: 220px;
+            margin-top: -40px;
+          }
+        }
+
+        .promocode {
+          .use-promo-button {
+            margin-left: 20px;
+          }
+        }
+      }
+
+      .button-group {
+        column-gap: 30px;
+
+        .button-green {
+          width: 180px;
+          height: 35px;
+          font-size: 14px;
+        }
+
+        .button-red {
+          width: 140px;
+          height: 35px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 455px) {
+  .cancel-checkout-modal {
+    .header {
+      p {
+        margin-top: -20px;
+        margin-left: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 433px) {
+  .checkout-container {
+    .order-container {
+      .button-group {
+        column-gap: 30px;
+
+        .button-green {
+          width: 180px;
+          height: 35px;
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+
+        .button-red {
+          width: 140px;
+          height: 35px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 388px) {
+  .checkout-container {
+    .order-container {
+      .payment-container {
+        .add-card {
+          .button-add {
+            margin-left: 0px;
+            margin-top: 0px;
+          }
+        }
+
+        .promocode {
+          .use-promo-button {
+            margin-left: 0px;
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 379px) {
+  img {
+    width: 150px;
+    height: 150px;
+  }
+  .checkout-container {
+    .order-container {
+      .product-container {
+        .product {
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 341px) {
+  .checkout-container {
+    .order-container {
+      .conclude-container {
+        .conclude {
+          width: 160px;
+        }
+      }
+    }
+  }
 }
