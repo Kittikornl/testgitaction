@@ -77,6 +77,7 @@ const Home = () => {
                 ? `${vegThumbnail}`
                 : props.product.PictureURL
             }
+            alt={props.product.ProductTitle}
           />
         </a>
         <div className="name">
@@ -87,7 +88,7 @@ const Home = () => {
   };
 
   const renderProduct = (product, index) => {
-    return <Product product={product} />;
+    return product.Amount === 0 ? null : <Product product={product} />;
   };
 
   const ProductHidden = (props) => {
@@ -104,6 +105,7 @@ const Home = () => {
                 ? `${vegThumbnail}`
                 : props.product.PictureURL
             }
+            alt={props.product.ProductTitle}
           />
         </a>
         <div className="name">{props.product.ProductTitle}</div>
@@ -112,23 +114,23 @@ const Home = () => {
   };
 
   const renderHidden = (product, index) => {
-    return <ProductHidden product={product} />;
+    return product.Amount === 0 ? null : <ProductHidden product={product} />;
   };
 
   const getSearchData = async (data) => {
     const payload = {
-      Search: data.keyword,
+      Search: data.keyword === "" ? null : data.keyword,
       ProductType: data.type === "" ? null : data.type,
     };
 
     const result = await postSearchProduct(payload);
-    console.log(result.data);
     var showMoreN = document.getElementById("showMoreN");
     var showMoreB = document.getElementById("showMoreB");
     var bestSellText = document.getElementById("bestSellText");
     var newArriveText = document.getElementById("newArriveText");
+    console.log(result);
 
-    if (payload.Search === "" && payload.ProductType === null) {
+    if (payload.Search === null && payload.ProductType === null) {
       fetchAllProduct();
       setShowBest(true);
       setShowNew(true);
@@ -137,7 +139,7 @@ const Home = () => {
         : (showMoreN.innerHTML = "");
       bestSellText.innerHTML = "Best seller";
       newArriveText.innerHTML = "New arrivals";
-    } else if (payload.Search === "" && payload.ProductType !== null) {
+    } else if (payload.Search === null && payload.ProductType !== null) {
       if (result.data.q_by_type !== undefined) {
         setAllProduct(result.data.q_by_type);
         setShowNew(false);
@@ -147,7 +149,7 @@ const Home = () => {
         bestSellText.innerHTML = "";
         newArriveText.innerHTML = "";
       }
-    } else if (payload.Search !== "" && payload.ProductType === null) {
+    } else if (payload.Search !== null && payload.ProductType === null) {
       if (result.data.q_by_productname !== undefined) {
         setAllProduct(result.data.q_by_productname);
         setShowNew(false);
@@ -157,7 +159,7 @@ const Home = () => {
         bestSellText.innerHTML = "";
         newArriveText.innerHTML = "";
       }
-    } else if (payload.Search !== "" && payload.ProductType !== null) {
+    } else if (payload.Search !== null && payload.ProductType !== null) {
       if (result.data.products_information) {
         setAllProduct(result.data.products_information);
         setShowNew(false);
@@ -183,13 +185,13 @@ const Home = () => {
         <div className="best-seller-grid">
           <div className="header flex-row">
             <div id="bestSellText">Best seller</div>
-            <a
+            <button
               className="see-more"
               id="showMoreB"
               onClick={handleSeeMoreBestSell}
             >
               See more{" >"}
-            </a>
+            </button>
           </div>
           <div class="grid-container m-t-16">
             {showBest
@@ -207,13 +209,13 @@ const Home = () => {
         <div className="new-arrivals-grid m-t-20">
           <div className="header flex-row">
             <div id="newArriveText">New arrivals</div>
-            <a
+            <button
               className="see-more"
               id="showMoreN"
               onClick={handleSeeMoreNewArrive}
             >
               See more{" >"}
-            </a>
+            </button>
           </div>
           <div class="grid-container m-t-16">
             {showNew

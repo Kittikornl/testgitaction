@@ -1,47 +1,128 @@
-import { Button } from 'antd'
-import React, { useState } from 'react'
-import Searchbar from '../components/searchbar'
+import { Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import Searchbar from "../components/searchbar";
+import { getHistory } from "../service/cart.service";
 
-import './history.scss'
+import "./history.scss";
 
-const HistoryItem = () => {
-    return (
-        <div className="history-item flex-row">
-            <div className="history-content-wrapper flex-row" >
-                <img src="https://www.jessicagavin.com/wp-content/uploads/2019/02/carrots-7-1200.jpg" />
-                <div className="history-content flex-col">
-                    <div className="order-id">Order Id : 1</div>
-                    <div className="seller">Seller : Tinnapop Pratheep</div>
-                    <div className="discount">Discount : 10 TH</div>
-                    <div className="total">Total : 300 TH</div>
-                </div>
-            </div>
-            <div className="button-wrapper">
-                <Button>{"Click >"}</Button>
-            </div>
+const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
+  const history = useHistory();
+
+  const [shopIDs] = useState(new Set())
+
+  const handleClick = () => {
+    history.push("history/description", {
+      orderList: orderList,
+      shopList: shopList,
+      orderId: orderId,
+      userData: userData,
+      shopIDs: shopIDs
+    });
+  };
+
+  const renderStatus = (status) => {
+    switch (status) {
+      case 0:
+        return "Wait for checkout";
+      case 1:
+        return "Wait for payment";
+      case 2:
+        return "paid";
+      case 3:
+        return "delivering";
+      case 4:
+        return "received";
+      case 5:
+        return "cancel";
+      case 6:
+        return "sold out";
+    }
+  };
+
+  const renderItem = (item, idx) => {
+    shopIDs.add(item.shop_id)
+    return <div key={idx} className="history-content-wrapper flex-row">
+      <img src={item.picture_url} />
+      <div className="history-content flex-col">
+        <div className="seller">Name : {item.product_title}</div>
+        <div className="seller">Shop : {getShopName(item.shop_id)}</div>
+        <div className="discount">Price : {item.price} TH</div>
+        <div className="discount">Amount : {item.amount} </div>
+        <div className="total">Total : {item.total_price} TH</div>
+      </div>
+    </div>
+  }
+
+  const getShopName = (shop_id) => {
+    const shopdata = shopList.find((item) => item.ID === shop_id)
+    return (shopdata? shopdata.shopname : "")
+  }
+
+  return (
+    <div className="history-item flex-col">
+      <div className="order-id">{`Order Id : ${orderId}`}</div>
+      <div className="history-item-wrapper flex-row">
+        <div className="order-wrapper flex-col">
+          {orderList.map(renderItem)}
         </div>
-    )
-}
+        <div className="button-wrapper flex-col">
+          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <Button onClick={() => handleClick()}>{"Click >"}</Button>
+        </div>
+        <div className="button-wrapper-mobile flex-col">
+          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <Button onClick={() => handleClick()}>{">"}</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const History = () => {
+  const [orderData] = useState({});
+  const [shopList, setShopList] = useState([]);
+  const [userData, setUserData] = useState({});
+  const [sortComplete, setSortComplete] = useState(false);
 
-    const [data, setData] = useState([1,2,3]);
+  useEffect(() => {
+    fetchdata();
+  }, []);
 
-    const renderHistoryItem = (item, idx) => {
-        return <HistoryItem key={idx} />
-    }
+  const fetchdata = async () => {
+    const result = await getHistory();
+    console.log(result.data);
+    sortOrderID(result.data.order_info)
+    setShopList(result.data.shop_info)
+    setUserData(result.data.user_info)
+  };
 
-    return (
-        <div className="history-page-container flex-col">
-            <Searchbar />
-            <div className="history-container">
-                <h1>My history</h1>
-                <div className="history-item-container flex-col">
-                    {data.map(renderHistoryItem)}
-                </div>
-            </div>
+  const sortOrderID = (order_data) => {
+    order_data.forEach(item => {
+      orderData[item.order_id] = []
+    });
+    order_data.forEach(item => {
+      orderData[item.order_id].push(item)
+    });
+    setSortComplete(true)
+  }
+
+  const renderHistoryItem = (item, idx) => {
+    return <HistoryItem key={idx} orderList={orderData[item]} orderId={item} shopList={shopList} userData={userData}/>;
+  };
+
+  if (!sortComplete) return <div></div>;
+  return (
+    <div className="history-page-container flex-col">
+      <Searchbar />
+      <div className="history-container">
+        <h1>My history</h1>
+        <div className="history-item-container flex-col">
+          {Object.keys(orderData).map(renderHistoryItem)}
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default History
+export default History;

@@ -188,23 +188,35 @@ type promotionResponseWrapper struct {
 // swagger:parameters getQRBody getQR
 type getQRBodyWrapper struct {
 	// in: body
-	Body payment.GetQRResponse
+	Body payment.Payment
 }
 
 // swagger:response getQRResponse
 type getQRResponseWrapper struct {
 	// in: body
-	Body int
+	Body payment.GetQRResponse
 }
 
 // swagger:parameters validateCardBody validateCard
 type validateCreditcardBodyWrapper struct {
 	// in: body
-	Body payment.ValidateCardResponse
+	Body payment.Payment
 }
 
 // swagger:response validateCardResponse
 type validateCreditcardResponseWrapper struct {
+	// in: body
+	Body payment.ValidateCardResponse
+}
+
+// swagger:parameters cancelOrderBody cancelOrder
+type cancelOrderBodyWrapper struct {
+	// in: body
+	Body payment.Payment
+}
+
+// swagger:response cancelOrderResponse
+type cancelOrderResponseWrapper struct {
 	// in: body
 	Body int
 }

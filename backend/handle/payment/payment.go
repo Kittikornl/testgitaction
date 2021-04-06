@@ -13,20 +13,18 @@ import (
 )
 
 type Payment struct {
-	Item      []models.Order `json:"order"`
-	promotion string         `json:"promotion"`
+	Item           []models.Order `json:"order"`
+	ShippingMethod string         `json:"shipping_method"`
 }
 
 type ValidateCardResponse struct {
 	Acceptance bool           `json:"accept"`
-	Order      []models.Order `json:"orders"`
-	Promotion  string         `json:"promotion"`
+	Order      []models.Order `json:"order"`
 }
 
 type GetQRResponse struct {
-	QR        string         `json:"qr"`
-	Order     []models.Order `json:"orders"`
-	Promotion string         `json:"promotion"`
+	QR    string         `json:"qr"`
+	Order []models.Order `json:"order"`
 }
 
 // swagger:route POST /payment/qr payment getQR
@@ -53,10 +51,11 @@ func GetQR(c *gin.Context) {
 	// Change each order's status to 2 (paid, wait for being delivered)
 	for _, order := range payment.Item {
 		orders := models.Order{}
-		if err := database.DB.Where("order_id = ?", order.OrderID).First(&orders).Error; err != nil {
+		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
@@ -71,7 +70,6 @@ func GetQR(c *gin.Context) {
 
 	response.QR = "https://drive.google.com/file/d/1d9jKm7B71cleQNxgB6JawCKjQMv9jZzY/view?usp=sharing"
 	response.Order = lst
-	response.Promotion = payment.promotion
 
 	// Fixed QR link, in the backend's GoogleDrive
 	c.JSON(http.StatusOK, response)
@@ -101,10 +99,11 @@ func ValidateCard(c *gin.Context) {
 	// Change each order's status to 2 (paid, wait for being delivered)
 	for _, order := range payment.Item {
 		orders := models.Order{}
-		if err := database.DB.Where("order_id = ?", order.OrderID).First(&orders).Error; err != nil {
+		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
 		lst = append(lst, orders)
@@ -119,9 +118,49 @@ func ValidateCard(c *gin.Context) {
 
 	response.Acceptance = true
 	response.Order = lst
-	response.Promotion = payment.promotion
 
 	c.JSON(http.StatusOK, response)
+}
+
+// swagger:route POST /payment/cancel payment cancelOrder
+// Cancle the order
+// parameters: cancleOrderBody
+// responses:
+//		200: returnMessage
+
+func CancelOrder(c *gin.Context) {
+	payment := Payment{}
+	lst := []models.Order{}
+
+	if err := c.ShouldBindBodyWith(&payment, binding.JSON); err != nil {
+		c.Status(http.StatusBadRequest)
+		println(err.Error())
+		return
+	}
+
+	if !ClearStock(c) {
+		return
+	}
+
+	// Change each order's status to 2 (paid, wait for being delivered)
+	for _, order := range payment.Item {
+		orders := models.Order{}
+		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
+			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+			return
+		}
+		orders.Status = 5
+		lst = append(lst, orders)
+	}
+
+	for _, order := range lst {
+		if err := database.DB.Save(&order).Error; err != nil {
+			c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			return
+		}
+	}
+	// Fixed QR link, in the backend's GoogleDrive
+	c.JSON(http.StatusOK, services.ReturnMessage("Cancled order"))
 }
 
 func ClearStock(c *gin.Context) bool {
@@ -143,6 +182,10 @@ func ClearStock(c *gin.Context) bool {
 		}
 
 		if int(order.Amount) > product.Amount {
+			order.Status = 6
+			if err := database.DB.Save(&order).Error; err != nil {
+				c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+			}
 			c.JSON(http.StatusBadRequest, services.ReturnMessage("The requested amount is exceeding the stock's amount."))
 			return false
 		}

@@ -40,6 +40,8 @@ img {
         font-size: 20px;
         justify-content: space-between;
         .see-more {
+          border: none;
+          background-color: white;
           font-size: 16px;
           color: $dark-green;
         }
@@ -58,6 +60,8 @@ img {
         font-size: 20px;
         justify-content: space-between;
         .see-more {
+          border: none;
+          background-color: white;
           font-size: 16px;
           color: $dark-green;
         }
@@ -75,10 +79,6 @@ img {
       .header {
         font-size: 20px;
         justify-content: space-between;
-        .see-more {
-          font-size: 16px;
-          color: $dark-green;
-        }
       }
       .grid-container {
         display: grid;
