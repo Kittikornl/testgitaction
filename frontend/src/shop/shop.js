@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import "./shop.scss";
 import Scores from "../components/scores";
 import { Button } from "antd";
-import { getShopData } from "../service/shop.service";
+import { getShopData, getReviewShop } from "../service/shop.service";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
 import { Link } from "react-router-dom";
 import { getUserInfo } from "../service/auth.service";
@@ -20,12 +20,14 @@ const Shop = () => {
   const [role, setRole] = useState(getUserInfo().role);
   const [userID, setUserID] = useState(getUserInfo().userId);
   const [userData, setUserData] = useState("");
+  const [comments, setComments] = useState([]);
 
   let { id } = useParams();
 
   useEffect(async () => {
     fetchShopData(id);
     fetchUserData(userID);
+    fetchReviewShop(id);
   }, []);
 
   const fetchShopData = async (id) => {
@@ -44,6 +46,11 @@ const Shop = () => {
     if (result.data.top_selling_products.slice(0, 8).length < 4) {
       showMoreB.innerHTML = "";
     }
+  };
+
+  const fetchReviewShop = async (id) => {
+    const result = await getReviewShop(id);
+    setComments(result);
   };
 
   const fetchUserData = async () => {
@@ -162,6 +169,24 @@ const Shop = () => {
     }
   };
 
+  const Comment = (props) => {
+    return (
+      <div className="comment flex row">
+        <div className="person">
+          {props.firstname} {props.lastname}
+        </div>
+        <div className="word">{props.comment}</div>
+        <div className="rateing">
+          <Scores score={props.rating} />
+        </div>
+      </div>
+    );
+  };
+
+  const renderComment = (comment, index) => {
+    return <Comment comment={comment}></Comment>;
+  };
+
   return (
     <div className="shop-container flex-col">
       <div className="empty-box">{shopDescription.description}</div>
@@ -232,9 +257,12 @@ const Shop = () => {
               {allProduct2.length === 0 ? null : allProduct2.map(renderProduct)}
             </div>
           </div>
+          <div className="comment-container m-t-10">
+            <div>Comment</div>
+            {comments.length === 0 ? null : comments.map(renderComment)}
+          </div>
         </div>
       </div>
-
       <div className="contact-container flex-col">
         <div className="contact flex-row">
           <div>Shop Contact: {shopDescription.phone_number}</div>
