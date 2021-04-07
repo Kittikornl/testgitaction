@@ -193,7 +193,7 @@ func ClearStock(c *gin.Context) bool {
 		// Sold product
 		if err := database.DB.Where("product_id = ?", order.ProductID).First(&sold).Error; err != nil {
 			// Not found in DB, collect new data
-			sold.Amount = LeftAmount(product.Amount, int(order.Amount))
+			sold.Amount = int(order.Amount)
 			sold.ProductId = order.ProductID
 			sold.ShopId = order.ShopID
 			if err := database.DB.Save(&sold).Error; err != nil {
@@ -201,7 +201,7 @@ func ClearStock(c *gin.Context) bool {
 				return false
 			}
 		} else { // Already existed in DB, does not need to collect shop_id & product_id anymore
-			sold.Amount = sold.Amount + LeftAmount(product.Amount, int(order.Amount))
+			sold.Amount = sold.Amount + int(order.Amount)
 			if err := database.DB.Save(&sold).Error; err != nil {
 				c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
 				return false
