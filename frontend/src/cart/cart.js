@@ -8,6 +8,8 @@ import { getCart, updateCart, deleteProduct, checkout } from '../service/cart.se
 import Notification from '../components/notification'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStore } from "@fortawesome/free-solid-svg-icons";
 
 const Cart = () => {
   // const [addedItems, setAddItems] = useState('a')
@@ -17,6 +19,9 @@ const Cart = () => {
   const [productDeleted, setProductDeleted] = useState({})
   const [priceTotal, setPriceTotal] = useState(0)
   const history = useHistory()
+  const shopId = []
+  const [shopMapProduct, setShopMapProduct] = useState({})
+  const [shopMapName, setShopMapName] = useState({})
 
   useEffect(() => {
     getCartData()
@@ -27,11 +32,31 @@ const Cart = () => {
       const res = await getCart()
       console.log('res',res.data.cart_items);
       let eachPrice = 0
+
       res.data.cart_items.map(c => {
         eachPrice += c['amount']*c['price']
       })
+      const shopProduct = {}
+      const shopName = {}
+      res?.data.cart_items?.map(item => {
+        if (shopProduct[item.shop_id]) {
+          console.log('found',item);
+          shopProduct[item.shop_id].push(item)
+        }
+        else {
+          shopProduct[item.shop_id] = [item]
+        }
+      })
+      res?.data.shop_info?.map(shop => {
+        shopName[shop.ID] = shop.shopname
+      })
+
+      setShopMapProduct(shopProduct)
+      setShopMapName(shopName)
+
       setPriceTotal(eachPrice)
       setCart(res.data.cart_items)
+
     } catch (error) {
       throw error
     }
@@ -49,9 +74,7 @@ const Cart = () => {
     }
   }
   const handleAddQuantity = async (product) => {
-    //add quantity in checkedProduct
     product['change_amount'] += 1
-    console.log(product);
     try {
       const res = await updateCart(product)
       console.log(res)
@@ -62,7 +85,6 @@ const Cart = () => {
   }
   const handleSubtractQuantity = async (product) => {
     product['change_amount'] -= 1
-    console.log(product);
     if (product['amount'] + product['change_amount'] == 0) {
       try {
         const res_remove = await deleteProduct(product['product_id'])
@@ -76,33 +98,30 @@ const Cart = () => {
     }
     else {
       try {
-      const res = await updateCart(product)
-      console.log(res)
-      
+        const res = await updateCart(product)
+        console.log(res)
       } catch (error) {
         throw error
       }
     }
     window.location.reload()
-
   }
+
   const handleCheckbox = (e, product) => {
     if (e.target.checked) {
-      console.log("product", product);
       setCheckedProduct([...checkedProduct, product])
-      
     }
   }
+
   const handleCheckout = async () => {
     const cart_checkout = cart.map(({CreatedAt, DeletedAt, ID, UpdatedAt, user_id, change_amount, ...keepAttrs}) => keepAttrs)
-    console.log(cart_checkout);
     try {
       const res = await checkout(cart_checkout)
       console.log(res);
-      Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
+      Notification({type: 'success', message: 'Checkout cart success', desc: "Let's pay"})
       history.push('/home')
     } catch (error) {
-      Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
+      Notification({type: 'error', message: 'Checkout cart fail', desc: 'Please checkout cart again'})
       throw error
     }
   }
@@ -110,44 +129,48 @@ const Cart = () => {
   const openModelDelete = (e, product) => {
     setVisibleDelete(true)
     setProductDeleted(product)
-    console.log('openmode', product);
   }
 
   const handleCancelDelete = () => {
     setVisibleDelete(false)
   }
+  console.log(shopMapProduct)
+  console.log(shopMapName);
 
   return (
     <div>
-      <Navbar />
-      <Searchbar />
       <div className="cart-container">
         <h2>My order</h2>
         <div className="item-list">
-            {cart.map(product => (
-              <div key={product.ID} className="item">
-                <div className="icon">
-                  <Checkbox onChange={(e) => handleCheckbox(e, product)}/>
-                </div>
-                <div className="product-detail">
-                  <div className="img">
-                    <img src={product.picture_url} />
+            {Object.keys(shopMapProduct).map(shopId => (
+              <>
+                <div><FontAwesomeIcon className="m-t-16 m-r-10" icon={faStore} />{shopMapName[shopId]}</div>
+                {shopMapProduct[shopId].map(product => (
+                  <div key={product.product_id} className="item">
+                    <div className="icon">
+                      <Checkbox onChange={(e) => handleCheckbox(e, product)}/>
+                    </div>
+                    <div className="product-detail">
+                      <div className="img">
+                        <img src={product.picture_url} />
+                      </div>
+                      <div className="desc">
+                        <h3>{product.product_title}</h3>
+                        <h4>amount: 
+                          <Button onClick={() => handleSubtractQuantity(product)}><MinusOutlined /></Button>
+                          {product.amount} kg
+                          <Button onClick={() => handleAddQuantity(product)}><PlusOutlined /></Button>
+                        </h4>
+                        <h4>price: {product.price} THB</h4>
+                        <h4>total: {product.price*product.amount} THB</h4>
+                      </div>
+                    </div>
+                    <Button onClick={(e) => openModelDelete(e, product)}>
+                      <DeleteOutlined/>
+                    </Button>
                   </div>
-                  <div className="desc">
-                    <h3>{product.product_title}</h3>
-                    <h4>amount: 
-                      <Button onClick={() => handleSubtractQuantity(product)}><MinusOutlined /></Button>
-                      {product.amount} kg
-                      <Button onClick={() => handleAddQuantity(product)}><PlusOutlined /></Button>
-                    </h4>
-                    <h4>price: {product.price} THB</h4>
-                    <h4>total: {product.price*product.amount} THB</h4>
-                  </div>
-                </div>
-                <Button onClick={(e) => openModelDelete(e, product)}>
-                  <DeleteOutlined/>
-                </Button>
-              </div>
+                ))}
+              </>
             ))}
         </div>
         <hr />
