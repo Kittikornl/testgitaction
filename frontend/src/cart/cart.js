@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./cart.scss";
-import Navbar from "../components/navbar";
-import Searchbar from "../components/searchbar";
-import { Checkbox, Button, Form, Modal } from "antd";
+import { Checkbox, Button, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getCart, updateCart, deleteProduct, checkout } from '../service/cart.service'
 import Notification from '../components/notification'
@@ -86,23 +84,17 @@ const Cart = () => {
     window.location.reload()
 
   }
-  const handleCheckbox = (e, product) => {
-    if (e.target.checked) {
-      console.log("product", product);
-      setCheckedProduct([...checkedProduct, product])
-      
-    }
-  }
   const handleCheckout = async () => {
+    console.log(cart)
     const cart_checkout = cart.map(({CreatedAt, DeletedAt, ID, UpdatedAt, user_id, change_amount, ...keepAttrs}) => keepAttrs)
     console.log(cart_checkout);
     try {
       const res = await checkout(cart_checkout)
       console.log(res);
-      Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
+      Notification({type: 'success', message: 'Checkout product success', desc: "Let's check your history!"})
       history.push('/home')
     } catch (error) {
-      Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
+      Notification({type: 'error', message: 'Checkout product fail', desc: 'Something went wrong!'})
       throw error
     }
   }
@@ -119,16 +111,11 @@ const Cart = () => {
 
   return (
     <div>
-      <Navbar />
-      <Searchbar />
       <div className="cart-container">
         <h2>My order</h2>
         <div className="item-list">
             {cart.map(product => (
               <div key={product.ID} className="item">
-                <div className="icon">
-                  <Checkbox onChange={(e) => handleCheckbox(e, product)}/>
-                </div>
                 <div className="product-detail">
                   <div className="img">
                     <img src={product.picture_url} />
