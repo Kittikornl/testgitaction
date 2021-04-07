@@ -138,11 +138,7 @@ func CancelOrder(c *gin.Context) {
 		return
 	}
 
-	if !ClearStock(c) {
-		return
-	}
-
-	// Change each order's status to 2 (paid, wait for being delivered)
+	// Change each order's status to 5 (canceled)
 	for _, order := range payment.Item {
 		orders := models.Order{}
 		if err := database.DB.Where("order_id = ? AND shop_id = ? AND product_title = ?", order.OrderID, order.ShopID, order.ProductTitle).First(&orders).Error; err != nil {
@@ -159,7 +155,7 @@ func CancelOrder(c *gin.Context) {
 			return
 		}
 	}
-	// Fixed QR link, in the backend's GoogleDrive
+	// Return message
 	c.JSON(http.StatusOK, services.ReturnMessage("Cancled order"))
 }
 
@@ -176,6 +172,8 @@ func ClearStock(c *gin.Context) bool {
 	// for-loop to check if any order is over in amount from stock.
 	for _, order := range payment.Item {
 		product := models.Product{}
+		sold := models.Soldproduct{}
+
 		if err := database.DB.Where("shop_id = ? AND product_title = ?", order.ShopID, order.ProductTitle).First(&product).Error; err != nil {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return false
@@ -189,10 +187,26 @@ func ClearStock(c *gin.Context) bool {
 			c.JSON(http.StatusBadRequest, services.ReturnMessage("The requested amount is exceeding the stock's amount."))
 			return false
 		}
-
 		product.Amount = LeftAmount(product.Amount, int(order.Amount))
 		products = append(products, product)
 
+		// Sold product
+		if err := database.DB.Where("product_id = ?", order.ProductID).First(&sold).Error; err != nil {
+			// Not found in DB, collect new data
+			sold.Amount = int(order.Amount)
+			sold.ProductId = order.ProductID
+			sold.ShopId = order.ShopID
+			if err := database.DB.Save(&sold).Error; err != nil {
+				c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+				return false
+			}
+		} else { // Already existed in DB, does not need to collect shop_id & product_id anymore
+			sold.Amount = sold.Amount + int(order.Amount)
+			if err := database.DB.Save(&sold).Error; err != nil {
+				c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
+				return false
+			}
+		}
 	}
 
 	// for-loop to update the amount left for each stock
