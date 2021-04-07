@@ -85,7 +85,7 @@ const EditShop = (props) => {
 
     return (
         <>
-        <Banner />
+        <Banner bgClass="two"/>
         <div className="edit-container">
             <div className="text-title">
                 Edit Shop

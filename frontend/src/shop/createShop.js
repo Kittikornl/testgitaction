@@ -40,7 +40,7 @@ const CreateShop = () => {
     
     return (
         <>
-        <Banner />
+        <Banner bgClass="two"/>
         <div className="create-shop-container">
             <div className="text-title">
                 Create Shop
@@ -73,9 +73,9 @@ const CreateShop = () => {
                             Create shop
                         </Button>
                     </Form.Item>
-                        <Button onClick={handleClear}>
+                        {/* <Button onClick={handleClear}>
                             Clear
-                        </Button>
+                        </Button> */}
                 </div>
                 
             </Form>

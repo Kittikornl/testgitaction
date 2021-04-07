@@ -11,6 +11,7 @@ var DB *gorm.DB
 func Initdatabase() {
 	var err error
 	dsn := "host=localhost user=postgres password='4583102625' dbname=empartydb port=5432 sslmode=disable TimeZone=Asia/Bangkok"
+	// dsn := "host=34.126.76.4 user=postgres password='emparty789' dbname=empartydb port=5432 sslmode=disable TimeZone=Asia/Bangkok"
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

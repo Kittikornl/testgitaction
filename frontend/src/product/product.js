@@ -68,12 +68,14 @@ const Product = () => {
             'amount': amount,
             'price': data.Price,
             'picture_url': data.PictureURL,
-            'product_detail': data.ProductDetail 
+            'product_detail': data.ProductDetail, 
+            'product_id': data.ID
         }
         try {
             await addCart(req)
             Notification({type: 'success', message: 'Add to cart success', desc: "Let's checkout"})
             setAmount(1)
+            getCartData()
         } catch (error) {
             Notification({type: 'error', message: 'Add to cart fail', desc: 'Please add to cart again'})
         }
@@ -81,10 +83,13 @@ const Product = () => {
 
     const handleAddToShop = () => {
         const c = cart.filter(item => {
+            console.log(item);
             return item['shop_id'] === data['ShopID'] && 
             item['product_title'] === data['ProductTitle'] && 
             item['product_detail'] === data['ProductDetail']
         })
+        console.log(c);
+        console.log(data)
         c.length == 0 ? handleAddCart() : handleUpdateCart(c[0]) 
     }
 
@@ -93,11 +98,12 @@ const Product = () => {
         try {
             const res = await updateCart(c)
             console.log(res);
-            Notification({type: 'success', message: 'Add to cart success', desc: "Let's checkout"})
+            Notification({type: 'success', message: 'Update to cart success', desc: "Let's checkout"})
             setAmount(1)
+            getCartData()
         } catch (error) {
             console.log(error);
-            Notification({type: 'error', message: 'Add to cart fail', desc: 'Please add to cart again'})
+            Notification({type: 'error', message: 'Update to cart fail', desc: 'Please add to cart again'})
         }
     }
 
