@@ -88,9 +88,9 @@ function App() {
           path="/checkout"
           component={Checkout}
         />
-        <Route exact key="review" path="/review" component={Review} />
-        <Route exact key="cart" path="/cart" component={Cart} />
-        <Route exact key="shipment" path="/shipment" component={Shipment} />
+        <PrivateRoute exact key="review" path="/review" component={Review} />
+        <PrivateRoute exact key="cart" path="/cart" component={Cart} />
+        <PrivateRoute exact key="shipment" path="/shipment" component={Shipment} />
       </Switch>
     </Router>
   );

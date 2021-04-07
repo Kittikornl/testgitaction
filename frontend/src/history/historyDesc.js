@@ -58,7 +58,8 @@ const HistoryDesc = (props) => {
 
   const handleReview= () => {
     history.push("/review", {
-      shopIDs: shopIDs
+      shopIDs: shopIDs,
+      orderList: orderList
     });
   };
 

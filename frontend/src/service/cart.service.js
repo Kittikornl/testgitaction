@@ -36,10 +36,9 @@ export const updateCart = async (data) => {
     }
 }
 
-export const deleteProduct = async (data) => {
+export const deleteProduct = async (product_id) => {
   try {
-      console.log(data);
-    return await axios.delete(API_URL + '/carts/delete', data, {
+    return await axios.delete(API_URL + `/carts/delete/${product_id}`, {
         headers: {
             'Authorization': authHeader()
         }});

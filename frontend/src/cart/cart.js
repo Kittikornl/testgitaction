@@ -36,22 +36,12 @@ const Cart = () => {
       throw error
     }
   }
-  // const updateCartData = async () => {
-  //   try {
-  //     const res = await getCart()
-  //     console.log(res);
-  //     // setCart(res)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
-  const handleRemove = async (e, productDeleted) => {
-    const {CreatedAt, DeletedAt, ID, UpdatedAt, user_id, change_amount, ...keepAttrs} = productDeleted 
 
-    console.log('productDeleted', keepAttrs);
+  const handleRemove = async (e, productDeleted) => {
     try {
-      const res_remove = await deleteProduct(keepAttrs)
+      const res_remove = await deleteProduct(productDeleted['product_id'])
       console.log(res_remove)
+      window.location.reload()
       Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
     } catch (error) {
       Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
@@ -72,13 +62,29 @@ const Cart = () => {
   }
   const handleSubtractQuantity = async (product) => {
     product['change_amount'] -= 1
-    try {
+    console.log(product);
+    if (product['amount'] + product['change_amount'] == 0) {
+      try {
+        const res_remove = await deleteProduct(product['product_id'])
+        console.log(res_remove)
+        Notification({type: 'success', message: 'Remove product success', desc: "Let's shopping"})
+
+      } catch (error) {
+        Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
+        throw error
+      }
+    }
+    else {
+      try {
       const res = await updateCart(product)
       console.log(res)
-      window.location.reload()
-    } catch (error) {
-      throw error
+      
+      } catch (error) {
+        throw error
+      }
     }
+    window.location.reload()
+
   }
   const handleCheckbox = (e, product) => {
     if (e.target.checked) {
@@ -99,9 +105,6 @@ const Cart = () => {
       Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
       throw error
     }
-  }
-  const handleCheckoutFailed = (e) => {
-    Notification({type: 'error', message: 'Remove product fail', desc: 'Please remove product again'})
   }
 
   const openModelDelete = (e, product) => {
