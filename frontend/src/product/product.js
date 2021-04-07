@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faMapMarkerAlt, faPhone, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { useParams } from 'react-router'
 
-import { getProduct } from '../service/product.service'
+import { getProduct, getReviewProduct } from '../service/product.service'
 import { getShopData } from '../service/shop.service'
 import { getUserData } from '../service/user.service'
 import { Link } from 'react-router-dom'
@@ -23,6 +23,7 @@ const Product = () => {
     const [shop, setShop] = useState({});
     const [owner, setOwner] = useState({});
     const [cart, setCart] = useState([]);
+    const [comment, setComment] = useState([]);
 
     useEffect(() => {
         fetchdata(id)
@@ -44,6 +45,11 @@ const Product = () => {
         const ownerData = ownerResult.data.Userdata
         console.log(ownerData)
         setOwner(ownerData)
+
+        const commentResult = await getReviewProduct(id)
+        const commentData = commentResult.data
+        console.log(commentData)
+        setComment(commentData)
     }
 
     const handleUpDownAmount = (value) => {
@@ -107,6 +113,17 @@ const Product = () => {
         }
     }
 
+    const renderReview = (item, idx) => {
+        console.log(item)
+        return <div className="comment-container flex-col">
+            <div className="comment-title flex-row">
+                <h3>{`${item.firstname} ${item.lastname}`}</h3>
+                <Scores score={item.rating} />
+            </div>
+            <div className="comment">{item.comment}</div>
+        </div>
+    }
+
 
     if (data.length !== 0 && shop.length !== 0)
     return (
@@ -130,7 +147,7 @@ const Product = () => {
                         <div className="score flex-row">
                             <div>{data.Rating}</div>
                             <Scores score={data.Rating}/>
-                            <div>0 reviews</div>
+                            <div>{data.review_count} reviews</div>
                         </div>
                     </div>
                 </div>
@@ -191,6 +208,10 @@ const Product = () => {
                         </Link>
                     </div>
                 </div>
+                <div>
+                    <h1>Comment</h1>
+                    <div>{comment.map(renderReview)}</div>
+                </div>       
             </div>
             <div className="product-page-footer">
                 .

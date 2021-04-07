@@ -68,10 +68,10 @@ const Profile = () => {
             <div className="button-content flex-row">
                 <div className="score-text">{shop.rating.toFixed(1)}</div>
                 <Scores score={shop.rating} />
-                {/* <div className="vote-count-text">
+                <div className="vote-count-text">
               <FontAwesomeIcon icon={faUserFriends} />
             </div>
-            <div className="score-text">{shop.vote.length}</div> */}
+            <div className="score-text">{shop.review_count}</div>
             </div>
         );
     };

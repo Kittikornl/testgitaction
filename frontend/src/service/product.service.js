@@ -55,3 +55,16 @@ export const deleteProduct = async (id) => {
     throw error;
   }
 };
+
+export const getReviewProduct = async (id) => {
+  try {
+    return await axios.get(API_URL + `/products/${id}/reviews`, { 
+      headers: {
+          'Authorization': authHeader()
+      }});
+  } catch (error) {
+    console.log("error get review product");
+    throw error;
+  }
+}
+

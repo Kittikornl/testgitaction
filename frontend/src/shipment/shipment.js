@@ -31,7 +31,6 @@ const Shipment = () => {
     
     return (
         <div>
-            <Navbar/>
             <Banner title="Track your orders" bgClass="three" />
             <div className="shipment-container">
                 <div>

@@ -35,6 +35,8 @@ const Shop = () => {
     var showMoreN = document.getElementById("showMoreN");
 
     const result = await getShopData(id);
+    console.log(result.data)
+    
     setNewArrival(result.data.new_arrival_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
     setAllProduct1(result.data.all_product_type1);
@@ -50,7 +52,7 @@ const Shop = () => {
 
   const fetchReviewShop = async (id) => {
     const result = await getReviewShop(id);
-    setComments(result);
+    setComments(result.data);
   };
 
   const fetchUserData = async () => {
@@ -169,16 +171,18 @@ const Shop = () => {
     }
   };
 
-  const Comment = (props) => {
+  const Comment = ({comment}) => {
     return (
-      <div className="comment flex row">
-        <div className="person">
-          {props.firstname} {props.lastname}
+      <div className="comment-container flex-col">
+        <div className="comment-title flex-row">
+          <div className="person">
+            {comment.firstname} {comment.lastname}
+          </div>
+          <div className="rateing">
+            <Scores score={comment.rating} />
+          </div>
         </div>
-        <div className="word">{props.comment}</div>
-        <div className="rateing">
-          <Scores score={props.rating} />
-        </div>
+        <div className="word">{comment.comment}</div>
       </div>
     );
   };
@@ -258,7 +262,9 @@ const Shop = () => {
             </div>
           </div>
           <div className="comment-container m-t-10">
-            <div>Comment</div>
+            <div className="header flex-row">
+              <div style={{fontWeight:"bold"}}>Comment</div>
+            </div>
             {comments.length === 0 ? null : comments.map(renderComment)}
           </div>
         </div>

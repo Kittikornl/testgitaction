@@ -4,12 +4,11 @@ import { postReview } from '../service/order.service'
 import Notification from '../components/notification'
 import Banner from "../components/static/banner";
 import { Input, Button, Rate } from "antd";
+import { useHistory } from "react-router";
 const { TextArea } = Input;
 
 const Review = (prop) => {
-  const orderId = 1
-  const shopId = 2
-  const productId = 2
+  const history = useHistory()
   const [rateShop, setRateShop] = useState(0)
   const [commentShop, setCommentShop] = useState("")
   const [rateProduct, setRateProduct] = useState(0)
@@ -19,7 +18,8 @@ const Review = (prop) => {
 
   const listShopId = prop.location.state.shopIDs
   const listOrder = prop.location.state.orderList
-  const shopMapProduct = {}
+
+  const [shopMapProduct] = useState({});
 
   useEffect(() => {
     listOrder.forEach(product => {
@@ -30,20 +30,24 @@ const Review = (prop) => {
         shopMapProduct[product['shop_id']] = [product['product_id']]
       }
     });
-    console.log(shopMapProduct);
-    console.log(Object.keys(shopMapProduct));
     // object.keys(shopMapProduct.key.map(shop => {
     //   console.log('shop', shop);
     // })
   }, [])
 
   const review = async (data) => {
-    const res = await postReview(data)
+    try {
+      const res = await postReview(data)
+    }
+    catch (error){
+      console.log(error)
+    }
+    
   }
   
-  const handleReview = () => {
+  const handleReview = async () => {
     try {
-      Object.keys(shopMapProduct).map(shopId => {
+      Object.keys(shopMapProduct).forEach(shopId => {
         const data = {
           "products": shopMapProduct[shopId],
           "products_comment": commentProduct,
@@ -54,10 +58,10 @@ const Review = (prop) => {
         }
         review(data)
       })
-      Notification({type: 'success', message:'Edit shop successful', desc: "Shop is edited"})
-
+      Notification({type: 'success', message:'Review successful', desc: "Thank you for your feedback!"})
+      history.push("/home")
     } catch (error) {
-      Notification({type: 'error', message:'Edit shop error', desc: "Please edit your shop again"})
+      Notification({type: 'error', message:'Review error', desc: "Something went wrong!"})
     }
     
   }
