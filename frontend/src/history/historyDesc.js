@@ -10,6 +10,7 @@ const HistoryDesc = (props) => {
   const history = useHistory();
   const [orderList, setOrderList] = useState(undefined);
   const [shopList, setShopList] = useState([]);
+  const [shopIDs, setShopIDs] = useState();
   const [orderId, setOrderId] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [userData, setUserData] = useState();
@@ -30,6 +31,7 @@ const HistoryDesc = (props) => {
       })
       setTotalPrice(totalPrice)
       renderShopMap(receiveProps.orderList, receiveProps.shopIDs)
+      setShopIDs(receiveProps.shopIDs)
     }
 
   }, []);
@@ -56,7 +58,7 @@ const HistoryDesc = (props) => {
 
   const handleReview= () => {
     history.push("/review", {
-      order_id : orderId
+      shopIDs: shopIDs
     });
   };
 
