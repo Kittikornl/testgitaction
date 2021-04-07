@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./review.scss";
 import { postReview } from '../service/order.service'
 import Notification from '../components/notification'
@@ -6,7 +6,7 @@ import Banner from "../components/static/banner";
 import { Input, Button, Rate } from "antd";
 const { TextArea } = Input;
 
-const Review = () => {
+const Review = (prop) => {
   const orderId = 1
   const shopId = 2
   const productId = 2
@@ -15,24 +15,55 @@ const Review = () => {
   const [rateProduct, setRateProduct] = useState(0)
   const [commentProduct, setCommentProduct] = useState("")
 
-  const handleReview = async () => {
-    try {
-      const data = {
-        "products": [productId],
-        "products_comment": commentProduct,
-        "products_rating": rateProduct,
-        "shop_comment": commentShop,
-        "shop_rating": rateShop,
-        "shop_id": shopId
+  console.log(prop.location.state)
+
+  const listShopId = prop.location.state.shopIDs
+  const listOrder = prop.location.state.orderList
+  const shopMapProduct = {}
+
+  useEffect(() => {
+    listOrder.forEach(product => {
+      if (shopMapProduct[product['shop_id']]) {
+        shopMapProduct[product['shop_id']].push(product['product_id'])
       }
-      console.log(data);
-      const res = await postReview(data)
+      else {
+        shopMapProduct[product['shop_id']] = [product['product_id']]
+      }
+    });
+    console.log(shopMapProduct);
+    console.log(Object.keys(shopMapProduct));
+    // object.keys(shopMapProduct.key.map(shop => {
+    //   console.log('shop', shop);
+    // })
+  }, [])
+
+  const review = async (data) => {
+    const res = await postReview(data)
+  }
+  
+  const handleReview = () => {
+    try {
+      Object.keys(shopMapProduct).map(shopId => {
+        const data = {
+          "products": shopMapProduct[shopId],
+          "products_comment": commentProduct,
+          "products_rating": rateProduct,
+          "shop_comment": commentShop,
+          "shop_rating": rateShop,
+          "shop_id": parseInt(shopId)
+        }
+        review(data)
+      })
       Notification({type: 'success', message:'Edit shop successful', desc: "Shop is edited"})
+
     } catch (error) {
       Notification({type: 'error', message:'Edit shop error', desc: "Please edit your shop again"})
     }
     
   }
+
+  
+
   return (
     <div>
       <Banner title="Review your orders" bgClass="two" />
@@ -40,7 +71,6 @@ const Review = () => {
         <h2 className="text-center m-t-30">
           Please rate your experience with seller
         </h2>
-
         <div className="form-container">
           <h2 className="">Shop Review</h2>
           <div className="review-stars">
