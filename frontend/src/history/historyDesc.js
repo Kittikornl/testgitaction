@@ -12,7 +12,6 @@ const HistoryDesc = (props) => {
   const [shopList, setShopList] = useState([]);
   const [shopIDs, setShopIDs] = useState();
   const [orderId, setOrderId] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [userData, setUserData] = useState();
 
   const [orderMap] = useState({});
@@ -25,11 +24,6 @@ const HistoryDesc = (props) => {
       setShopList(receiveProps.shopList)
       setOrderId(receiveProps.orderId)
       setUserData(receiveProps.userData)
-      let totalPrice = 0
-      receiveProps.orderList.forEach(order => {
-        totalPrice += order.total_price
-      })
-      setTotalPrice(totalPrice)
       renderShopMap(receiveProps.orderList, receiveProps.shopIDs)
       setShopIDs(receiveProps.shopIDs)
     }
@@ -86,7 +80,7 @@ const HistoryDesc = (props) => {
         <div className="product-content flex-col">
           <div>{item.product_title}</div>
           <div>Amount : {item.amount} kg</div>
-          <div>Price : {item.total_price} TH</div>
+          <div>Price : {item.price} TH</div>
         </div>
       </div>
     </div>
@@ -103,9 +97,9 @@ const HistoryDesc = (props) => {
     <div className="history-desc-container flex-col">
       <div className="order-title flex-row">
         <h1>Order Id : {orderId}</h1>
-        {orderList[0].status !== 1 && orderList[0].status !== 6 && <div className="success-paid flex-row">
-          <Button onClick={() => handleTrack()}>Track your order</Button>
-          <Button onClick={() => handleReview()}>Review</Button>
+        {orderList[0].status !== 1 && orderList[0].status !== 5 && <div className="success-paid flex-row">
+          {orderList[0].status !== 4 && <Button onClick={() => handleTrack()}>Track your order</Button>}
+          {orderList[0].status !== 2 && <Button onClick={() => handleReview()}>Review</Button> }
         </div>}
         
         {orderList[0].status === 1 && <div className="unsuccess-paid">
@@ -140,7 +134,11 @@ const HistoryDesc = (props) => {
                 ? "-"
                 : orderList[0].tracking_number}
             </div>
-            <div>Kerry</div>
+            <div>
+              {orderList[0].shipping_method === ""
+                ? "-"
+                : orderList[0].shipping_method}
+            </div>
           </div>
         </div>
         <div className="content-warpper flex-col">
@@ -154,7 +152,7 @@ const HistoryDesc = (props) => {
             {orderList[0].status === 2 && <div>Payment status : </div>}
           </div>
           <div className="content flex-col">
-            <div>{totalPrice} TH</div>
+            <div>{orderList[0].total_price} TH</div>
             {orderList[0].status === 2 && <div>Credit card</div>}
             {orderList[0].status === 2 && <div>Already</div>}
           </div>
