@@ -28,20 +28,21 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
       case 1:
         return "Wait for payment";
       case 2:
-        return "paid";
+        return "Paid";
       case 3:
-        return "delivering";
+        return "Delivering";
       case 4:
-        return "received";
+        return "Received";
       case 5:
-        return "cancel";
+        return "Cancel";
       case 6:
-        return "sold out";
+        return "Sold out";
     }
   };
 
   const renderItem = (item, idx) => {
     shopIDs.add(item.shop_id)
+    console.log(item)
     return <div key={idx} className="history-content-wrapper flex-row">
       <img src={item.picture_url} />
       <div className="history-content flex-col">
@@ -49,7 +50,6 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
         <div className="seller">Shop : {getShopName(item.shop_id)}</div>
         <div className="discount">Price : {item.price} TH</div>
         <div className="discount">Amount : {item.amount} </div>
-        <div className="total">Total : {item.total_price} TH</div>
       </div>
     </div>
   }
@@ -67,11 +67,12 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
           {orderList.map(renderItem)}
         </div>
         <div className="button-wrapper flex-col">
-          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <div>Total Price : {orderList[0].total_price}</div>
+          <div className="status">{renderStatus(orderList[0] ?.status)}</div>
           <Button onClick={() => handleClick()}>{"Click >"}</Button>
         </div>
         <div className="button-wrapper-mobile flex-col">
-          <div className="status">{renderStatus(orderList[0].status)}</div>
+          <div className="status">{renderStatus(orderList[0] ?.status)}</div>
           <Button onClick={() => handleClick()}>{">"}</Button>
         </div>
       </div>
@@ -88,6 +89,10 @@ const History = () => {
   useEffect(() => {
     fetchdata();
   }, []);
+
+  useEffect(() => {
+    fetchdata();
+  }, [orderData]);
 
   const fetchdata = async () => {
     const result = await getHistory();
