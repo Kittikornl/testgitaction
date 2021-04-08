@@ -114,6 +114,7 @@ func DeleteShop(c *gin.Context) {
 	id := c.Param("id")
 	shoptable := models.Shoptable{}
 	product := models.Product{}
+	sold := models.Soldproduct{}
 
 	// Check if in the database
 	if err := database.DB.Find(&shoptable, id).Error; err != nil {
@@ -123,5 +124,6 @@ func DeleteShop(c *gin.Context) {
 
 	database.DB.Delete(&shoptable)
 	database.DB.Where("shop_id = ?", id).Delete(&product)
+	database.DB.Where("shop_id = ?", id).Delete(&sold)
 	c.Status(http.StatusNoContent)
 }
