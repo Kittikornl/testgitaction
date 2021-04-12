@@ -183,6 +183,27 @@
         }
       }
     },
+    "/history/filter/:status": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return orders history filter by status",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "filterHistory",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/filterHistoryResponse"
+          }
+        }
+      }
+    },
     "/homepage": {
       "get": {
         "security": [
@@ -654,6 +675,29 @@
     "DeletedAt": {
       "$ref": "#/definitions/NullTime"
     },
+    "FilterHistoryOutput": {
+      "type": "object",
+      "properties": {
+        "order_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Items"
+        },
+        "shop_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Shoptable"
+          },
+          "x-go-name": "ShopOut"
+        },
+        "user_info": {
+          "$ref": "#/definitions/Userdata"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
     "GetQRResponse": {
       "type": "object",
       "properties": {
@@ -799,7 +843,7 @@
           "x-go-name": "ShopID"
         },
         "status": {
-          "description": "Status's detail:\n0 = Cart (DEFAULT)\n1 = Wait for being paid\n2 = paid, wait for being delivered\n3 = delivered, wait for being received\n4 = received\n5 = Cancel order (SENT FROM FRONT)",
+          "description": "Status's detail:\n0 = Cart (DEFAULT)\n1 = Wait for being paid\n2 = paid, wait for being delivered\n3 = delivered, wait for being received\n4 = received\n5 = Cancel order (SENT FROM FRONT)\n6 = Amount of items in order is exceeding",
           "type": "integer",
           "format": "int64",
           "x-go-name": "Status"
@@ -1362,6 +1406,12 @@
     },
     "checkOutOrderResponse": {
       "description": ""
+    },
+    "filterHistoryResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/FilterHistoryOutput"
+      }
     },
     "getQRResponse": {
       "description": "",

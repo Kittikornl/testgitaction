@@ -23,6 +23,49 @@ type HistoryOutput struct {
 	ShopOut  []models.Shoptable `json:"shop_info"`
 }
 
+type FilterHistoryOutput struct {
+	Items    []models.Order     `json:"order_info"`
+	UserInfo models.Userdata    `json:"user_info"`
+	ShopOut  []models.Shoptable `json:"shop_info"`
+}
+
+// swagger:route GET /history/filter/:status cart filterHistory
+// Return orders history filter by status
+// Security:
+//       Bearer: read
+// responses:
+//		200: filterHistoryResponse
+
+func FilterHistory(c *gin.Context){
+	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
+	status := c.Param("status")
+	var filterHistoryOut FilterHistoryOutput
+
+	if err := database.DB.Where("id = ?", userID).Find(&filterHistoryOut.UserInfo).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	if err := database.DB.Where("user_id = ? AND status = ?", userID, status).Order("order_id desc").Find(&filterHistoryOut.Items).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	for _, e := range filterHistoryOut.Items {
+
+		var shopInfo models.Shoptable
+		if err := database.DB.Where("id = ?", e.ShopID).Find(&shopInfo).Error; err != nil {
+			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+			return
+		}
+		_, found := Find(filterHistoryOut.ShopOut, shopInfo)
+		if !found {
+			filterHistoryOut.ShopOut = append(filterHistoryOut.ShopOut, shopInfo)
+		}
+	}
+	c.JSON(http.StatusOK, filterHistoryOut)
+}
+
 // swagger:route GET /history cart getOrderHistory
 // Return orders history
 // Security:
@@ -40,7 +83,7 @@ func GetOrdersHistory(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Where("user_id = ? AND status > ?", userID, 0).Find(&historyOut.Items).Error; err != nil {
+	if err := database.DB.Where("user_id = ? AND status > ?", userID, 0).Order("order_id desc").Find(&historyOut.Items).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
