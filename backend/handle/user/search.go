@@ -23,6 +23,7 @@ func SearchProductOrShop(c *gin.Context) {
 	types := make([]models.Product, 0)
 	productsSpec := make([]models.Product, 0)
 	shops := make([]models.Shoptable, 0)
+	productsInShop := make([]models.Product, 0)
 	
 	search.Search = " "
 	search.ProductType = 0
@@ -62,10 +63,35 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, &shops)
 		}
 
+		
+		for _,e := range shops{
+			var productTMP []models.Product
+			if err := database.DB.Where("shop_id = ?", e.ID).Find(&productTMP).Error; err != nil {
+				c.JSON(http.StatusBadRequest, &shops)
+			}
+
+			for _,i := range productTMP{
+				_, found := Find(productsInShop,i)
+				if !found {
+					productsInShop = append(productsInShop, i)
+				}
+			}
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"q_by_shopname":    shops,
+			"all_products_inshop": productsInShop,
 			"q_by_productname": products,
 			"q_by_type":        types})
 	}
 
+}
+
+func Find(slice []models.Product, val models.Product) (int, bool) {
+	for i, item := range slice {
+		if item == val {
+			return i, true
+		}
+	}
+	return -1, false
 }
