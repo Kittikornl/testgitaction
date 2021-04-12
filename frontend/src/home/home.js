@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { getHomeData, getAllProduct } from "../service/home.service";
+import {
+  getHomeData,
+  getAllProduct,
+  getAllShop,
+} from "../service/home.service";
 import "./home.scss";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
 import Searchbar from "../components/searchbar";
 import { postSearchProduct } from "../service/search.service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStore } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const [showMoreBest, setShowMoreBest] = useState(false);
@@ -13,10 +19,12 @@ const Home = () => {
   const [allProduct, setAllProduct] = useState([]);
   const [showBest, setShowBest] = useState(true);
   const [showNew, setShowNew] = useState(true);
+  const [allShop, setAllShop] = useState([]);
 
   useEffect(() => {
     fetchHomeData();
     fetchAllProduct();
+    fetchAllShop();
   }, []);
 
   const fetchHomeData = async () => {
@@ -37,6 +45,11 @@ const Home = () => {
   const fetchAllProduct = async () => {
     const result = await getAllProduct();
     setAllProduct(result.data);
+  };
+
+  const fetchAllShop = async () => {
+    const result = await getAllShop();
+    setAllShop(result.data);
   };
 
   const handleSeeMoreBestSell = () => {
@@ -83,6 +96,14 @@ const Home = () => {
         <div className="name">
           {props.product.length === 0 ? "" : props.product.ProductTitle}
         </div>
+        <div className="shop-name-container flex-row">
+          <FontAwesomeIcon className="store-icon m-t-16" icon={faStore} />
+          <div className="shop-name">
+            {allShop.length === 0
+              ? null
+              : allShop[props.product.ShopID - 1].shopname}
+          </div>
+        </div>
       </div>
     );
   };
@@ -109,6 +130,14 @@ const Home = () => {
           />
         </a>
         <div className="name">{props.product.ProductTitle}</div>
+        <div className="shop-name-container flex-row">
+          <FontAwesomeIcon className="store-icon m-t-16" icon={faStore} />
+          <div className="shop-name">
+            {allShop.length === 0
+              ? null
+              : allShop[props.product.ShopID - 1].shopname}
+          </div>
+        </div>
       </div>
     );
   };

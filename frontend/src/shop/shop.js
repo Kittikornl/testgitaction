@@ -35,8 +35,7 @@ const Shop = () => {
     var showMoreN = document.getElementById("showMoreN");
 
     const result = await getShopData(id);
-    console.log(result.data)
-    
+
     setNewArrival(result.data.new_arrival_products.slice(0, 8));
     setTopSell(result.data.top_selling_products.slice(0, 8));
     setAllProduct1(result.data.all_product_type1);
@@ -171,7 +170,7 @@ const Shop = () => {
     }
   };
 
-  const Comment = ({comment}) => {
+  const Comment = ({ comment }) => {
     return (
       <div className="comment-container flex-col">
         <div className="comment-title flex-row">
@@ -263,7 +262,7 @@ const Shop = () => {
           </div>
           <div className="comment-container m-t-10">
             <div className="header flex-row">
-              <div style={{fontWeight:"bold"}}>Comment</div>
+              <div style={{ fontWeight: "bold" }}>Comment</div>
             </div>
             {comments.length === 0 ? null : comments.map(renderComment)}
           </div>
