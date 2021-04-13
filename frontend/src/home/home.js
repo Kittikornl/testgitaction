@@ -20,6 +20,7 @@ const Home = () => {
   const [showBest, setShowBest] = useState(true);
   const [showNew, setShowNew] = useState(true);
   const [allShop, setAllShop] = useState([]);
+  const [productInShop, setProductInShop] = useState([]);
 
   useEffect(() => {
     fetchHomeData();
@@ -45,6 +46,7 @@ const Home = () => {
   const fetchAllProduct = async () => {
     const result = await getAllProduct();
     setAllProduct(result.data);
+    console.log(result.data);
   };
 
   const fetchAllShop = async () => {
@@ -153,50 +155,33 @@ const Home = () => {
     };
 
     const result = await postSearchProduct(payload);
-    var showMoreN = document.getElementById("showMoreN");
-    var showMoreB = document.getElementById("showMoreB");
-    var bestSellText = document.getElementById("bestSellText");
-    var newArriveText = document.getElementById("newArriveText");
     console.log(result);
 
     if (payload.Search === null && payload.ProductType === null) {
       fetchAllProduct();
+      setProductInShop([]);
       setShowBest(true);
       setShowNew(true);
-      allProduct.length > 4
-        ? (showMoreN.innerHTML = "See more >")
-        : (showMoreN.innerHTML = "");
-      bestSellText.innerHTML = "Best seller";
-      newArriveText.innerHTML = "New arrivals";
     } else if (payload.Search === null && payload.ProductType !== null) {
       if (result.data.q_by_type !== undefined) {
         setAllProduct(result.data.q_by_type);
+        setProductInShop([]);
         setShowNew(false);
         setShowBest(false);
-        showMoreN.innerHTML = "";
-        showMoreB.innerHTML = "";
-        bestSellText.innerHTML = "";
-        newArriveText.innerHTML = "";
       }
     } else if (payload.Search !== null && payload.ProductType === null) {
       if (result.data.q_by_productname !== undefined) {
+        setProductInShop(result.data.all_products_inshop);
         setAllProduct(result.data.q_by_productname);
         setShowNew(false);
         setShowBest(false);
-        showMoreN.innerHTML = "";
-        showMoreB.innerHTML = "";
-        bestSellText.innerHTML = "";
-        newArriveText.innerHTML = "";
       }
     } else if (payload.Search !== null && payload.ProductType !== null) {
       if (result.data.products_information) {
         setAllProduct(result.data.products_information);
+        setProductInShop(result.data.allproducts_for_shop);
         setShowNew(false);
         setShowBest(false);
-        showMoreN.innerHTML = "";
-        showMoreB.innerHTML = "";
-        bestSellText.innerHTML = "";
-        newArriveText.innerHTML = "";
       }
     }
   };
@@ -211,59 +196,63 @@ const Home = () => {
             <div>min spend: 500 THB</div>
           </div>
         </div>
-        <div className="best-seller-grid">
-          <div className="header flex-row">
-            <div id="bestSellText">Best seller</div>
-            <button
-              className="see-more"
-              id="showMoreB"
-              onClick={handleSeeMoreBestSell}
-            >
-              See more{" >"}
-            </button>
-          </div>
-          <div class="grid-container m-t-16">
-            {showBest
-              ? topSell.slice(0, 4).length === 0
+        {showBest ? (
+          <div className="best-seller-grid">
+            <div className="header flex-row">
+              <div id="bestSellText">Best seller</div>
+              <button
+                className="see-more"
+                id="showMoreB"
+                onClick={handleSeeMoreBestSell}
+              >
+                {topSell.length > 4 ? "See more >" : ""}
+              </button>
+            </div>
+            <div class="grid-container m-t-16">
+              {topSell.slice(0, 4).length === 0
                 ? null
-                : topSell.slice(0, 4).map(renderProduct)
-              : null}
-            {showMoreBest
-              ? topSell.slice(4, 8).length === 0
-                ? null
-                : topSell.slice(4, 8).map(renderHidden)
-              : null}
+                : topSell.slice(0, 4).map(renderProduct)}
+              {showMoreBest
+                ? topSell.slice(4, 8).length === 0
+                  ? null
+                  : topSell.slice(4, 8).map(renderHidden)
+                : null}
+            </div>
           </div>
-        </div>
-        <div className="new-arrivals-grid m-t-20">
-          <div className="header flex-row">
-            <div id="newArriveText">New arrivals</div>
-            <button
-              className="see-more"
-              id="showMoreN"
-              onClick={handleSeeMoreNewArrive}
-            >
-              See more{" >"}
-            </button>
-          </div>
-          <div class="grid-container m-t-16">
-            {showNew
-              ? newArrival.slice(0, 4).length === 0
+        ) : null}
+        {showNew ? (
+          <div className="new-arrivals-grid m-t-20">
+            <div className="header flex-row">
+              <div id="newArriveText">New arrivals</div>
+              <button
+                className="see-more"
+                id="showMoreN"
+                onClick={handleSeeMoreNewArrive}
+              >
+                {newArrival.length > 4 ? "See more >" : ""}
+              </button>
+            </div>
+
+            <div class="grid-container m-t-16">
+              {newArrival.slice(0, 4).length === 0
                 ? null
-                : newArrival.slice(0, 4).map(renderProduct)
-              : null}
-            {showMoreNew
-              ? newArrival.slice(4, 8).length === 0
-                ? null
-                : newArrival.slice(4, 8).map(renderHidden)
-              : null}
+                : newArrival.slice(0, 4).map(renderProduct)}
+              {showMoreNew
+                ? newArrival.slice(4, 8).length === 0
+                  ? null
+                  : newArrival.slice(4, 8).map(renderHidden)
+                : null}
+            </div>
           </div>
-        </div>
+        ) : null}
         <div className="all-products-grid m-t-20">
           <div className="header flex-row">
             <div>All products</div>
           </div>
           <div class="grid-container m-t-16">
+            {productInShop.length === 0
+              ? null
+              : productInShop.map(renderProduct)}
             {allProduct.length === 0 ? null : allProduct.map(renderProduct)}
           </div>
         </div>
