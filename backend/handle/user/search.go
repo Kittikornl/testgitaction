@@ -50,10 +50,6 @@ func SearchProductOrShop(c *gin.Context) {
 			"allproducts_for_shop": productsSpec})
 
 	} else { //1 param
-		//query by product name
-		if err := database.DB.Where("product_title ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&products).Error; err != nil {
-			c.JSON(http.StatusBadRequest, &products)
-		}
 		//query by type
 		if err := database.DB.Where("product_type = ? AND amount > ?", search.ProductType, 0).Find(&types).Error; err != nil {
 			c.JSON(http.StatusBadRequest, &types)
@@ -63,18 +59,29 @@ func SearchProductOrShop(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, &shops)
 		}
 
-		
 		for _,e := range shops{
 			var productTMP []models.Product
+			
 			if err := database.DB.Where("shop_id = ?", e.ID).Find(&productTMP).Error; err != nil {
 				c.JSON(http.StatusBadRequest, &shops)
 			}
-
 			for _,i := range productTMP{
 				_, found := Find(productsInShop,i)
 				if !found {
 					productsInShop = append(productsInShop, i)
 				}
+			}
+		}
+		
+		var productNotInShop []models.Product
+		//query by product name
+		if err := database.DB.Where("product_title ILIKE ? AND amount > ?", "%"+search.Search+"%", 0).Find(&productNotInShop).Error; err != nil {
+			c.JSON(http.StatusBadRequest, &productNotInShop)
+		}
+		for _,i := range productNotInShop{
+			_, found := Find(productsInShop,i)
+			if !found {
+				products = append(products, i)
 			}
 		}
 
