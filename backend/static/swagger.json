@@ -225,6 +225,27 @@
         }
       }
     },
+    "/orders": {
+      "get": {
+        "security": [
+          {
+            "Bearer": [
+              "read"
+            ]
+          }
+        ],
+        "description": "Return orders for shop",
+        "tags": [
+          "cart"
+        ],
+        "operationId": "getOrdersForSeller",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ordersForSellerResponse"
+          }
+        }
+      }
+    },
     "/payment/cancel": {
       "post": {
         "description": "Cancle the order",
@@ -870,6 +891,29 @@
       },
       "x-go-package": "github.com/sec33_Emparty/backend/models"
     },
+    "OrdersSellerOutput": {
+      "type": "object",
+      "properties": {
+        "order_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Order"
+          },
+          "x-go-name": "Items"
+        },
+        "shop_info": {
+          "$ref": "#/definitions/Shoptable"
+        },
+        "user_info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Userdata"
+          },
+          "x-go-name": "UserInfo"
+        }
+      },
+      "x-go-package": "github.com/sec33_Emparty/backend/handle/cart"
+    },
     "Payment": {
       "type": "object",
       "properties": {
@@ -1429,6 +1473,12 @@
       "description": "",
       "schema": {
         "$ref": "#/definitions/HistoryOutput"
+      }
+    },
+    "ordersForSellerResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/OrdersSellerOutput"
       }
     },
     "productReviewsResponse": {
