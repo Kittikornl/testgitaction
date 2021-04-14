@@ -19,8 +19,14 @@ type Checkout struct {
 
 type HistoryOutput struct {
 	Items    []models.Order     `json:"order_info"`
-	UserInfo []models.Userdata    `json:"user_info"`
+	UserInfo models.Userdata    `json:"user_info"`
 	ShopOut  []models.Shoptable `json:"shop_info"`
+}
+
+type OrdersSellerOutput struct {
+	Items    []models.Order     `json:"order_info"`
+	UserInfo []models.Userdata    `json:"user_info"`
+	ShopOut  models.Shoptable `json:"shop_info"`
 }
 
 type FilterHistoryOutput struct {
@@ -157,10 +163,17 @@ func CheckOutOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"order_id": orderID + 1})
 }
 
+// swagger:route GET /orders cart getOrdersForSeller
+// Return orders for shop
+// Security:
+//       Bearer: read
+// responses:
+//		200: ordersForSellerResponse
+
 func GetOrdersForSeller(c *gin.Context) {
 
 	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
-	var orderOut HistoryOutput
+	var orderOut OrdersSellerOutput
 
 	if err := database.DB.Where("id = ?", userID).Find(&orderOut.ShopOut).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
