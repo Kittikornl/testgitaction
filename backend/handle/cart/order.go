@@ -19,7 +19,7 @@ type Checkout struct {
 
 type HistoryOutput struct {
 	Items    []models.Order     `json:"order_info"`
-	UserInfo models.Userdata    `json:"user_info"`
+	UserInfo []models.Userdata    `json:"user_info"`
 	ShopOut  []models.Shoptable `json:"shop_info"`
 }
 
@@ -157,6 +157,46 @@ func CheckOutOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"order_id": orderID + 1})
 }
 
+func GetOrdersForSeller(c *gin.Context) {
+
+	userID, _ := services.ExtractToken(c.GetHeader("Authorization"))
+	var orderOut HistoryOutput
+
+	if err := database.DB.Where("id = ?", userID).Find(&orderOut.ShopOut).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	if err := database.DB.Where("shop_id = ? AND status = ?", userID, 2).Find(&orderOut.Items).Error; err != nil {
+		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
+	}
+
+	for _, e := range orderOut.Items {
+
+		var userInfo models.Userdata
+		if err := database.DB.Where("id = ?", e.UserId).Find(&userInfo).Error; err != nil {
+			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+			return
+		}
+		_, found := FindUser(orderOut.UserInfo, userInfo)
+		if !found {
+			orderOut.UserInfo = append(orderOut.UserInfo, userInfo)
+		}
+	}
+	c.JSON(http.StatusOK, orderOut)
+}
+
 func randInt(min int, max int) int {
 	return min + rand.Intn(max-min)
+}
+
+
+func FindUser(slice []models.Userdata, val models.Userdata) (int, bool) {
+	for i, item := range slice {
+		if item == val {
+			return i, true
+		}
+	}
+	return -1, false
 }
