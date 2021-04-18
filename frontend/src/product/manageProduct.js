@@ -75,7 +75,7 @@ const ManageProduct = (props) => {
         form.setFieldsValue({type: value})
     }
 
-    const handleSubmit = (fieldsValue) => {
+    const handleSubmit = async (fieldsValue) => {
         let payload = {}
 
         payload["PictureURL"] = url
@@ -92,17 +92,18 @@ const ManageProduct = (props) => {
         console.log(payload)
 
         if (mode === 0) {
-            postAddProduct(payload)
+            await postAddProduct(payload)
             Notification({type: 'success', message: 'Add product successfully.', desc: 'wait for customer!'})
+            history.push('shop')
         }
         else if (mode === 1) {
-            putEditProduct(payload, data.ID)
+            await putEditProduct(payload, data.ID)
             Notification({type: 'success', message: 'Edit product successfully.', desc: 'check your product information!'})
+            history.push('shop')
         }
         else {
             Notification({type: 'error', message: 'Mode error.', desc: 'something went wrong!'})
         }
-        history.push('shop')
     }
 
 
