@@ -3,15 +3,18 @@ import { notification } from 'antd'
 const Notification = ({type, message, desc}) => {
     const showNotificationInform = () => {notification.open({
         message: message,
-        description: desc
+        description: desc,
+        duration: 2
     })}
     const showNotificationSuccess = () => {notification.success({
         message: message,
-        description: desc
+        description: desc,
+        duration: 2
     })}
     const showNotificationError = () => {notification.error({
         message: message,
-        description: desc
+        description: desc,
+        duration: 2
     })}
     console.log(type, message, desc)
     if (type === 'inform'){
