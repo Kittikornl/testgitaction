@@ -20,6 +20,7 @@ import Review from "./review/review";
 import Shipment from "./shipment/shipment";
 import Cart from "./cart/cart";
 import Checkout from "./checkout/checkout";
+import ShopOrder from "./shop/shopOrder";
 
 function App() {
   const history = useHistory();
@@ -91,6 +92,7 @@ function App() {
         <PrivateRoute exact key="review" path="/review" component={Review} />
         <PrivateRoute exact key="cart" path="/cart" component={Cart} />
         <PrivateRoute exact key="shipment" path="/shipment" component={Shipment} />
+        <PrivateRoute exact key="shop-order" path="/orders/shop" component={ShopOrder} />
       </Switch>
     </Router>
   );
