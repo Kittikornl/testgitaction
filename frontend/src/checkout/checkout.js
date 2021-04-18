@@ -49,7 +49,7 @@ const Checkout = (props) => {
   const checkpermission = (props) => {
     console.log(props);
     if (props.location.state === undefined) {
-      history.push("/history");
+      history.push("/order");
       return false;
     } else {
       return true;
