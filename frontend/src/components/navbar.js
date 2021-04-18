@@ -47,21 +47,15 @@ const Navbar = () => {
                         <Link to="/home">Home</Link>
                     </Menu.Item>
                     <Menu.Item key="2" >
-                        <Link to="/history">History</Link>
+                        <Link to="/order">My order</Link>
                     </Menu.Item>
                     <Menu.Item key="3" >
-                        <Link to="/aboutus">About us</Link>
-                    </Menu.Item>
-                    <Menu.Item key="4" className="desktop-logo">
-                        <Link to="/home" >pugsod</Link>
-                    </Menu.Item>
-                    <Menu.Item key="5" >
                         <Link to="/cart">Cart</Link>
                     </Menu.Item>
-                    <Menu.Item key="6" >
+                    <Menu.Item key="4" >
                         <Link to="/profile">Profile</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" className="logout-tab">
+                    <Menu.Item key="5" className="logout-tab">
                         <div onClick={showLogoutModal}>Logout</div>
                     </Menu.Item>
                  </Menu>
@@ -72,21 +66,18 @@ const Navbar = () => {
                         <Link to="/home">Home</Link>
                     </Menu.Item>
                     <Menu.Item key="2" >
-                        <Link to="/history">History</Link>
+                        <Link to="/order">My order</Link>
                     </Menu.Item>
-                    <Menu.Item key="3" >
-                        <Link to="/aboutus">About us</Link>
-                    </Menu.Item>
-                    <Menu.Item key="4" className="desktop-logo">
+                    <Menu.Item key="3" className="desktop-logo">
                         <Link to="/home" >pugsod</Link>
                     </Menu.Item>
-                    <Menu.Item key="5" >
+                    <Menu.Item key="4" >
                         <Link to="/cart">Cart</Link>
                     </Menu.Item>
-                    <Menu.Item key="6" >
+                    <Menu.Item key="5" >
                         <Link to="/profile">Profile</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" className='logout-tab'>
+                    <Menu.Item key="6" className='logout-tab'>
                         <div onClick={showLogoutModal}>Logout</div>
                     </Menu.Item>
                  </Menu>

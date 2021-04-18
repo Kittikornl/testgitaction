@@ -24,9 +24,9 @@
     .profile-title .full-name {
         display: inline-flex;
         flex-direction: row;
-
+        margin-top: 10px;
         font-weight: bold;
-        font-size: 40px;
+        font-size: 30px;
         color: $green;
 
         align-items: center;
@@ -70,12 +70,12 @@
     .ant-btn {
         background-color: $green;
         border-radius: 10px;
-        height: 60px;
+        height: 45px;
         border: none;
-
         font-weight: 600;
-        font-size: 20px;
+        font-size: 18px;
         color: white;
+        margin-top: 10px;
     }
 
     .button-container {
