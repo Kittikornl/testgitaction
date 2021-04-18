@@ -46,12 +46,12 @@ const Home = () => {
   const fetchAllProduct = async () => {
     const result = await getAllProduct();
     setAllProduct(result.data);
-    console.log(result.data);
   };
 
   const fetchAllShop = async () => {
     const result = await getAllShop();
     setAllShop(result.data);
+    console.log(result.data)
   };
 
   const handleSeeMoreBestSell = () => {
@@ -177,6 +177,7 @@ const Home = () => {
         setShowBest(false);
       }
     } else if (payload.Search !== null && payload.ProductType !== null) {
+      
       if (result.data.products_information) {
         setAllProduct(result.data.products_information);
         setProductInShop(result.data.allproducts_for_shop);
