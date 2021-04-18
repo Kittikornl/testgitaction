@@ -71,3 +71,15 @@ export const getHistory = async () => {
     }
 }
 
+export const getHistoryFilter = async (status) => {
+    try {
+        return await axios.get(API_URL + `/history/filter/${status}`, {
+            headers: {
+                'Authorization': authHeader()
+            }
+        })
+    } catch (error) {
+        throw error
+    }
+}
+
