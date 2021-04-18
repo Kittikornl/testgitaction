@@ -210,7 +210,7 @@ const Product = () => {
                 </div>
                 <div>
                     <h1>Comment</h1>
-                    <div>{comment.map(renderReview)}</div>
+                    <div>{comment.length > 0 ? comment.map(renderReview) : "No comment"}</div>
                 </div>       
             </div>
             <div className="product-page-footer">

@@ -146,7 +146,7 @@ const Shop = () => {
           <div className="button-group flex-row">
             <Link to="/manage/shop">
               <Button htmlType="edit" className="button-green">
-                Manage Product
+                Manage Shop
               </Button>
             </Link>
           </div>

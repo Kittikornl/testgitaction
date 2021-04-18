@@ -59,7 +59,7 @@ const Profile = () => {
         else if (role === 2)
             history.push('create/shop')
         else
-            history.push('history')
+            history.push('order')
     }
 
     const renderButtonContentText = () => {
@@ -81,7 +81,7 @@ const Profile = () => {
                 <Button onClick={() => handleUserButton()} >
                     {(role === 1) ? <FontAwesomeIcon icon={faHistory} /> : <FontAwesomeIcon icon={faShoppingCart} />}
                     &nbsp;
-                    {(role === 1) ? "Shopping history" : 
+                    {(role === 1) ? "Shopping Order" : 
                        (shop.ID === 0) ? "Create Shop" : "View shop >"}
                 </Button>
                 {(role === 2 && shop.ID === 0) ? 

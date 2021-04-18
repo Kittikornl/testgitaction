@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import Searchbar from "../components/searchbar";
+import OrderSearchbar from "../components/orderSearchBar";
 import { getHistory } from "../service/cart.service";
 
 import "./history.scss";
@@ -12,7 +12,7 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
   const [shopIDs] = useState(new Set())
 
   const handleClick = () => {
-    history.push("history/description", {
+    history.push("order/description", {
       orderList: orderList,
       shopList: shopList,
       orderId: orderId,
@@ -42,7 +42,6 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
 
   const renderItem = (item, idx) => {
     shopIDs.add(item.shop_id)
-    console.log(item)
     return <div key={idx} className="history-content-wrapper flex-row">
       <img src={item.picture_url} />
       <div className="history-content flex-col">
@@ -81,34 +80,43 @@ const HistoryItem = ({ orderList, orderId, shopList, userData }) => {
 };
 
 const History = () => {
-  const [orderData] = useState({});
+  const [orderData, setOrderData] = useState({});
   const [shopList, setShopList] = useState([]);
   const [userData, setUserData] = useState({});
   const [sortComplete, setSortComplete] = useState(false);
 
+  const [orderId, setOrderId] = useState("");
+
   useEffect(() => {
-    fetchdata();
+    fetchdata(0, null, "");
   }, []);
 
-  useEffect(() => {
-    fetchdata();
-  }, [orderData]);
-
-  const fetchdata = async () => {
-    const result = await getHistory();
-    console.log(result.data);
+  const fetchdata = async (type, data, id) => {
+    setSortComplete(false)
+    let result = {}
+    setOrderId(id)
+    if (type === 0) {
+      result = await getHistory();
+      setShopList(result.data.shop_info)
+      setUserData(result.data.user_info)
+    }
+    else {
+      result = data
+      setOrderData({})
+    }
     sortOrderID(result.data.order_info)
-    setShopList(result.data.shop_info)
-    setUserData(result.data.user_info)
   };
 
   const sortOrderID = (order_data) => {
+    let order_dict = {}
     order_data.forEach(item => {
-      orderData[item.order_id] = []
+      order_dict[item.order_id] = []
     });
+    
     order_data.forEach(item => {
-      orderData[item.order_id].push(item)
+      order_dict[item.order_id].push(item)
     });
+    setOrderData(order_dict)
     setSortComplete(true)
   }
 
@@ -119,11 +127,16 @@ const History = () => {
   if (!sortComplete) return <div></div>;
   return (
     <div className="history-page-container flex-col">
-      <Searchbar />
+      <OrderSearchbar setData={fetchdata} />
       <div className="history-container">
-        <h1>My history</h1>
+        <h1>My orders</h1>
         <div className="history-item-container flex-col">
-          {Object.keys(orderData).map(renderHistoryItem)}
+          {console.log(orderData)}
+          {orderId!==""? 
+            <HistoryItem orderList={orderData[orderId]} orderId={orderId} shopList={shopList} userData={userData}/>
+            :
+            Object.keys(orderData).map(renderHistoryItem)
+          }
         </div>
       </div>
     </div>

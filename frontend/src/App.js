@@ -75,11 +75,11 @@ function App() {
           path="/manage/shop"
           component={ManageShop}
         />
-        <PrivateRoute exact key="history" path="/history" component={History} />
+        <PrivateRoute exact key="order" path="/order" component={History} />
         <PrivateRoute
           exact
-          key="history-desc"
-          path="/history/description"
+          key="order-desc"
+          path="/order/description"
           component={HistoryDesc}
         />
         <PrivateRoute

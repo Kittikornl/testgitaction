@@ -10,6 +10,7 @@ const Searchbar = (props) => {
     const payload = {};
     payload.keyword = value;
     payload.type = type;
+    console.log(payload)
     props.getSearchData(payload);
   };
 
@@ -53,3 +54,4 @@ const Searchbar = (props) => {
 };
 
 export default Searchbar;
+
