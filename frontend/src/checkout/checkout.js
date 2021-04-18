@@ -501,7 +501,7 @@ const Checkout = (props) => {
               Make a payment
             </Button>
           ) : payMethod === "card" ? (
-            <Link to="/history">
+            <Link to="/order">
               <Button
                 htmlType="submit"
                 className="button-green"
@@ -529,7 +529,7 @@ const Checkout = (props) => {
                   <div className="header">QR Code</div>
                   <img src={qr} />
                   <div className="button-group flex-row">
-                    <Link to="/history">
+                    <Link to="/order">
                       <Button
                         htmlType="submit"
                         className="button-green"
