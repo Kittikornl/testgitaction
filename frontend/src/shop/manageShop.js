@@ -154,8 +154,9 @@ const ManageShop = () => {
                         <FontAwesomeIcon icon={faEdit} />
                     </Link>
                 </h1>
-                <div className="add-product-button">
+                <div className="add-product-button flex-row">
                     <Button onClick={() => handleAddProduct()}>Add Product</Button>
+                    <Button onClick={() => history.push("/orders/shop")}>View Order</Button>
                 </div>
                 <div className="veg-container">
                     <h2>Vegetables</h2>

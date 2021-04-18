@@ -16,6 +16,19 @@ export const getShopData = async (id) => {
   }
 };
 
+export const getShopOrder = async () => {
+  try {
+    return await axios.get(API_URL + `/orders`, {
+      headers: {
+        Authorization: authHeader(),
+      },
+    });
+  } catch (error) {
+    console.log("error get shoporder");
+    throw error;
+  }
+};
+
 export const postShop = async (values) => {
   try {
     return await axios.post(API_URL + "/shops", values, {
