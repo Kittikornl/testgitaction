@@ -39,6 +39,10 @@
         border-radius: 10px;
         height: 45px;
         border: none;
+        &:hover {
+            background-color: #a7e6b9;
+            color: $dark-green;
+        }
     }
     .ant-form-item {
         color: $dark-green;

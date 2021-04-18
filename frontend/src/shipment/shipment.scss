@@ -4,7 +4,7 @@
     width: 100%;
     margin: 0 auto;
     max-width: 1330px;
-    padding: 0 20px;
+    padding: 0 20px 10px;
     h2 {
         color: $green;
         margin-bottom: 5px;
@@ -28,6 +28,9 @@
     .ant-steps {
         margin: 100px 0;
     }
+    .ant-steps-vertical {
+        margin: 0;
+    }
     .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after,
     .ant-steps-item-icon > .ant-steps-icon,
     .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot {
@@ -48,15 +51,6 @@
             }
         }
     };
-    // @media screen and(min-width: 1024px) {
-    //     .ant-input {
-    //         width: 450px;
-
-    //     }
-    //     .ant-btn {
-    //         width: 130px;
-    //     }
-    // }
     @media screen and(min-width: 768px) {
         .box-input .ant-input {
             width: 450px;

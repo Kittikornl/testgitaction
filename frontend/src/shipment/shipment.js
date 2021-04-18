@@ -1,4 +1,4 @@
-import React, { useState } from 'react' 
+import React, { useEffect, useState } from 'react' 
 import './shipment.scss'
 import Navbar from '../components/navbar'
 import Banner from "../components/static/banner";
@@ -14,6 +14,11 @@ const Shipment = () => {
     const [valid, setValid] = useState(false)
     const [input, setInput] = useState(false)
     const [status, setStatus] = useState(0)
+    const [windowDimensions, setWindowDimensions] = useState()
+
+    useEffect(() => {
+        setWindowDimensions(getWindowDimensions())
+    }, [])
 
     const getShipmentStatus = async () => {
         const data = {
@@ -21,14 +26,20 @@ const Shipment = () => {
         }
         const res = await postShipment(data)
         setInput(true)
-        console.log(res.data.shop_id);
         res.data.user_id === 0 ? setValid(false):setValid(true)
-        console.log('trackId',trackId);
-        console.log('valid', valid);
-        console.log('status', res.data.status);
         setStatus(res.data.status)
+
     }
-    
+
+    const getWindowDimensions = () => {
+        const { innerWidth: width, innerHeight: height } = window;
+        console.log(height);
+        return {
+          width,
+          height
+        };
+      }
+
     return (
         <div>
             <Banner title="Track your orders" bgClass="three" />
@@ -43,14 +54,20 @@ const Shipment = () => {
                     </div>
                 </div>
                 {/* status 2, 3, 4 */}
-                {input & valid ? 
-                    <Steps progressDot current={status-2}>
+                {input & valid & windowDimensions?.width > 375 ? 
+                    <Steps progressDot current={status-2} className="horizontal">
                         <Step title="Receive order" description="Your order is prepared" />
-                        {/* <Step title="In Progress" description="Delivery in progress"/> */}
                         <Step title="Shipped" description="Your order is shipped" />
                         <Step title="Success" description="Your order derivered" />
                     </Steps>
                  : 
+                 input & valid & windowDimensions?.width <= 375 ? 
+                    <Steps direction="vertical" progressDot current={status-2} className="verticle">
+                        <Step title="Receive order" description="Your order is prepared" />
+                        <Step title="Shipped" description="Your order is shipped" />
+                        <Step title="Success" description="Your order derivered" />
+                    </Steps>
+                :
                  input ?
                 <div className="text-center box-result">
                     <img src={notFound} />

@@ -22,10 +22,10 @@
             height: auto;
             width: auto;
             border: none;
-            background-color: #f1fbf7;
+            background-color: $button-red;
             border-radius: 5px;
-            color: #4d7951;
-            font-size: 30px;
+            color: white;
+            font-size: 20px;
         }
         .product-detail {
             display: flex;
@@ -54,18 +54,63 @@
                     margin: 0 10px;
                 }
             }
-            @media screen and(max-width: 425px) {
-                .img {
-                    width: 50%;
-                }
-                .desc {
-                    width: 50%;
-                    font-size: 80%;
-                }
-            }
+
         }
         > div {
             padding: 4px;
+        }
+        @media screen and(max-width: 425px) {
+            .product-detail {
+                .img {
+                    width: 40%;
+                }
+                .desc {
+                    width: 60%;
+                    font-size: 80%;
+
+                    .ant-btn {
+                        display: inline;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
+            .ant-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+            }
+        }
+        @media screen and(max-width: 320px) {
+            .product-detail {
+                .img {
+                    width: 35%;
+                }
+                .desc {
+                    width: 65%;
+                    font-size: 80%;
+
+                    .ant-btn {
+                        display: inline;
+                        width: 25px;
+                        height: 25px;
+                    }
+                }
+            }
+            .ant-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 25px;
+                height: 25px;
+                font-size: 16px;
+            }
+            > div {
+                padding: 0;
+            }
         }
     }
     .summary {
@@ -94,5 +139,11 @@
     .ant-checkbox-checked .ant-checkbox-inner {
         border-color: #52c41a;
         background-color: #52c41a;
+    }
+
+    @media screen and(max-width: 425px) {
+        .item-list {
+            padding: 0;
+        }
     }
 }

@@ -572,7 +572,7 @@ const Checkout = (props) => {
                 <p>Are you sure you want to cancel this order ?</p>
               </div>
               <div className="button-group flex-row">
-                <Link to="/history">
+                <Link to="/order">
                   <Button
                     htmlType="submit"
                     className="button-yes"
