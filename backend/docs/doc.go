@@ -124,6 +124,13 @@ type orderHistoryResponseWrapper struct {
 	Body cart.HistoryOutput
 }
 
+// swagger:response ordersForSellerResponse
+type ordersForSellerResponseWrapper struct {
+	// return orders for shop
+	// in: body
+	Body cart.OrdersSellerOutput
+}
+
 // swagger:response filterHistoryResponse
 type filterHistoryResponseWrapper struct {
 	// return orders history filter by status
