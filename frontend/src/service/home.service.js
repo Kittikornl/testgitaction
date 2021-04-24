@@ -34,3 +34,12 @@ export const getAllShop = async () => {
     throw error;
   }
 };
+
+export const getRandomPromotion = async () => {
+  try {
+    return await axios.get(API_URL + "/payment/promotion", { headers: header });
+  } catch (error) {
+    console.log("error get promotion");
+    throw error;
+  }
+};
