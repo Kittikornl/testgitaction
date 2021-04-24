@@ -139,17 +139,13 @@ func UsePromotion(c *gin.Context) {
 
 func GetRandomPromotion(c *gin.Context){
 	promotions := []models.Promotion{}
-	var promotion models.Promotion
 
 	if err := database.DB.Where("amount > ?", 1).Find(&promotions).Error; err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage("promotion code: does not exist"))
 		return
+	}
+	if len(promotions)==0{
+		c.JSON(http.StatusBadRequest, services.ReturnMessage("No promotion"))
 	}
 	index := rand.Intn(len(promotions))
-	id := (promotions[index]).ID
-	if err := database.DB.Where("id = ? ", id).First(&promotion).Error; err != nil {
-		c.JSON(http.StatusBadRequest, services.ReturnMessage(err.Error()))
-		return
-	}
-	c.JSON(http.StatusOK, &promotion)
+	c.JSON(http.StatusOK, &promotions[index])
 }
