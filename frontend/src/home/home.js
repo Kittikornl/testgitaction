@@ -3,6 +3,7 @@ import {
   getHomeData,
   getAllProduct,
   getAllShop,
+  getRandomPromotion,
 } from "../service/home.service";
 import "./home.scss";
 import vegThumbnail from "../img/veg-thumbnail.jpg";
@@ -21,11 +22,13 @@ const Home = () => {
   const [showNew, setShowNew] = useState(true);
   const [allShop, setAllShop] = useState([]);
   const [productInShop, setProductInShop] = useState([]);
+  const [promotion, setPromotion] = useState("");
 
   useEffect(() => {
     fetchHomeData();
     fetchAllProduct();
     fetchAllShop();
+    fetchPromotion();
   }, []);
 
   const fetchHomeData = async () => {
@@ -51,9 +54,15 @@ const Home = () => {
   const fetchAllShop = async () => {
     const result = await getAllShop();
     setAllShop(result.data);
-    console.log(result.data)
+    console.log(result.data);
   };
 
+  const fetchPromotion = async () => {
+    const result = await getRandomPromotion();
+    setPromotion(result.data);
+  };
+
+  console.log(promotion);
   const handleSeeMoreBestSell = () => {
     setShowMoreBest(!showMoreBest);
 
@@ -177,7 +186,6 @@ const Home = () => {
         setShowBest(false);
       }
     } else if (payload.Search !== null && payload.ProductType !== null) {
-      
       if (result.data.products_information) {
         setAllProduct(result.data.products_information);
         setProductInShop(result.data.allproducts_for_shop);
@@ -193,8 +201,13 @@ const Home = () => {
       <div className="home-page">
         <div className="promo-banner m-y-24">
           <div className="promo-code semi-bold flex-col">
-            <div>Save 10% off | code ABC2D3</div>
-            <div>min spend: 500 THB</div>
+            <div>
+              Save {promotion.discount_amount} THB off | code{" "}
+              {promotion.promotion_code}
+            </div>
+            {promotion.min_spent !== 0 ? (
+              <div>min spend: {promotion.min_spent} THB</div>
+            ) : null}
           </div>
         </div>
         {showBest ? (
