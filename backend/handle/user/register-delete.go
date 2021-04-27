@@ -66,6 +66,8 @@ func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 	userTable := models.Usertable{}
 	userData := models.Userdata{}
+	shopData := models.Shoptable{}
+	productData := make([]models.Product, 0)
 
 	if err := database.DB.Find(&userTable, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
@@ -75,7 +77,12 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 		return
 	}
+	if err := database.DB.Where("user_id = ?", id).Find(&shopData).Error; err != nil {
+		c.JSON(http.StatusBadRequest, &shopData)
+	}
 	database.DB.Delete(&userTable)
 	database.DB.Delete(&userData)
+	database.DB.Delete(&shopData)
+	database.DB.Where("shop_id = ?", shopData.ID).Delete(&productData)
 	c.Status(http.StatusNoContent)
 }
