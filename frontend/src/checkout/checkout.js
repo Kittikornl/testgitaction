@@ -228,6 +228,7 @@ const Checkout = (props) => {
     });
     payload["order"] = tmp;
     payload["shipping_method"] = shippingMethod;
+    payload["total_price"] = totalPrice;
     console.log(payload);
     try {
       await postPaymentByCredit(payload);
@@ -262,6 +263,7 @@ const Checkout = (props) => {
     });
     payload["order"] = tmp;
     payload["shipping_method"] = shippingMethod;
+    payload["total_price"] = totalPrice;
     console.log(payload);
     try {
       await postPaymentByQR(payload);
@@ -373,6 +375,11 @@ const Checkout = (props) => {
                         {
                           required: true,
                           message: "Please input your card number!",
+                        },
+                        { len: 16, message: "Card Number only 16 characters" },
+                        {
+                          pattern: /^[0-9\b]+$/,
+                          message: "Please enter as number",
                         },
                       ]}
                     >
