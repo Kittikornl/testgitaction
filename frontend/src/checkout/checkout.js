@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import Notification from "../components/notification";
 import { useHistory } from "react-router";
 
+const { useForm } = Form;
+
 const Checkout = (props) => {
   const history = useHistory();
   const [showAddCard, setShowAddCard] = useState(false);
@@ -45,6 +47,7 @@ const Checkout = (props) => {
   const [shippingMethod, setShippingMethod] = useState("");
   const initdata = [];
   const monthFormat = "MM/YYYY";
+  const [formAddCredit] = useForm();
 
   const checkpermission = (props) => {
     console.log(props);
@@ -181,9 +184,7 @@ const Checkout = (props) => {
   const onFinishAddCreditCard = () => {
     setShowAddCard(false);
     setShowCard(true);
-  };
-
-  const handleSubmitCard = () => {
+    setVisibleCredit(false);
     setConfirmLoading(true);
     setTimeout(() => {
       setVisibleCredit(false);
@@ -359,6 +360,7 @@ const Checkout = (props) => {
               >
                 <div className="add-creditcard-modal">
                   <Form
+                    form={formAddCredit}
                     {...modalCreditLayout}
                     name="basic"
                     initialValues={{ remember: true }}
@@ -422,20 +424,25 @@ const Checkout = (props) => {
                       <Input />
                     </Form.Item>
                     <div className="card-button flex-row">
-                      <Button
+                    <Form.Item>
+                        <Button
                         htmlType="submit"
                         className="button-green"
-                        onClick={handleSubmitCard}
+                        // onClick={handleSubmitCard}
                       >
                         Submit
                       </Button>
+                    </Form.Item>
+                    <Form.Item>
                       <Button
-                        htmlType="cancle"
-                        className="button-red"
-                        onClick={handleCancelCredit}
+                      htmlType="cancle"
+                      className="button-red"
+                      onClick={handleCancelCredit}
                       >
                         Cancel
                       </Button>
+                    </Form.Item>
+                      
                     </div>
                   </Form>
                 </div>
