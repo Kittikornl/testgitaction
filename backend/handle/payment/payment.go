@@ -15,6 +15,7 @@ import (
 type Payment struct {
 	Item           []models.Order `json:"order"`
 	ShippingMethod string         `json:"shipping_method"`
+	totalPrice     float32        `json:"total_price"`
 }
 
 type ValidateCardResponse struct {
@@ -55,6 +56,7 @@ func GetQR(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.TotalPrice = payment.totalPrice
 		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
@@ -103,6 +105,7 @@ func ValidateCard(c *gin.Context) {
 			c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
 			return
 		}
+		orders.TotalPrice = payment.totalPrice
 		orders.ShippingMethod = payment.ShippingMethod
 		orders.Status = 2
 		orders.TrackingNumber = GenerateTrackingNumber()
