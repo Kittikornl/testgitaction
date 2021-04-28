@@ -33,19 +33,23 @@ func GetShop(c *gin.Context) {
 		Where("products.shop_id = ? AND products.amount > ?", id, 0).
 		Group("products.id").Order("total desc").Limit(8).Scan(&top_selling).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
 	}
 
 	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? AND product_type = ? AND amount > ?", id, 1, 0).Find(&all_products_1).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
 	}
 
 	if err := database.DB.Order("product_title ASC, product_type ASC").Where("shop_id = ? AND product_type = ? AND amount > ?", id, 2, 0).Find(&all_products_2).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
 	}
 	// SELECT * FROM Products WHERE ShopID = id ORDER BY ProductTitle ASC GROUP BY ProductType
 
 	if err := database.DB.Order("created_at desc").Limit(5).Where("shop_id = ? AND amount > ?", id, 0).Find(&new_products).Error; err != nil {
 		c.JSON(http.StatusNotFound, services.ReturnMessage(err.Error()))
+		return
 	}
 
 	if err := database.DB.First(&shop, id).Error; err != nil {
