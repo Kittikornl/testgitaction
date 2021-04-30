@@ -22,7 +22,8 @@ jobs:
       run: |
         cd ./backend
         go mod vendor
-        go run server
+
+
 
     - name: Test
       run: |
