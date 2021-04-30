@@ -25,7 +25,4 @@ jobs:
 
     - name: Test
       run: |
-        cd ./backend/tests
-        go test
-        cd shoptest
-        go test
+        cd ./backend/tests/shoptest
