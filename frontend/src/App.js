@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import "./App.scss";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "./login/login";
@@ -95,6 +96,29 @@ function App() {
         <PrivateRoute exact key="shop-order" path="/orders/shop" component={ShopOrder} />
       </Switch>
     </Router>
+=======
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+>>>>>>> 982c88e3d1f62db5c3e8b1d487fcbf8f79335ddd
   );
 }
 
