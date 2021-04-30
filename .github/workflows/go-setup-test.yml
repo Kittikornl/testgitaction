@@ -26,10 +26,9 @@ jobs:
     - name: Run server
       run: |
         cd backend
-        go run server
+        go run server.go
 
     - name: Test
       run: |
-        ls
-        cd backend/tests/shoptest
+        cd tests/shoptest
         go test
