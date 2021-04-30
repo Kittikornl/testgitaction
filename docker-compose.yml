@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+    frontend:
+        container_name: react-docker
+        build: frontend
+        volumes:
+          - '.:/usr/src/app'
+          - '/usr/src/app/node_modules'
+        ports:
+          - '3000:3000'
+        environment:
+          - NODE_ENV=${NODE_ENV}
