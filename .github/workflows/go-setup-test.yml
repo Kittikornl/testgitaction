@@ -19,7 +19,7 @@ jobs:
         go-version: 1.15
 
     - name: Install dependency
-      run: cd backend | go mod vendor
+      run: cd ./backend | go mod vendor
 
     - name: Test
-      run: cd backend | ls
+      run: cd ./backend/test | ls
