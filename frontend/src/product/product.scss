@@ -1,0 +1,185 @@
+@import '../index.scss';
+
+.product-page-container {
+    .product-page-content {
+        justify-content: center;
+        margin-top: 50px; 
+
+        grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
+        column-gap: 80px;
+
+        h1 {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 36px;
+            font-family: $thai-font;
+            color: $green;
+        }
+
+        .amount {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            color: #000;
+        }
+        .shop, .province, .score {
+            font-size: 18px;
+            color: #000;
+        }
+
+        .score {
+            column-gap : 10px;
+        }
+
+        .star-icon {
+            color: $yellow;
+        }
+        .shop-desc {
+            font-size: 18px;
+            color: #000;
+        }
+
+        .product-image-wrapper {
+            grid-row-end: span 3;
+
+            img {
+                max-width: 400px;
+                max-height: 400px;
+                width: 100vw;
+                height: auto;
+            }
+        }
+
+        .product-name-wrapper, .product-desc-wrapper {
+            padding-bottom: 20px;
+            border-bottom: 1px $gray solid;
+        }
+
+        .product-price-wrapper {
+            margin-top: 10px;
+            h1 {
+                margin-bottom: 0px;
+            }
+
+            .price {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+
+                color: #000;
+            }
+            .content {
+                display: flex;
+                flex-flow: column wrap;
+                row-gap: 10px;
+            }
+            .amount-button {
+                .ant-input {
+                    width: 50px;
+                    height: 32px;
+
+                    background-color: $green;
+                    color: #FFF;
+
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .button-left {
+                    border-top-left-radius: 25%;
+                    border-bottom-left-radius: 25%;              
+                }
+                .button-right {
+                    border-top-right-radius: 25%;
+                    border-bottom-right-radius: 25%;              
+                }
+            }
+        }
+
+        .shop-contact-wrapper {
+            margin-top: 10px;
+            .content {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 18px;
+
+                color: #000;
+            }
+        }
+        .comment-container {
+            margin-bottom: 10px;
+            row-gap: 10px;
+            .comment-title {
+                column-gap: 10px;
+                align-items: center;
+
+                h3 {
+                    margin-bottom: 0px;
+                    font-weight: bold;
+                }
+            }
+            .comment {
+                color: #000;
+            }
+        }
+
+        @media screen and (max-width: 880px) {
+            h1 {
+                text-align: center;
+            }
+            .content {
+                text-align: center;
+            }
+            .score {
+                justify-content: center;
+            }
+
+            .product-price-wrapper .content {
+                flex-flow: row wrap;
+                column-gap: 10px;
+                row-gap: 0px;
+                justify-content: center;
+            }
+
+            .product-price-wrapper {
+                border-bottom: 1px $gray solid;
+                padding-bottom: 20px;
+            }
+            .shop-desc {
+                text-align: center;
+            }
+            .shop-contact-wrapper{
+                .visit-shop-button {
+                    text-align: center;
+                }
+            }
+    
+        }
+     
+    }
+    .product-page-footer {
+        background-image: url("../img/main-veg.jpg");
+        width: 100vw;
+
+        margin-top: 100px;
+        padding-top: 150px ;
+    }
+
+    .visit-shop-button, .add-cart {
+        margin-top: 5px;
+        .ant-btn {
+            height: 50px;
+            border-radius: 10px;
+        }
+        
+    }
+
+    .ant-btn {
+        background-color: $green;
+        color: #FFF;
+    }
+
+    .fs-20 {
+        font-size: 20px;
+    }
+}

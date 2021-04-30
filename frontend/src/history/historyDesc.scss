@@ -1,0 +1,70 @@
+@import '../index.scss';
+
+.history-desc-container {
+    align-content: center;
+    padding-top: 20px;
+    .order-title {
+        justify-content: space-between;
+        width: 80vw;
+        align-items: center;
+        h1 {
+            margin-bottom: 0;
+            color: $dark-green;
+        }
+        .success-paid {
+            column-gap: 30px;
+        }
+        .unsuccess-paid {
+            padding-left: 10px;
+        }
+        .ant-btn {
+            background-color: $green;
+            color: #FFF;
+            border-radius: 8px;
+        }
+        @media screen and(max-width: 376px) {
+            h1 {
+                font-size: 26px;
+            }
+        }
+    }
+
+    .order-content {
+        width: 80vw;
+        row-gap: 10px;
+        .content-warpper {
+            border-bottom: 2px #DEDEDE solid;
+            padding: 20px 0;
+            font-size: 18px;
+
+            .title {
+                width: 300px;
+            }
+
+            .title,
+            .content {
+                row-gap: 10px;
+            }
+
+            .title-product {
+                margin-bottom: 10px;
+            }
+
+            .product-item {
+                column-gap: 100px;
+
+                margin-bottom: 20px;
+
+                img {
+                    width: 200px;
+                    height: 200px;
+                }
+
+                .product-content {
+                    justify-content: center;
+                    row-gap: 10px;
+                }
+            }
+        }
+    }
+}
