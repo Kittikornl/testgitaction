@@ -26,4 +26,5 @@ jobs:
     - name: Test
       run: |
         cd ./backend/tests
+        ls
         go test
