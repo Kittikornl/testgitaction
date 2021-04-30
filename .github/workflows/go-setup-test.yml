@@ -18,14 +18,13 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Install dependency
+    - name: Install dependency and run server
       run: |
         cd ./backend
         go mod vendor
+        go run server
 
     - name: Test
       run: |
-        cd ./backend
-        go run server
-        cd /tests/shoptest
+        cd backend/tests/shoptest
         go test
