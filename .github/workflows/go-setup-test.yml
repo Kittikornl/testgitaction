@@ -22,8 +22,8 @@ jobs:
       run: |
         cd ./backend
         go mod vendor
-        
+
     - name: Test
       run: |
-        cd tests/shoptest
+        cd backend/tests/shoptest
         go test
