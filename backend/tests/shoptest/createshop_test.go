@@ -123,10 +123,11 @@ func TestCreateShop2(t *testing.T){
 	bodyCreate, _ := ioutil.ReadAll(res.Body)
 	fmt.Println("response Body:", string(bodyCreate))
 
-	if(res.StatusCode == 200){
+	
+	if(res.StatusCode == 400){
 		return
 	}
-	t.Error("Please enter valid input")
+	t.Error("Invalid input case not work")
 }
 
 func TestCreateShop3(t *testing.T){
@@ -183,9 +184,8 @@ func TestCreateShop3(t *testing.T){
 	bodyCreate, _ := ioutil.ReadAll(res.Body)
 	fmt.Println("response Body:", string(bodyCreate))
 
-	if(res.StatusCode == 200){
+	if(res.StatusCode == 400){
 		return
-	}else if(res.StatusCode == 400){
-		t.Error("Please enter valid input")
 	}
+	t.Error("Invalid input case not work")
 }
