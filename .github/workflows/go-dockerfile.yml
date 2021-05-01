@@ -14,12 +14,12 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build Docker Image
-      run: |
-        cd backend
-        docker build -t emparty/pugsod:backend ../
+      working-directory: ./backend
+      run: docker build -t emparty/pugsod:backend .
 
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
+      working-directory: ./backend
       with:
         name: emparty/pugsod
         username: ${{ secrets.DOCKER_USERNAME }}
