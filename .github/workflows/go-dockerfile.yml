@@ -26,5 +26,3 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push to DockerHub
-      run: docker push emparty/pugsod:backend
