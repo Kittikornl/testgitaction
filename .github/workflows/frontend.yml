@@ -1,4 +1,4 @@
-name: Go
+name: Frontend building and pushing docker image
 
 on:
   push:
@@ -12,22 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./frontend
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.15
-
-    - name: Install dependency
-      run: go mod vendor
-
-    - name: Test
-      run: |
-        cd tests
-        go test
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -42,8 +29,8 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build Docker
-      run: docker build -t emparty/pugsod:backend .
+      run: docker build -t emparty/pugsod:frontend .
     
     - name: Push to Dockerhub
-      run: docker push emparty/pugsod:backend
+      run: docker push emparty/pugsod:frontend
     
