@@ -1,0 +1,29 @@
+version: '3.5'
+services:
+
+    frontend:
+        image: emparty/pugsod:frontend
+        ports:
+          - "3000:3000"
+        environment:
+          - NODE_ENV=${NODE_ENV}
+
+    db:
+      image: postgres
+      restart: always
+      environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: '1234'
+          POSTGRES_DB: empartydb
+      ports: 
+          - "5432:5432"
+  
+
+    app:
+      image: emparty/pugsod:backend
+      ports:
+          - "8080:8080" 
+      depends_on: 
+          - db
+      networks: 
+          - default

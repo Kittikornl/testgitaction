@@ -1,0 +1,13 @@
+# base image
+FROM node:14.16.1
+
+# working directory
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+# install app dependencies
+COPY . .
+RUN yarn install
+
+# start app command
+CMD ["yarn", "start"]
