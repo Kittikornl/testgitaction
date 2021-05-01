@@ -15,6 +15,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
+        cd backend
         docker build -t emparty/pugsod:backend . 
 
     - name: Publish to Registry
