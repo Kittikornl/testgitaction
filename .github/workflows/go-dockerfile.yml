@@ -17,10 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Publish to Registry
-      uses: docker/build-push-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        push: true
-        tags: emparty/pugsod:backend
+    - name: Build Docker Image
+      run: docker build -t emparty/pugsod:backend .
+
+    - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push to DockerHub
+      run: docker push emparty/pugsod:backend
