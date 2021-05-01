@@ -16,10 +16,9 @@ jobs:
     - name: Build Docker Image
       run: |
         cd backend
-        docker build -t emparty/pugsod:backend . 
+        docker build -t emparty/pugsod:backend ../
 
     - name: Publish to Registry
-      run: cd backend
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: emparty/pugsod
