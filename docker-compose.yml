@@ -8,7 +8,7 @@ services:
         environment:
           - NODE_ENV=${NODE_ENV}
 
-    db:
+    database:
       image: postgres
       restart: always
       environment:
@@ -24,6 +24,6 @@ services:
       ports:
           - "8080:8080" 
       depends_on: 
-          - db
+          - database
       networks: 
           - default
