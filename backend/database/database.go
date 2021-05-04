@@ -12,7 +12,7 @@ var DB *gorm.DB
 
 func Initdatabase() {
 	var err error
-	dsn := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable", "postgres", "1234", "database", "5432", "empartydb")
+	dsn := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable", "postgres", "1234", "localhost", "5432", "empartydb")
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
