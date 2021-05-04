@@ -1204,6 +1204,9 @@
     strip-json-comments "^3.1.1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3ec06303f517f95a64a143339d6433509ca51f93
 "@firebase/analytics-types@0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@firebase/analytics-types/-/analytics-types-0.4.0.tgz#d6716f9fa36a6e340bc0ecfe68af325aa6f60508"
@@ -1478,8 +1481,11 @@
     lodash.camelcase "^4.3.0"
     protobufjs "^6.8.6"
 
+<<<<<<< HEAD
 =======
 >>>>>>> 982c88e3d1f62db5c3e8b1d487fcbf8f79335ddd
+=======
+>>>>>>> 3ec06303f517f95a64a143339d6433509ca51f93
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"

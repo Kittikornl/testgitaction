@@ -64,11 +64,6 @@ const Editprofile = (props) => {
   };
 
   const onFinishInfo = (fieldsValue) => {
-    // const values = {
-    //   ...fieldsValue,
-    //   "date-picker": fieldsValue["birthdate"].format(dateFormat),
-    // };
-    console.log("Received values of form: ", fieldsValue);
     let paylaod = {};
 
     paylaod.firstname = fieldsValue.firstname;

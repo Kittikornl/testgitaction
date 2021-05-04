@@ -1,8 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api";
-
 const header = {
   'Content-Type': 'application/json',
   'Authorization': authHeader()
@@ -10,7 +8,7 @@ const header = {
 
 export const getProduct = async (id) => {
   try {
-    return await axios.get(API_URL + `/products/${id}`, { 
+    return await axios.get(`/products/${id}`, { 
       headers: {
           'Authorization': authHeader()
       }});
@@ -22,7 +20,7 @@ export const getProduct = async (id) => {
 
 export const postAddProduct = async (values) => {
   try {
-    return await axios.post(API_URL + "/products", values, { 
+    return await axios.post("/products", values, { 
       headers: {
           'Authorization': authHeader()
       }});
@@ -34,7 +32,7 @@ export const postAddProduct = async (values) => {
 
 export const putEditProduct = async (values, id) => {
   try {
-    return await axios.put(API_URL + `/products/${id}`, values, { 
+    return await axios.put(`/products/${id}`, values, { 
       headers: {
           'Authorization': authHeader()
       }});
@@ -46,7 +44,7 @@ export const putEditProduct = async (values, id) => {
 
 export const deleteProduct = async (id) => {
   try {
-    return await axios.delete(API_URL + `/products/${id}`, { 
+    return await axios.delete(`/products/${id}`, { 
       headers: {
           'Authorization': authHeader()
       }});
@@ -58,7 +56,7 @@ export const deleteProduct = async (id) => {
 
 export const getReviewProduct = async (id) => {
   try {
-    return await axios.get(API_URL + `/products/${id}/reviews`, { 
+    return await axios.get(`/products/${id}/reviews`, { 
       headers: {
           'Authorization': authHeader()
       }});
