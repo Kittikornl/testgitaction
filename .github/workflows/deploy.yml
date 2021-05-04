@@ -1,11 +1,8 @@
 name: Deploy App to AWS
 
-# Only trigger, when the build workflow succeeded
 on:
-  workflow_run:
-    workflows: ["Backend testing, building and pushing docker image"]
-    types:
-      - completed
+  push:
+    branches: [ main ]
 
 jobs:
   build:
