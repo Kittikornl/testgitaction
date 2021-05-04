@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Edit permission
+      - name: show path
         run: |
         cd ~
         tree
