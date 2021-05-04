@@ -17,6 +17,10 @@ jobs:
           aws-access-key-id: AKIATWA57VH5L4IVAOSX
           aws-secret-access-key: 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
           aws-region: ap-southeast-2
+
+      - name: generate ssh key
+        run: |
+          ssh-keygen -t rsa
       
       - name: copy file to aws
         run: |
