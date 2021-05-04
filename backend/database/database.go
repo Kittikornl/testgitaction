@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+
 	"github.com/sec33_Emparty/backend/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,7 +12,7 @@ var DB *gorm.DB
 
 func Initdatabase() {
 	var err error
-	dsn := "host=localhost user=postgres password='1234' dbname=empartydb port=5432 sslmode=disable TimeZone=Asia/Bangkok"
+	dsn := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable", "postgres", "1234", "localhost", "5432", "empartydb")
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

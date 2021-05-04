@@ -6,8 +6,10 @@ RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 # install app dependencies
-COPY package.json /usr/src/app
+COPY . .
 RUN yarn install
+
+EXPOSE 80
 
 # start app command
 CMD ["yarn", "start"]

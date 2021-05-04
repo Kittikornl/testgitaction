@@ -1,13 +1,9 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
-import { useHistory } from 'react-router-dom'
-
-const API_URL = 'http://localhost:8080/api'
-
 
 export const login = async (email, password) => {
     return await axios
-    .post(API_URL + '/users/login', {email, password})
+    .post('/users/login', {email, password})
     .then(response => {
         console.log(response);
         if (response.data.token) {

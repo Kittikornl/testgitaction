@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3ec06303f517f95a64a143339d6433509ca51f93
 import "./App.scss";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "./login/login";
@@ -96,6 +99,7 @@ function App() {
         <PrivateRoute exact key="shop-order" path="/orders/shop" component={ShopOrder} />
       </Switch>
     </Router>
+<<<<<<< HEAD
 =======
 import logo from './logo.svg';
 import './App.css';
@@ -119,6 +123,8 @@ function App() {
       </header>
     </div>
 >>>>>>> 982c88e3d1f62db5c3e8b1d487fcbf8f79335ddd
+=======
+>>>>>>> 3ec06303f517f95a64a143339d6433509ca51f93
   );
 }
 

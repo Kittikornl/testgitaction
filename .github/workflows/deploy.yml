@@ -1,0 +1,21 @@
+name: Deploy App to AWS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy Docker-Compose to AWS EC2
+        run: |
+          scp -i "emparty.pem" ./docker-compose.yml ec2-user@ec2-13-54-221-181.ap-southeast-2.compute.amazonaws.com:/home/ec2-user/"
+          ssh -i "emparty.pem" ec2-user@ec2-13-54-221-181.ap-southeast-2.compute.amazonaws.com"
+          cd ~/ec2-user
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d

@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api";
+const API_URL = "api";
 
 const header = {
   "Content-Type": "application/json",
@@ -11,7 +11,7 @@ const header = {
 export const getOrderHistory = async () => {
   try {
     console.log("data", header);
-    return await axios.get(API_URL + "/history", {
+    return await axios.get("/history", {
       headers: {
         Authorization: authHeader(),
       },
