@@ -19,8 +19,7 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: generate ssh key
-        run: |
-          ssh-keygen -t rsa
+        run: cat > ~/.ssh/known_hosts
       
       - name: copy file to aws
         run: |
