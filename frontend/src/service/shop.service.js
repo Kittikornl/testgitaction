@@ -1,11 +1,9 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api";
-
 export const getShopData = async (id) => {
   try {
-    return await axios.get(API_URL + `/shops/${id}`, {
+    return await axios.get(`/shops/${id}`, {
       headers: {
         Authorization: authHeader(),
       },
@@ -18,7 +16,7 @@ export const getShopData = async (id) => {
 
 export const getShopOrder = async () => {
   try {
-    return await axios.get(API_URL + `/orders`, {
+    return await axios.get(`/orders`, {
       headers: {
         Authorization: authHeader(),
       },
@@ -31,7 +29,7 @@ export const getShopOrder = async () => {
 
 export const postShop = async (values) => {
   try {
-    return await axios.post(API_URL + "/shops", values, {
+    return await axios.post("/shops", values, {
       headers: {
         Authorization: authHeader(),
       },
@@ -44,7 +42,7 @@ export const postShop = async (values) => {
 
 export const editShop = async (id, data) => {
   try {
-    return await axios.put(API_URL + `/shops/${id}`, data, {
+    return await axios.put(`/shops/${id}`, data, {
       headers: {
         Authorization: authHeader(),
       },
@@ -57,7 +55,7 @@ export const editShop = async (id, data) => {
 
 export const deleteShop = async (id) => {
   try {
-    return await axios.delete(API_URL + `/shops/${id}`, {
+    return await axios.delete(`/shops/${id}`, {
       headers: {
         Authorization: authHeader(),
       },
@@ -70,7 +68,7 @@ export const deleteShop = async (id) => {
 
 export const getReviewShop = async (id) => {
   try {
-    return await axios.get(API_URL + `/shops/${id}/reviews`, {
+    return await axios.get(`/shops/${id}/reviews`, {
       headers: {
         Authorization: authHeader(),
       },
