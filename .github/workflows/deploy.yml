@@ -11,13 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Edit permission
-        run: chmod 400 emparty.pem
-
-      - name: Deploy Docker-Compose to AWS EC2
-        run: |
-          ssh -i "emparty.pem" ec2-user@ip-172-31-7-249
-          cd ~/ec2-user/emparty
-          docker-compose down
-          docker-compose pull
-          docker-compose up -d
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ec2-13-54-221-181.ap-southeast-2.compute.amazonaws.com
+          username: ec2-user
+          password: 
+          source: "docker-compose.yml"
+          target: ""
