@@ -1,11 +1,9 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api";
-
 export const postShipment = async (data) => {
     try {
-        return await axios.post(API_URL + `/shipment`, data, {
+        return await axios.post(`/shipment`, data, {
           headers: {
             'Authorization': authHeader()
         }});
@@ -16,7 +14,7 @@ export const postShipment = async (data) => {
 
 export const postReview = async (data) => {
   try {
-    return await axios.post(API_URL + `/reviews`, data, {
+    return await axios.post(`/reviews`, data, {
       headers: {
         'Authorization': authHeader()
     }});
